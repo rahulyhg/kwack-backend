@@ -5,7 +5,7 @@ var controller = {
      */
  addInterest: function (req, res) {
         if (req.body) {
-            User.addInterest( req.user.userId,req.body.interests,  res.callback);
+            User.addInterest( req.body.userId,req.body.interests,  res.callback);
         } else {
             res.json({
                 value: false,
@@ -20,7 +20,7 @@ var controller = {
      */
  removeInterest: function (req, res) {
         if (req.body) {
-            User.removeInterest( req.user.userId,req.body.interests, res.callback);
+            User.removeInterest( req.body.userId,req.body.interests, res.callback);
         } else {
             res.json({
                 value: false,
@@ -35,7 +35,7 @@ var controller = {
      */
  addLocation: function (req, res) {
         if (req.body) {
-            User.addLocation( req.user.userId,req.body.location, res.callback);
+            User.addLocation( req.body.userId,req.body.location, res.callback);
         } else {
             res.json({
                 value: false,
@@ -50,7 +50,7 @@ var controller = {
      */
  removeLocation: function (req, res) {
         if (req.body) {
-            User.removeLocation( req.user.userId, res.callback);
+            User.removeLocation( req.body.userId, res.callback);
         } else {
             res.json({
                 value: false,

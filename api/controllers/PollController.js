@@ -6,7 +6,7 @@ var controller = {
     addPoolAnswer: function (req, res) {
         async.waterfall([
             function (callback) {
-                Pool.addPoolAnswer(req.body.newsId, req.body.optionId, req.user.userId, callback);
+                Pool.addPoolAnswer(req.body.newsId, req.body.optionId, req.body.userId, callback);
             },
             function (data, callback) {
                 Pool.calculatePoolAnswer(req.body.newsId, callback);
