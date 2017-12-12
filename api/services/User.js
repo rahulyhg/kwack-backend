@@ -1,8 +1,12 @@
 var schema = new Schema({
     name: {
         type: String,
-        required: true,
-        excel: true,
+    },
+       age: {
+        type: String,
+    },
+      location: {
+        type: String,
     },
     email: {
         type: String,
@@ -10,6 +14,25 @@ var schema = new Schema({
         excel: "User Email",
         unique: true
     },
+   inviteFrinend:[
+       {
+           id: {
+        type: String,
+    },
+      name: {
+        type: String,
+    },
+      source: {
+        type: String,
+    },
+      email: {
+        type: String,
+    },
+       }
+   ],
+    interests:[{
+    name:String
+    }],
     dob: {
         type: Date,
         excel: {
@@ -86,6 +109,103 @@ module.exports = mongoose.model('User', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "user", "user"));
 var model = {
+
+ /**
+     * this function add details about the user interests
+     * @param {newsId} input newsId
+     *  * @param {interests} input interests
+     * @param {callback} callback function with err and response
+     */
+    addInterest: function (userId,interests, callback) {
+        	User.Update({
+					    _id: mongoose.Types.ObjectId(userId)
+        }, {
+                $push: {
+                    'interests': {
+                        name: interests
+                    }
+                }
+             }).exec(function (err, found) {
+                if (err) {
+                    callback(err, null);
+                } else if (_.isEmpty(found)) {
+                    callback("noDataound", null);
+                } else {
+                    callback(null, found);
+                }
+
+            });
+ },
+  /**
+     * this function remove details about the user interests
+     * @param {newsId} input newsId
+     *  * @param {interests} input interests
+     * @param {callback} callback function with err and response
+     */
+     removeInterest: function (userId,interests, callback) {
+        	User.Update({
+					    _id: mongoose.Types.ObjectId(userId)
+        }, {
+                $pull: {
+                    'interests': {
+                        name: interests
+                    }
+                }
+             }).exec(function (err, found) {
+                if (err) {
+                    callback(err, null);
+                } else if (_.isEmpty(found)) {
+                    callback("noDataound", null);
+                } else {
+                    callback(null, found);
+                }
+
+            });
+ },
+  /**
+     * this function add details about the user location
+     * @param {newsId} input newsId
+     *  * @param {location} input location
+     * @param {callback} callback function with err and response
+     */
+
+ addLocation: function (userId,location, callback) {
+        		User.findOneAndUpdate({
+						_id: userId
+					}, {
+						location: location
+					}).exec(function (err, found) {
+                if (err) {
+                    callback(err, null);
+                } else if (_.isEmpty(found)) {
+                    callback("noDataound", null);
+                } else {
+                    callback(null, found);
+                }
+
+            });
+ },
+  /**
+     * this function remove details about the user location
+     * @param {newsId} input newsId
+     * @param {callback} callback function with err and response
+     */
+  removeLocation: function (userId, callback) {
+        	User.findOneAndUpdate({
+						_id: userId
+					}, {
+						location: ""
+					}).exec(function (err, found) {
+                if (err) {
+                    callback(err, null);
+                } else if (_.isEmpty(found)) {
+                    callback("noDataound", null);
+                } else {
+                    callback(null, found);
+                }
+
+            });
+ },
     add: function () {
         var sum = 0;
         _.each(arguments, function (arg) {

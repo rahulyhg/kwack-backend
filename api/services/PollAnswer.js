@@ -1,12 +1,18 @@
 var schema = new Schema({
-    name: {
+    user: {
+   type: Schema.Types.ObjectId,
+        ref: 'User'
+        
+    },
+     news: {
         type: String,
         required: true,
-        unique: true,
-        uniqueCaseInsensitive: true,
-        excel: {
-            name: "Name"
-        }
+        
+    },
+     pollOption: {
+        type: String,
+        required: true,
+        
     }
 });
 

@@ -1,5 +1,67 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+       /**
+     * for users to add interests 
+     */
+ addInterest: function (req, res) {
+        if (req.body) {
+            User.addInterest( req.user.userId,req.body.interests,  res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+          /**
+     * for users to remove interests 
+     */
+ removeInterest: function (req, res) {
+        if (req.body) {
+            User.removeInterest( req.user.userId,req.body.interests, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+              /**
+     * for users to add location 
+     */
+ addLocation: function (req, res) {
+        if (req.body) {
+            User.addLocation( req.user.userId,req.body.location, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+              /**
+     * for users to remove location 
+     */
+ removeLocation: function (req, res) {
+        if (req.body) {
+            User.removeLocation( req.user.userId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+
+
     index: function (req, res) {
         res.json({
             name: "Hello World"
