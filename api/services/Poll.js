@@ -4,9 +4,9 @@ var model = {
      * @param {newsId} input newsId
      * @param {callback} callback function with err and response
      */
-    getPool: function (newsId, callback) {
+    getpoll: function (newsId, callback) {
         News.finOne({
-            _id: poolId
+            _id:  pollId
         }, callback);
     },
     /**
@@ -18,10 +18,10 @@ var model = {
      */
     addPoolAnswer: function (newsId, optionId, userId, callback) {
         var pollAnswerObj = PoolAnswer();
-        poolAnswerObj.news = newsId;
-        poolAnswerObj.option = userId;
-        poolAnswerObj.user = userId;
-        poolAnswerObj.save(callback);
+        pollAnswerObj.news = newsId;
+        pollAnswerObj.option = userId;
+         pollAnswerObj.user = userId;
+        pollAnswerObj.save(callback);
     },
     /**
      * this function provides details about the poll

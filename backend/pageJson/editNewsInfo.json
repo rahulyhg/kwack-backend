@@ -1,0 +1,128 @@
+{
+    "title": "Edit User",
+    "name": "User",
+    "jsonPage": "viewUser",
+    "desciption": "",
+    "pageType": "edit",
+    "urlFields": ["_id"],
+  "fields": [{
+        "name": "Title",
+        "type": "text",
+        "tableRef": "title",
+        "placeholder": "Enter title",
+        "id": "title",
+        "url": ""
+    },
+    {
+        "name": "description",
+        "type": "text",
+        "tableRef": "description",
+        "placeholder": "Enter description",
+        "id": "description",
+        "url": ""
+    },
+    {
+        "name": "url",
+        "type": "text",
+        "tableRef": "url",
+        "placeholder": "Enter url",
+        "id": "url",
+        "url": ""
+    },
+    {
+        "name": "imageUrl",
+        "type": "text",
+        "tableRef": "imageUrl",
+        "placeholder": "Enter imageUrl",
+        "id": "imageUrl",
+        "url": ""
+    },
+    {
+        "name": "source",
+        "type": "text",
+        "tableRef": "source",
+        "placeholder": "Enter source",
+        "id": "source",
+        "url": ""
+    },
+    {
+        "name": "sourceId",
+        "type": "text",
+        "tableRef": "sourceId",
+        "placeholder": "Enter sourceId",
+        "id": "sourceId",
+        "url": ""
+    },
+     {
+        "name": "sourceJson",
+        "type": "text",
+        "tableRef": "sourceJson",
+        "placeholder": "Enter sourceJson",
+        "id": "sourceJson",
+        "url": ""
+    },
+      {
+        "name": "pollOptions",
+        "type": "box",
+        "id": "pollOptions",
+        "tableRef": "pollOptions",
+        "placeholder": "Enter pollOptions",
+        "fields": [{
+                "name": "title",
+                "type": "text",
+                "tableRef": "title",
+                "placeholder": "Enter Vote title",
+                "id": "title",
+                "onView":true,
+                "view": true,
+                "companyCount":"companyCount"
+               
+                },{
+                "name": "percentage",
+                "type": "text",
+                "tableRef": "percentage",
+                "placeholder": "Enter Vote Counts",
+                "id": "percentage",
+                "onView":true,
+                "view": true,
+                "companyCount":"companyCount"
+               
+                }]
+     },
+     {
+        "name": "pollQuestion",
+        "type": "text",
+        "tableRef": "pollQuestion",
+        "placeholder": "Enter pollQuestion",
+        "id": "pollQuestion",
+        "url": ""
+    }],
+    "action": [{
+        "name": "submit",
+        "action": "submitNewsInfo",
+        "stateName": {
+            "page": "page",
+            "json": {
+                "id": "viewNewsInfo"
+            }
+        }
+    }, {
+        "name": "cancel",
+        "sideMenuRedirect": true,
+        "stateName": {
+            "page": "page",
+            "json": {
+                "id": "viewNewsInfo"
+            }
+        }
+    }],
+    "apiCall": {
+        "url": "NewsInfo/save",
+        "params": "_id"
+    },
+    "preApi": {
+        "url": "NewsInfo/getOne",
+        "params": "_id"
+    }
+
+}

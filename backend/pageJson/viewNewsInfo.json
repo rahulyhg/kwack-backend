@@ -1,0 +1,45 @@
+{
+    "title": "NewsInfo",
+    "description": "List of NewsInfo",
+    "pageType": "view",
+    "sendIdWithCreate": true,
+    "urlFields": ["_id"],
+    "fields": [{
+        "name": "title",
+        "isSort": "",
+        "tableRef": "title"
+    }],
+    "action": [{
+        "name": "edit",
+        "icon": "fa-pencil",
+        "buttonClass": "btn-primary",
+        "type": "page",
+        "action": "editNewsInfo",
+        "fieldsToSend": {
+            "_id": "_id"
+        }
+    }, {
+        "name": "delete",
+        "icon": "fa-trash",
+        "buttonClass": "btn-danger",
+        "type": "apiCallConfirm",
+        "title": "Delete NewsInfo",
+        "content": "Are you sure you want to delete NewsInfo?",
+        "api": "NewsInfo/delete",
+        "fieldsToSend": {
+            "name": "_id",
+            "value": "_id"
+        }
+    }],
+    "button": [ {
+        "name": "Create",
+        "icon": "plus",
+        "class": "btn-success",
+        "type": "page",
+        "action": "createNewsInfo"
+    }],
+    "apiCall": {
+        "url": "NewsInfo/search",
+        "params": "_id"
+    }
+}

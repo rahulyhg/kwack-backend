@@ -5,15 +5,14 @@ var schema = new Schema({
         
     },
      news: {
-        type: String,
-        required: true,
+        type: String
         
     },
-     pollOption: {
-        type: String,
-        required: true,
-        
-    }
+  pollOptions: [{
+        option: {
+            type: String
+        }
+    }],
 });
 
 schema.plugin(deepPopulate, {});

@@ -27,15 +27,18 @@ var schema = new Schema({
         type: String,
 
     },
+
+
     pollOptions: [{
         title: {
             type: String
         },
-        percentage: {
+         percentage: {
             type: String
         }
-
     }],
+   
+        
     pollQuestion: {
         type: String,
 

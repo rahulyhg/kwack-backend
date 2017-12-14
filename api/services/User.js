@@ -2,36 +2,45 @@ var schema = new Schema({
     name: {
         type: String,
     },
-       age: {
+     userName: {
         type: String,
     },
-      location: {
+    age: {
+        type: String,
+    },
+    country:{
+        type:String
+    },
+     state:{
+        type:String
+    },
+    location: {
         type: String,
     },
     email: {
         type: String,
         validate: validators.isEmail(),
         excel: "User Email",
-        unique: true
     },
-   inviteFrinend:[
-       {
-           id: {
-        type: String,
-    },
-      name: {
-        type: String,
-    },
-      source: {
-        type: String,
-    },
-      email: {
-        type: String,
-    },
-       }
-   ],
-    interests:[{
-    name:String
+    inviteFrinend: [{
+        id: {
+            type: String,
+        },
+        name: {
+            type: String,
+        },
+        source: {
+            type: String,
+        },
+        email: {
+            type: String,
+        },
+    }],
+    interests: [{
+        name: String
+    }],
+    locations: [{
+        locName: String
     }],
     dob: {
         type: Date,
@@ -109,103 +118,154 @@ module.exports = mongoose.model('User', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "user", "user"));
 var model = {
+     /**
+     * this function for get user by email
+     * @param {userEmail} input userEmail
+     * @param {callback} callback function with err and response
+     */
+    getUser: function (userEmail, callback) {
+        
+        User.findOne({
+            email: userEmail,
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
 
- /**
+        });
+    },
+
+      /**
+     * this function for users to verify Account 
+     * @param {userEmail} input userEmail
+     * * @param {password} input password
+     * @param {callback} callback function with err and response
+     */
+    VerifyUser: function (userEmail,password, callback) {
+        
+        User.findOne({
+            email: userEmail,
+            password:password
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
+
+    /**
      * this function add details about the user interests
      * @param {newsId} input newsId
      *  * @param {interests} input interests
      * @param {callback} callback function with err and response
      */
-    addInterest: function (userId,interests, callback) {
-        	User.Update({
-					    _id: mongoose.Types.ObjectId(userId)
+    addInterests: function (userId, interests, callback) {
+        User.Update({
+            _id: mongoose.Types.ObjectId(userId)
         }, {
-                $push: {
-                    'interests': {
-                        name: interests
-                    }
+            $push: {
+                'interests': {
+                    name: interests
                 }
-             }).exec(function (err, found) {
-                if (err) {
-                    callback(err, null);
-                } else if (_.isEmpty(found)) {
-                    callback("noDataound", null);
-                } else {
-                    callback(null, found);
-                }
+            }
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
 
-            });
- },
-  /**
+        });
+    },
+    /**
      * this function remove details about the user interests
      * @param {newsId} input newsId
      *  * @param {interests} input interests
      * @param {callback} callback function with err and response
      */
-     removeInterest: function (userId,interests, callback) {
-        	User.Update({
-					    _id: mongoose.Types.ObjectId(userId)
+    removeInterests: function (userId, interests, callback) {
+        User.Update({
+            _id: mongoose.Types.ObjectId(userId)
         }, {
-                $pull: {
-                    'interests': {
-                        name: interests
-                    }
+            $pull: {
+                'interests': {
+                    name: interests
                 }
-             }).exec(function (err, found) {
-                if (err) {
-                    callback(err, null);
-                } else if (_.isEmpty(found)) {
-                    callback("noDataound", null);
-                } else {
-                    callback(null, found);
-                }
+            }
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
 
-            });
- },
-  /**
+        });
+    },
+    /**
      * this function add details about the user location
      * @param {newsId} input newsId
-     *  * @param {location} input location
+     *  * @param {locations} input locations
      * @param {callback} callback function with err and response
      */
 
- addLocation: function (userId,location, callback) {
-        		User.findOneAndUpdate({
-						_id: userId
-					}, {
-						location: location
-					}).exec(function (err, found) {
-                if (err) {
-                    callback(err, null);
-                } else if (_.isEmpty(found)) {
-                    callback("noDataound", null);
-                } else {
-                    callback(null, found);
+    addLocations: function (userId, locations, callback) {
+        User.Update({
+            _id: mongoose.Types.ObjectId(userId)
+        }, {
+            $push: {
+                'locations': {
+                    locName: locations
                 }
+            }
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
 
-            });
- },
-  /**
+        });
+    },
+    /**
      * this function remove details about the user location
      * @param {newsId} input newsId
      * @param {callback} callback function with err and response
      */
-  removeLocation: function (userId, callback) {
-        	User.findOneAndUpdate({
-						_id: userId
-					}, {
-						location: ""
-					}).exec(function (err, found) {
-                if (err) {
-                    callback(err, null);
-                } else if (_.isEmpty(found)) {
-                    callback("noDataound", null);
-                } else {
-                    callback(null, found);
+    removeLocations: function (userId, locations, callback) {
+        User.Update({
+            _id: mongoose.Types.ObjectId(userId)
+        }, {
+            $pull: {
+                'locations': {
+                    locName: locations
                 }
+            }
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
 
-            });
- },
+        });
+    },
     add: function () {
         var sum = 0;
         _.each(arguments, function (arg) {
@@ -214,60 +274,87 @@ var model = {
         return sum;
     },
     existsSocial: function (user, callback) {
+        console.log("inside existsocial000000000000000000000000000",user)
         var Model = this;
+        var userEmail = '';
         Model.findOne({
+        
             "oauthLogin.socialId": user.id,
             "oauthLogin.socialProvider": user.provider,
         }).exec(function (err, data) {
             if (err) {
-                console.log(err);
                 callback(err, data);
             } else if (_.isEmpty(data)) {
-                var modelUser = {
-                    name: user.displayName,
-                    accessToken: [uid(16)],
-                    oauthLogin: [{
-                        socialId: user.id,
-                        socialProvider: user.provider,
-                    }]
-                };
                 if (user.emails && user.emails.length > 0) {
-                    modelUser.email = user.emails[0].value;
-                    var envEmailIndex = _.indexOf(env.emails, modelUser.email);
-                    if (envEmailIndex >= 0) {
-                        modelUser.accessLevel = "Admin";
-                    }
+                    userEmail = user.emails[0].value;
+                 
                 }
-                modelUser.googleAccessToken = user.googleAccessToken;
-                modelUser.googleRefreshToken = user.googleRefreshToken;
-                if (user.image && user.image.url) {
-                    modelUser.photo = user.image.url;
-                }
-                Model.saveData(modelUser, function (err, data2) {
-                    if (err) {
-                        callback(err, data2);
-                    } else {
-                        data3 = data2.toObject();
-                        delete data3.oauthLogin;
-                        delete data3.password;
-                        delete data3.forgotPassword;
-                        delete data3.otp;
-                        callback(err, data3);
-                    }
+                Model.findOne({'emailId':userEmail},function(err,userData){
+                             if(err){
+                            console.log(err);
+                             }
+                          if(_.isEmpty(userData)){
+                            var modelUser = {
+                                name: user.displayName,
+                                email: userEmail,
+                                accessToken: [uid(16)],
+                                loginProvider:user.provider,
+                                oauthLogin: [{
+                                    socialId: user.id,
+                                    socialProvider: user.provider,
+                                }]
+                            };
+                            
+                            modelUser.socialAccessToken = user.AccessToken;
+                            modelUser.socialRefreshToken = user.RefreshToken;
+                            if (user.image && user.image.url) {
+                                modelUser.photo = user.image.url;
+                            }
+                            Model.saveData(modelUser, function (err, data2) {
+                                if (err) {
+                                    callback(err, data2);
+                                } else {
+                                    data3 = data2.toObject();
+                                    delete data3.oauthLogin;
+                                    delete data3.password;
+                                    delete data3.forgotPassword;
+                                    delete data3.otp;
+                                    callback(err, data3);
+                                }
+                            });
+                          }else{
+                              console.log(userData.oauthLogin);
+                            userData.oauthLogin.push({socialId:user.id, socialProvider: user.provider});
+                            userData.loginProvider = user.provider;
+                            userData.socialAccessToken = user.AccessToken;
+                            userData.socialRefreshToken = user.RefreshToken;
+                            userData.save(function(err, savedData){
+                                delete savedData.oauthLogin;
+                                delete savedData.password;
+                                delete savedData.forgotPassword;
+                                delete savedData.otp;
+                                callback(err,savedData);
+                            });
+                          }   
                 });
+
+                
             } else {
                 delete data.oauthLogin;
                 delete data.password;
                 delete data.forgotPassword;
                 delete data.otp;
-                data.googleAccessToken = user.googleAccessToken;
+
+                console.log(" ============ user.googleAccessToken",user.AccessToken);
+                data.loginProvider = user.provider;
+                data.socialAccessToken = user.AccessToken;
                 data.save(function () {});
                 callback(err, data);
             }
         });
     },
     profile: function (data, callback, getGoogle) {
-        var str = "name email photo mobile accessLevel";
+        var str = "name email photo mobile accessLevel loginProvider";
         if (getGoogle) {
             str += " googleAccessToken googleRefreshToken";
         }

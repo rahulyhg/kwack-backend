@@ -1,11 +1,41 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+            /**
+     * for get user by email
+     */
+ getUser: function (req, res) {
+        if (req.body) {
+            User.getUser(req.body.email, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+         /**
+     * for users to verify Account 
+     */
+ VerifyUser: function (req, res) {
+        if (req.body) {
+            User.VerifyUser(req.body.email, req.body.password, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
        /**
      * for users to add interests 
      */
- addInterest: function (req, res) {
+ addInterests: function (req, res) {
         if (req.body) {
-            User.addInterest( req.body.userId,req.body.interests,  res.callback);
+            User.addInterests(req.body.userId,req.body.interests,  res.callback);
         } else {
             res.json({
                 value: false,
@@ -18,9 +48,9 @@ var controller = {
           /**
      * for users to remove interests 
      */
- removeInterest: function (req, res) {
+ removeInterests: function (req, res) {
         if (req.body) {
-            User.removeInterest( req.body.userId,req.body.interests, res.callback);
+            User.removeInterests( req.body.userId,req.body.interests, res.callback);
         } else {
             res.json({
                 value: false,
@@ -31,11 +61,11 @@ var controller = {
         }
     },
               /**
-     * for users to add location 
+     * for users to add locations 
      */
- addLocation: function (req, res) {
+ addLocations: function (req, res) {
         if (req.body) {
-            User.addLocation( req.body.userId,req.body.location, res.callback);
+            User.addLocations( req.body.userId,req.body.locations, res.callback);
         } else {
             res.json({
                 value: false,
@@ -46,11 +76,11 @@ var controller = {
         }
     },
               /**
-     * for users to remove location 
+     * for users to remove locations 
      */
- removeLocation: function (req, res) {
+ removeLocations: function (req, res) {
         if (req.body) {
-            User.removeLocation( req.body.userId, res.callback);
+            User.removeLocations(req.body.userId,req.body.locations, res.callback);
         } else {
             res.json({
                 value: false,
@@ -68,13 +98,28 @@ var controller = {
         });
     },
     loginFacebook: function (req, res) {
+        if (req.query.returnUrl) {
+            req.session.returnUrl = req.query.returnUrl;
+        }
         passport.authenticate('facebook', {
             scope: ['public_profile', 'user_friends', 'email'],
             failureRedirect: '/'
         }, res.socialLogin)(req, res);
     },
+    loginTwitter: function (req, res) {
+        if (req.query.returnUrl) {
+            req.session.returnUrl = req.query.returnUrl;
+        } else {
 
-    loginGoogle: function (req, res) {
+        }
+// console.log("**************************",res)
+        passport.authenticate('twitter', {
+            scope: ['openid', 'profile', 'email'],
+            failureRedirect: '/'
+        }, res.socialLogin)(req, res);
+    },
+
+     loginGoogle: function (req, res) {
         if (req.query.returnUrl) {
             req.session.returnUrl = req.query.returnUrl;
         } else {
