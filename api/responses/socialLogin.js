@@ -77,10 +77,10 @@ req.session.returnUrl="http://localhost:8100/#/parampage?name="+profile.displayN
 
     console.log("res in returnurl",req.session.returnUrl);
 }
-else if(req.session.returnUrl=="http://event.wohlig.co.in/#!/login")
+else if(req.session.returnUrl=="")
 {
 
-req.session.returnUrl="http://event.wohlig.co.in/#/parampage?name="+profile.name.givenName+"&lastName="+profile.name.familyName+"&emailId="+profile.emails[0].value;
+req.session.returnUrl=""+profile.displayName+"&email="+profile.emails[0].value;
 
 console.log("res in returnurl",req.session.returnUrl);
 }
