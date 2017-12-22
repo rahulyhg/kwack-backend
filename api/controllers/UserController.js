@@ -35,7 +35,7 @@ var controller = {
      */
  addInterests: function (req, res) {
         if (req.body) {
-            User.addInterests(req.body.userId,req.body.interests,  res.callback);
+            User.addInterests(req.body.userId,req.body.interest,  res.callback);
         } else {
             res.json({
                 value: false,
@@ -49,6 +49,7 @@ var controller = {
      * for users to remove interests 
      */
  removeInterests: function (req, res) {
+     console.log("inisde remove",req.body)
         if (req.body) {
             User.removeInterests( req.body.userId,req.body.interests, res.callback);
         } else {

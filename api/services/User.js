@@ -2,17 +2,17 @@ var schema = new Schema({
     name: {
         type: String,
     },
-     userName: {
+    userName: {
         type: String,
     },
     age: {
         type: String,
     },
-    country:{
-        type:String
+    country: {
+        type: String
     },
-     state:{
-        type:String
+    state: {
+        type: String
     },
     location: {
         type: String,
@@ -21,6 +21,19 @@ var schema = new Schema({
         type: String,
         validate: validators.isEmail(),
         excel: "User Email",
+    },
+
+    userPollTotal: {
+        type: Number,
+    },
+    usernewstotal: {
+        type: Number,
+    },
+    followCount: {
+        type: Number,
+    },
+    followingCount: {
+        type: Number,
     },
     inviteFrinend: [{
         id: {
@@ -78,7 +91,8 @@ var schema = new Schema({
     },
     mobile: {
         type: String,
-        default: ""
+        required: true,
+        unique: true,
     },
     otp: {
         type: String,
@@ -118,13 +132,13 @@ module.exports = mongoose.model('User', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "user", "user"));
 var model = {
-     /**
+    /**
      * this function for get user by email
      * @param {userEmail} input userEmail
      * @param {callback} callback function with err and response
      */
     getUser: function (userEmail, callback) {
-        
+
         User.findOne({
             email: userEmail,
         }).exec(function (err, found) {
@@ -139,17 +153,17 @@ var model = {
         });
     },
 
-      /**
+    /**
      * this function for users to verify Account 
      * @param {userEmail} input userEmail
      * * @param {password} input password
      * @param {callback} callback function with err and response
      */
-    VerifyUser: function (userEmail,password, callback) {
-        
+    VerifyUser: function (userEmail, password, callback) {
+
         User.findOne({
             email: userEmail,
-            password:password
+            password: password
         }).exec(function (err, found) {
             if (err) {
                 callback(err, null);
@@ -168,25 +182,25 @@ var model = {
      *  * @param {interests} input interests
      * @param {callback} callback function with err and response
      */
-    addInterests: function (userId, interests, callback) {
-        User.Update({
-            _id: mongoose.Types.ObjectId(userId)
-        }, {
-            $push: {
-                'interests': {
-                    name: interests
-                }
-            }
-        }).exec(function (err, found) {
+    addInterests: function (userId, interest, callback) {
+        var data1 = {}
+        data1.interests = [];
+        for (var idx = 0; idx < interest.length; idx++) {
+            data1.interests.push({
+                name: interest[idx].name,
+            });
+        }
+        data1._id = userId;
+        User.saveData(data1, function (err, created) {
             if (err) {
                 callback(err, null);
-            } else if (_.isEmpty(found)) {
-                callback("noDataound", null);
+            } else if (_.isEmpty(created)) {
+                callback(null, "noDataound");
             } else {
-                callback(null, found);
+                callback(null, created)
             }
 
-        });
+        })
     },
     /**
      * this function remove details about the user interests
@@ -195,8 +209,9 @@ var model = {
      * @param {callback} callback function with err and response
      */
     removeInterests: function (userId, interests, callback) {
-        User.Update({
-            _id: mongoose.Types.ObjectId(userId)
+        console.log("inside reove api0",userId,interests)
+        User.update({
+            _id: userId
         }, {
             $pull: {
                 'interests': {
@@ -274,11 +289,11 @@ var model = {
         return sum;
     },
     existsSocial: function (user, callback) {
-        console.log("inside existsocial000000000000000000000000000",user)
+        console.log("inside existsocial000000000000000000000000000", user)
         var Model = this;
         var userEmail = '';
         Model.findOne({
-        
+
             "oauthLogin.socialId": user.id,
             "oauthLogin.socialProvider": user.provider,
         }).exec(function (err, data) {
@@ -287,65 +302,70 @@ var model = {
             } else if (_.isEmpty(data)) {
                 if (user.emails && user.emails.length > 0) {
                     userEmail = user.emails[0].value;
-                 
+
                 }
-                Model.findOne({'emailId':userEmail},function(err,userData){
-                             if(err){
-                            console.log(err);
-                             }
-                          if(_.isEmpty(userData)){
-                            var modelUser = {
-                                name: user.displayName,
-                                email: userEmail,
-                                accessToken: [uid(16)],
-                                loginProvider:user.provider,
-                                oauthLogin: [{
-                                    socialId: user.id,
-                                    socialProvider: user.provider,
-                                }]
-                            };
-                            
-                            modelUser.socialAccessToken = user.AccessToken;
-                            modelUser.socialRefreshToken = user.RefreshToken;
-                            if (user.image && user.image.url) {
-                                modelUser.photo = user.image.url;
+                Model.findOne({
+                    'emailId': userEmail
+                }, function (err, userData) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    if (_.isEmpty(userData)) {
+                        var modelUser = {
+                            name: user.displayName,
+                            email: userEmail,
+                            accessToken: [uid(16)],
+                            loginProvider: user.provider,
+                            oauthLogin: [{
+                                socialId: user.id,
+                                socialProvider: user.provider,
+                            }]
+                        };
+
+                        modelUser.socialAccessToken = user.AccessToken;
+                        modelUser.socialRefreshToken = user.RefreshToken;
+                        if (user.image && user.image.url) {
+                            modelUser.photo = user.image.url;
+                        }
+                        Model.saveData(modelUser, function (err, data2) {
+                            if (err) {
+                                callback(err, data2);
+                            } else {
+                                data3 = data2.toObject();
+                                delete data3.oauthLogin;
+                                delete data3.password;
+                                delete data3.forgotPassword;
+                                delete data3.otp;
+                                callback(err, data3);
                             }
-                            Model.saveData(modelUser, function (err, data2) {
-                                if (err) {
-                                    callback(err, data2);
-                                } else {
-                                    data3 = data2.toObject();
-                                    delete data3.oauthLogin;
-                                    delete data3.password;
-                                    delete data3.forgotPassword;
-                                    delete data3.otp;
-                                    callback(err, data3);
-                                }
-                            });
-                          }else{
-                              console.log(userData.oauthLogin);
-                            userData.oauthLogin.push({socialId:user.id, socialProvider: user.provider});
-                            userData.loginProvider = user.provider;
-                            userData.socialAccessToken = user.AccessToken;
-                            userData.socialRefreshToken = user.RefreshToken;
-                            userData.save(function(err, savedData){
-                                delete savedData.oauthLogin;
-                                delete savedData.password;
-                                delete savedData.forgotPassword;
-                                delete savedData.otp;
-                                callback(err,savedData);
-                            });
-                          }   
+                        });
+                    } else {
+                        console.log(userData.oauthLogin);
+                        userData.oauthLogin.push({
+                            socialId: user.id,
+                            socialProvider: user.provider
+                        });
+                        userData.loginProvider = user.provider;
+                        userData.socialAccessToken = user.AccessToken;
+                        userData.socialRefreshToken = user.RefreshToken;
+                        userData.save(function (err, savedData) {
+                            delete savedData.oauthLogin;
+                            delete savedData.password;
+                            delete savedData.forgotPassword;
+                            delete savedData.otp;
+                            callback(err, savedData);
+                        });
+                    }
                 });
 
-                
+
             } else {
                 delete data.oauthLogin;
                 delete data.password;
                 delete data.forgotPassword;
                 delete data.otp;
 
-                console.log(" ============ user.googleAccessToken",user.AccessToken);
+                console.log(" ============ user.googleAccessToken", user.AccessToken);
                 data.loginProvider = user.provider;
                 data.socialAccessToken = user.AccessToken;
                 data.save(function () {});
