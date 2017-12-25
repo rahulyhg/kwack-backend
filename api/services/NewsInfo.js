@@ -49,7 +49,7 @@ var schema = new Schema({
     }],
     realTotalCount: {
         type: Number,
-
+        default: 0
     },
     commentTotal: {
         type: Number,
@@ -62,7 +62,7 @@ var schema = new Schema({
             index: true
         }
     }],
-     likeTotal: {
+    likeTotal: {
         type: Number,
         default: 0
     },
