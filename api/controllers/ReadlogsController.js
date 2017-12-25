@@ -3,7 +3,7 @@ module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
 
              /**
-     *  to add comment 
+     *  to add readlogs and count 
      */
  readLogs: function (req, res) {
         if (req.body) {

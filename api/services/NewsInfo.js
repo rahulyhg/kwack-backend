@@ -83,6 +83,27 @@ module.exports = mongoose.model('NewsInfo', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
+
+    /**
+     * this function for search All News
+     * @param {callback} callback function with err and response
+     */
+    getAllNews: function (callback) {
+
+        NewsInfo.find({}).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
+
+
+
     /**
      * this function for news to add vote 
      * @param {pollname} input userEmail

@@ -18,10 +18,9 @@ module.exports = mongoose.model('Readlogs', schema);
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
     /**
-     * this function add comment for news
+     * this function add readLogs for news and count total readlogs
      * @param {newsId} input newsId
      *  * @param {userId} input userId
-     * *  * @param {comment} input comment
      * @param {callback} callback function with err and response
      */
 
