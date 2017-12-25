@@ -1,5 +1,20 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+          /**
+     * for users to verify Account 
+     */
+ sendOtp: function (req, res) {
+        if (req.body) {
+            User.sendOtp(req.body.email, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
             /**
      * for get user by email
      */

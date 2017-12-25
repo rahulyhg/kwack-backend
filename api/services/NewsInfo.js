@@ -55,7 +55,7 @@ var schema = new Schema({
         type: Number,
         default: 0
     },
-    comments: [{
+    comments: [{ 
         comment: {
             type: Schema.Types.ObjectId,
             ref: 'Comment',

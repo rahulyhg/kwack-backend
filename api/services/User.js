@@ -132,6 +132,35 @@ module.exports = mongoose.model('User', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "user", "user"));
 var model = {
+
+ /**
+     * this function for send otp
+     * @param {email} input email
+     * @param {callback} callback function with err and response
+     */
+  sendOtp: function (email, callback) {
+        console.log("inside send otp", email)
+        var emailOtp = (Math.random() + "").substring(2, 6);
+        var foundData = {};
+        User.findOneAndUpdate({
+            email: email
+        }, {
+            otp: emailOtp
+        }, {
+            new: true
+     }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
+
+
     /**
      * this function for get user by email
      * @param {userEmail} input userEmail
