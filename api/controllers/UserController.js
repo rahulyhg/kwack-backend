@@ -15,6 +15,21 @@ var controller = {
             })
         }
     },
+             /**
+     * for users to verify otp 
+     */
+ verifyOTPForResetPass: function (req, res) {
+        if (req.body) {
+            User.verifyOTPForResetPass(req.body.otp, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
             /**
      * for get user by email
      */

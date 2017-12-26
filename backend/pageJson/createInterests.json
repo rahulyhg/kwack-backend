@@ -1,0 +1,39 @@
+{
+    "title": "Create Interests",
+    "name": "Interests",
+    "jsonPage": "viewInterests",
+    "desciption": "",
+    "pageType": "create",
+    "urlFields": ["Interests"],
+    "fields": [{
+        "name": "Name",
+        "type": "text",
+        "tableRef": "name",
+        "placeholder": "Enter Name",
+        "id": "name",
+        "validation": ["", "", ""],
+        "url": ""
+    }],
+    "action": [{
+        "name": "submit",
+        "action": "submitInterests",
+        "stateName": {
+            "page": "page",
+            "json": {
+                "id": "viewInterests"
+            }
+        }
+    }, {
+        "name": "cancel",
+        "sideMenuRedirect": true,
+        "stateName": {
+            "page": "page",
+            "json": {
+                "id": "viewInterests"
+            }
+        }
+    }],
+    "apiCall": {
+        "url": "Interests/save"
+    }
+}

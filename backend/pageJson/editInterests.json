@@ -1,0 +1,45 @@
+{
+    "title": "Edit Interests",
+    "name": "Interests",
+    "jsonPage": "viewInterests",
+    "desciption": "",
+    "pageType": "edit",
+    "urlFields": ["_id"],
+    "fields": [{
+        "name": "Name",
+        "type": "text",
+        "tableRef": "name",
+        "placeholder": "Enter Name",
+        "id": "name",
+        "validation": ["required", "trim", "unique"],
+        "url": ""
+    }],
+    "action": [{
+        "name": "submit",
+        "action": "submitInterests",
+        "stateName": {
+            "page": "page",
+            "json": {
+                "id": "viewInterests"
+            }
+        }
+    }, {
+        "name": "cancel",
+        "sideMenuRedirect": true,
+        "stateName": {
+            "page": "page",
+            "json": {
+                "id": "viewInterests"
+            }
+        }
+    }],
+    "apiCall": {
+        "url": "Interests/save",
+        "params": "_id"
+    },
+    "preApi": {
+        "url": "Interests/getOne",
+        "params": "_id"
+    }
+
+}

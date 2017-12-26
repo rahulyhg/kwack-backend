@@ -115,6 +115,8 @@ var schema = new Schema({
         type: String,
         default: "User",
         enum: ['User', 'Admin']
+
+        
     }
 });
 
@@ -160,6 +162,28 @@ var model = {
         });
     },
 
+ /**
+     * this function for verify otp
+     * @param {otp} input otp
+     * @param {callback} callback function with err and response
+     */
+  verifyOTPForResetPass: function (otp, callback) {
+        User.findOne({
+            otp: otp
+        }).exec(function (error, found) {
+            if (error || found == undefined) {
+                callback(error, null);
+            } else {
+                if (_.isEmpty(found)) {
+                    callback(null, {
+                        message: "No data found"
+                    });
+                } else {
+                    callback(null, found);
+                }
+            }
+        })
+    },
 
     /**
      * this function for get user by email
