@@ -5,7 +5,7 @@ var controller = {
      */
  getPoll: function (req, res) {
         if (req.body) {
-            PollAnswer.getPoll(req.body.newsId, res.callback);
+            PollAnswer.getPoll(req.body.newsId,req.body.userId, res.callback);
         } else {
             res.json({
                 value: false,
@@ -20,7 +20,7 @@ var controller = {
      */
  addPollAnswer: function (req, res) {
         if (req.body) {
-            PollAnswer.addPollAnswer(req.body.newsId, req.body.optionId,req.body.userId,res.callback);
+            PollAnswer.addPollAnswer(req.body.newsId, req.body.pollname,req.body.userId,res.callback);
         } else {
             res.json({
                 value: false,

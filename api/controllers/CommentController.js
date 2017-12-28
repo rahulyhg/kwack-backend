@@ -5,7 +5,8 @@ var controller = {
      */
  addComment: function (req, res) {
         if (req.body) {
-            Comment.addComment(req.body.userId,req.body.newsId,req.body.comment, res.callback);
+            console.log("req.body",req.body)
+            Comment.addComment(req.body.userId,req.body.newsId,req.body.comment,req.body.kwack, res.callback);
         } else {
             res.json({
                 value: false,

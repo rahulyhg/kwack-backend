@@ -18,6 +18,9 @@ var schema = new Schema({
         type: Number
 
     },
+    kwack:{
+        type:String
+    }
 
 });
 
@@ -37,19 +40,20 @@ var model = {
      * @param {callback} callback function with err and response
      */
 
-    addComment: function (userId, newsId, comment, callback) {
-
+    addComment: function (userId, newsId, comment,kwack, callback) {
+console.log("inside api",userId,newsId,comment,kwack)
         async.waterfall([
             function (callback1) {
                 var comment1 = {}
                 comment1.user = userId
                 comment1.news = newsId
                 comment1.comment = comment
+                comment1.kwack = kwack
                 Comment.saveData(comment1, function (err, created) {
                     if (err) {
-                        callback(err, null);
+                        callback1(err, null);
                     } else if (_.isEmpty(created)) {
-                        callback(null, "noDataound");
+                        callback1(null, "noDataound");
                     } else {
                         data1 = {}
                         data1.newsId = newsId;
