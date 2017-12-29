@@ -14,12 +14,13 @@ var schema = new Schema({
     repliesTo: [{
         reply: String
     }],
-    likes: {
-        type: Number
+    likes: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
 
-    },
-    kwack:{
-        type:String
+    }],
+    kwack: {
+        type: String
     }
 
 });
@@ -40,8 +41,8 @@ var model = {
      * @param {callback} callback function with err and response
      */
 
-    addComment: function (userId, newsId, comment,kwack, callback) {
-console.log("inside api",userId,newsId,comment,kwack)
+    addComment: function (userId, newsId, comment, kwack, callback) {
+        console.log("inside api", userId, newsId, comment, kwack)
         async.waterfall([
             function (callback1) {
                 var comment1 = {}
@@ -294,7 +295,7 @@ console.log("inside api",userId,newsId,comment,kwack)
         });
     },
 
-    
+
 
 };
 module.exports = _.assign(module.exports, exports, model);
