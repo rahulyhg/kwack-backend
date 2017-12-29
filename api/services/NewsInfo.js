@@ -73,7 +73,7 @@ var schema = new Schema({
         type: Number,
         default: 0
     },
-    likes: [{
+    Likes: [{
         like: {
             type: Schema.Types.ObjectId,
             ref: 'Comment',
