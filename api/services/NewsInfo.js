@@ -104,7 +104,6 @@ module.exports = mongoose.model('NewsInfo', schema);
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
        searchNewsByDesc: function (data, callback) {
-        console.log("serhNesw",data)
         var trimText = data.searchText.trim();
         var search = new RegExp('' + trimText);
 
@@ -129,7 +128,6 @@ var model = {
         });
     },
     searchNewsByTitle: function (data, callback) {
-        console.log("serhNesw",data)
         var trimText = data.searchText.trim();
         var search = new RegExp('' + trimText);
 
@@ -178,10 +176,8 @@ var model = {
     getAllNews1: function (data, callback) {
         // console.log("inside get getAllNews1",data)
         if (data.count) {
-            console.log("inside if")
             var maxCount = data.count;
         } else {
-            console.log("inside else", Config.maxRow)
             var maxCount = Config.maxRow;
         }
         var maxRow = maxCount
@@ -189,7 +185,6 @@ var model = {
         if (data.page) {
             page = data.page;
         }
-        console.log("data.field", data.field)
         var field = data.field;
         var options = {
             field: data.field,
@@ -206,7 +201,7 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({})
-            .deepPopulate("polls.poll")
+            .deepPopulate("polls.poll comments.comment.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -225,12 +220,9 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getAllNewsJustNow: function (data, callback) {
-        console.log("inside get getAllNews1", data)
         if (data.count) {
-            console.log("inside if")
             var maxCount = data.count;
         } else {
-            console.log("inside else", Config.maxRow)
             var maxCount = Config.maxRow;
         }
         var maxRow = maxCount
@@ -238,7 +230,6 @@ var model = {
         if (data.page) {
             page = data.page;
         }
-        console.log("data.field", data.field)
         var field = data.field;
         var options = {
             field: data.field,
@@ -255,7 +246,7 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({})
-            .deepPopulate("polls.poll")
+            .deepPopulate("polls.poll comments.comment.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -275,7 +266,6 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getNewsByInterest: function (data, callback) {
-        console.log("inside get userInterest", data)
         if (data.count) {
             var maxCount = data.count;
         } else {
@@ -304,7 +294,7 @@ var model = {
         NewsInfo.find({
                 interest: data.userInterest
             })
-            .deepPopulate("polls.poll")
+            .deepPopulate("polls.poll comments.comment.user")
             .order(options)
             .keyword(options)
             .page(options,
