@@ -158,7 +158,7 @@ var model = {
     getTrendingNews: function (callback) {
         NewsInfo.find({
             trending: "YES"
-        }).deepPopulate('polls.poll comments.comment.user').exec(function (err, found) {
+        }).deepPopulate('polls.poll comments.comment').exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
@@ -201,7 +201,7 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({})
-            .deepPopulate("polls.poll comments.comment.user")
+            .deepPopulate("polls.poll comments.comment")
             .order(options)
             .keyword(options)
             .page(options,
@@ -246,7 +246,7 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({})
-            .deepPopulate("polls.poll comments.comment.user")
+            .deepPopulate("polls.poll comments.comment")
             .order(options)
             .keyword(options)
             .page(options,
@@ -294,7 +294,7 @@ var model = {
         NewsInfo.find({
                 interest: data.userInterest
             })
-            .deepPopulate("polls.poll comments.comment.user")
+            .deepPopulate("polls.poll comments.comment")
             .order(options)
             .keyword(options)
             .page(options,
@@ -334,7 +334,7 @@ var model = {
         // console.log("newsId",newsId)
         NewsInfo.findOne({
             _id: newsId
-        }).deepPopulate('polls.poll comments.comment.user').exec(function (err, found) {
+        }).deepPopulate('polls.poll comments.comment').exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
