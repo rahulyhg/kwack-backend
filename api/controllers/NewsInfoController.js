@@ -1,5 +1,20 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+               /**
+     * for Get all news
+     */
+ getTrendingNews: function (req, res) {
+        if (req.body) {
+            NewsInfo.getTrendingNews(res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
               /**
      * for Get all news
      */
@@ -16,7 +31,7 @@ var controller = {
         }
     }, 
                   /**
-     * for Get all Just Now news
+     * for Get Nes By Interest
      */
  getNewsByInterest: function (req, res) {
      console.log("inside ctrl")

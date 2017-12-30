@@ -74,21 +74,21 @@ var schema = new Schema({
         default: 0
     },
     Likes: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Comment',
-            index: true
+        type: Schema.Types.ObjectId,
+        ref: 'Comment',
+        index: true
     }],
-       trending: {
+    trending: {
         type: String,
         default: "NO",
         enum: ['YES', 'NO']
     },
-       IsPoll: {
+    IsPoll: {
         type: String,
         default: "NO",
         enum: ['YES', 'NO']
     },
-       IsKwack: {
+    IsKwack: {
         type: String,
         default: "NO",
         enum: ['YES', 'NO']
@@ -103,6 +103,24 @@ module.exports = mongoose.model('NewsInfo', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
+    /**
+     * this function for get One News
+     * @param {callback} callback function with err and response
+     */
+    getTrendingNews: function (callback) {
+        NewsInfo.find({
+            trending: "YES"
+        }).deepPopulate('polls.poll comments.comment.user').exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
     /**
      * this function for search All News
      * @param {callback} callback function with err and response
@@ -137,8 +155,7 @@ var model = {
             start: (page - 1) * maxRow,
             count: maxRow
         };
-        NewsInfo.find({
-            })
+        NewsInfo.find({})
             .deepPopulate("polls.poll")
             .order(options)
             .keyword(options)
@@ -153,17 +170,17 @@ var model = {
                     }
                 });
     },
-      /**
+    /**
      * this function for search New added News
      * @param {callback} callback function with err and response
      */
     getAllNewsJustNow: function (data, callback) {
-        console.log("inside get getAllNews1",data)
+        console.log("inside get getAllNews1", data)
         if (data.count) {
             console.log("inside if")
             var maxCount = data.count;
         } else {
-             console.log("inside else",Config.maxRow)
+            console.log("inside else", Config.maxRow)
             var maxCount = Config.maxRow;
         }
         var maxRow = maxCount
@@ -171,7 +188,7 @@ var model = {
         if (data.page) {
             page = data.page;
         }
-        console.log("data.field",data.field)
+        console.log("data.field", data.field)
         var field = data.field;
         var options = {
             field: data.field,
@@ -187,8 +204,7 @@ var model = {
             start: (page - 1) * maxRow,
             count: maxRow
         };
-        NewsInfo.find({
-            })
+        NewsInfo.find({})
             .deepPopulate("polls.poll")
             .order(options)
             .keyword(options)
@@ -204,12 +220,12 @@ var model = {
                 });
     },
 
-      /**
+    /**
      * this function for search News by interest
      * @param {callback} callback function with err and response
      */
     getNewsByInterest: function (data, callback) {
-        console.log("inside get userInterest",data)
+        console.log("inside get userInterest", data)
         if (data.count) {
             var maxCount = data.count;
         } else {
@@ -236,7 +252,7 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({
-            interest:data.userInterest
+                interest: data.userInterest
             })
             .deepPopulate("polls.poll")
             .order(options)
