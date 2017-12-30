@@ -158,7 +158,7 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getAllNewsJustNow: function (data, callback) {
-        // console.log("inside get getAllNews1",data)
+        console.log("inside get getAllNews1",data)
         if (data.count) {
             console.log("inside if")
             var maxCount = data.count;

@@ -19,8 +19,10 @@ var controller = {
      * for Get all Just Now news
      */
  getAllNewsJustNow: function (req, res) {
+     console.log("inside ctrl")
         if (req.body) {
-            NewsInfo.getAllNewsJustNow(res.callback);
+            console.log("getAllNewsJustNow",req.body)
+            NewsInfo.getAllNewsJustNow(req.body,res.callback);
         } else {
             res.json({
                 value: false,
