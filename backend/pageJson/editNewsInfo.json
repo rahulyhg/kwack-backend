@@ -62,41 +62,75 @@
         "url": ""
     },
       {
-        "name": "pollOptions",
-        "type": "box",
-        "id": "pollOptions",
-        "tableRef": "pollOptions",
-        "placeholder": "Enter pollOptions",
-        "fields": [{
-                "name": "title",
-                "type": "text",
-                "tableRef": "title",
-                "placeholder": "Enter Vote title",
-                "id": "title",
-                "onView":true,
-                "view": true,
-                "companyCount":"companyCount"
-               
-                },{
-                "name": "percentage",
-                "type": "text",
-                "tableRef": "percentage",
-                "placeholder": "Enter Vote Counts",
-                "id": "percentage",
-                "onView":true,
-                "view": true,
-                "companyCount":"companyCount"
-               
-                }]
-     },
-     {
         "name": "pollQuestion",
         "type": "text",
         "tableRef": "pollQuestion",
         "placeholder": "Enter pollQuestion",
         "id": "pollQuestion",
         "url": ""
-    }],
+    },
+     {
+        "name": "pollOptions",
+        "type": "box",
+        "tableRef": "pollOptions",
+        "validation": ["required", "trim", ""],
+        "field": [{
+                "name": "title",
+                "type": "text",
+                "tableRef": "title",
+                "placeholder": "Entertitle",
+                "id": "title",
+                "validation": ["", "trim", ""],
+                "onView": true,
+                "view": true,
+                "url": ""
+            },
+            {
+                "name": "percentage",
+                "type": "text",
+                "tableRef": "percentage",
+                "placeholder": "Enter percentage",
+                "id": "percentage",
+                "validation": ["", "trim", ""],
+                "onView": true,
+                "view": true,
+                "url": ""
+            }
+        ]
+    },
+      {
+        "name": "Interest",
+        "type": "text",
+        "tableRef": "interest",
+        "placeholder": "Enter Interest",
+        "id": "interest",
+        "url": ""
+    },
+     {
+        "name": "Real Total Count",
+        "type": "number",
+        "tableRef": "realTotalCount",
+        "placeholder": "Enter realTotalCount",
+        "id": "realTotalCount",
+        "url": ""
+    },
+    {
+        "name": "Comment Total Count",
+        "type": "number",
+        "tableRef": "commentTotal",
+        "placeholder": "Enter commentTotal",
+        "id": "commentTotal",
+        "url": ""
+    },
+     {
+        "name": "Total Like",
+        "type": "number",
+        "tableRef": "likeTotal",
+        "placeholder": "Enter likeTotal",
+        "id": "likeTotal",
+        "url": ""
+    }
+    ],
     "action": [{
         "name": "submit",
         "action": "submitNewsInfo",

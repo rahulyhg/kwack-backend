@@ -44,9 +44,9 @@ var schema = new Schema({
         type: String,
 
     },
-    interests: [{
+    interest: {
         name: String
-    }],
+    },
     realTotalCount: {
         type: Number,
         default: 0
@@ -56,11 +56,9 @@ var schema = new Schema({
         default: 0
     },
     comments: [{ 
-        comment: {
             type: Schema.Types.ObjectId,
             ref: 'Comment',
             index: true
-        }
     }],
      polls: [{ 
         poll: {
@@ -74,12 +72,25 @@ var schema = new Schema({
         default: 0
     },
     Likes: [{
-        like: {
             type: Schema.Types.ObjectId,
             ref: 'Comment',
             index: true
-        }
     }],
+       trending: {
+        type: String,
+        default: "NO",
+        enum: ['YES', 'NO']
+    },
+       IsPoll: {
+        type: String,
+        default: "NO",
+        enum: ['YES', 'NO']
+    },
+       IsKwack: {
+        type: String,
+        default: "NO",
+        enum: ['YES', 'NO']
+    },
 
 });
 
@@ -119,12 +130,111 @@ var model = {
                 }
             },
             sort: {
-                desc: 'createdAt'
+                createdAt: 1
             },
             start: (page - 1) * maxRow,
             count: maxRow
         };
         NewsInfo.find({
+            })
+            .deepPopulate("polls.poll")
+            .order(options)
+            .keyword(options)
+            .page(options,
+                function (err, found) {
+                    if (err) {
+                        callback(err, null);
+                    } else if (found) {
+                        callback(null, found);
+                    } else {
+                        callback("Invalid data", null);
+                    }
+                });
+    },
+      /**
+     * this function for search New added News
+     * @param {callback} callback function with err and response
+     */
+    getAllNewsJustNow: function (data, callback) {
+        // console.log("inside get getAllNews1",data)
+        if (data.count) {
+            console.log("inside if")
+            var maxCount = data.count;
+        } else {
+             console.log("inside else",Config.maxRow)
+            var maxCount = Config.maxRow;
+        }
+        var maxRow = maxCount
+        var page = 1;
+        if (data.page) {
+            page = data.page;
+        }
+        console.log("data.field",data.field)
+        var field = data.field;
+        var options = {
+            field: data.field,
+            filters: {
+                keyword: {
+                    fields: ['name'],
+                    term: data.keyword
+                }
+            },
+            sort: {
+                createdAt: -1
+            },
+            start: (page - 1) * maxRow,
+            count: maxRow
+        };
+        NewsInfo.find({
+            })
+            .deepPopulate("polls.poll")
+            .order(options)
+            .keyword(options)
+            .page(options,
+                function (err, found) {
+                    if (err) {
+                        callback(err, null);
+                    } else if (found) {
+                        callback(null, found);
+                    } else {
+                        callback("Invalid data", null);
+                    }
+                });
+    },
+
+      /**
+     * this function for search News by interest
+     * @param {callback} callback function with err and response
+     */
+    getNewsByInterest: function (data, callback) {
+        // console.log("inside get getAllNews1",data)
+        if (data.count) {
+            var maxCount = data.count;
+        } else {
+            var maxCount = Config.maxRow;
+        }
+        var maxRow = maxCount
+        var page = 1;
+        if (data.page) {
+            page = data.page;
+        }
+        var field = data.field;
+        var options = {
+            field: data.field,
+            filters: {
+                keyword: {
+                    fields: ['name'],
+                    term: data.keyword
+                }
+            },
+            sort: {
+                createdAt: -1
+            },
+            start: (page - 1) * maxRow,
+            count: maxRow
+        };
+        NewsInfo.find({
+            interest:data.Userinterest
             })
             .deepPopulate("polls.poll")
             .order(options)

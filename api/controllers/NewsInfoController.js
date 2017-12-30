@@ -15,6 +15,21 @@ var controller = {
             })
         }
     }, 
+                /**
+     * for Get all Just Now news
+     */
+ getAllNewsJustNow: function (req, res) {
+        if (req.body) {
+            NewsInfo.getAllNewsJustNow(res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
              /**
      * for Get all news
      */
