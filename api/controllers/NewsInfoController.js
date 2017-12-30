@@ -15,6 +15,23 @@ var controller = {
             })
         }
     }, 
+                  /**
+     * for Get all Just Now news
+     */
+ getNewsByInterest: function (req, res) {
+     console.log("inside ctrl")
+        if (req.body) {
+            console.log("getNewsByInterest",req.body)
+            NewsInfo.getNewsByInterest(req.body,res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
                 /**
      * for Get all Just Now news
      */

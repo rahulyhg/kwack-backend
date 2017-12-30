@@ -209,7 +209,7 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getNewsByInterest: function (data, callback) {
-        // console.log("inside get getAllNews1",data)
+        console.log("inside get userInterest",data)
         if (data.count) {
             var maxCount = data.count;
         } else {
@@ -236,7 +236,7 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({
-            interest:data.Userinterest
+            interest:data.userInterest
             })
             .deepPopulate("polls.poll")
             .order(options)
