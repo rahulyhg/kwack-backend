@@ -55,12 +55,14 @@ var schema = new Schema({
         type: Number,
         default: 0
     },
-    comments: [{ 
+    comments: [{
+        comment: {
             type: Schema.Types.ObjectId,
             ref: 'Comment',
             index: true
+        }
     }],
-     polls: [{ 
+    polls: [{
         poll: {
             type: Schema.Types.ObjectId,
             ref: 'PollAnswer',
@@ -101,7 +103,7 @@ module.exports = mongoose.model('NewsInfo', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
-      /**
+    /**
      * this function for search All News
      * @param {callback} callback function with err and response
      */
@@ -111,7 +113,7 @@ var model = {
             console.log("inside if")
             var maxCount = data.count;
         } else {
-             console.log("inside else",Config.maxRow)
+            console.log("inside else", Config.maxRow)
             var maxCount = Config.maxRow;
         }
         var maxRow = maxCount
@@ -119,7 +121,7 @@ var model = {
         if (data.page) {
             page = data.page;
         }
-        console.log("data.field",data.field)
+        console.log("data.field", data.field)
         var field = data.field;
         var options = {
             field: data.field,
@@ -272,10 +274,10 @@ var model = {
      * this function for get One News
      * @param {callback} callback function with err and response
      */
-    getOneNews: function (newsId,callback) {
-// console.log("newsId",newsId)
+    getOneNews: function (newsId, callback) {
+        // console.log("newsId",newsId)
         NewsInfo.findOne({
-            _id:newsId
+            _id: newsId
         }).deepPopulate('polls.poll comments.comment.user').exec(function (err, found) {
             if (err) {
                 callback(err, null);
