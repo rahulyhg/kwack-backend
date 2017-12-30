@@ -103,6 +103,56 @@ module.exports = mongoose.model('NewsInfo', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
+       searchNewsByDesc: function (data, callback) {
+        console.log("serhNesw",data)
+        var trimText = data.searchText.trim();
+        var search = new RegExp('' + trimText);
+
+        var queryString = {
+            description: {
+                $regex: search,
+                $options: "i"
+            }
+            
+        }
+
+        NewsInfo.find(queryString).limit(5).exec(function (error, NewsInfoFound) {
+            if (error || NewsInfoFound == undefined) {
+                callback(error, null);
+            } else {
+                if (!_.isEmpty(NewsInfoFound)) {
+                    callback(null, NewsInfoFound);
+                } else {
+                    callback(null, []);
+                }
+            }
+        });
+    },
+    searchNewsByTitle: function (data, callback) {
+        console.log("serhNesw",data)
+        var trimText = data.searchText.trim();
+        var search = new RegExp('' + trimText);
+
+        var queryString = {
+            title: {
+                $regex: search,
+                $options: "i"
+            }
+            
+        }
+
+        NewsInfo.find(queryString).limit(5).exec(function (error, NewsInfoFound) {
+            if (error || NewsInfoFound == undefined) {
+                callback(error, null);
+            } else {
+                if (!_.isEmpty(NewsInfoFound)) {
+                    callback(null, NewsInfoFound);
+                } else {
+                    callback(null, []);
+                }
+            }
+        });
+    },
     /**
      * this function for get One News
      * @param {callback} callback function with err and response

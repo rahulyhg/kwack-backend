@@ -1,5 +1,59 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+    // globalSearch: function (req, res) {
+    //     var searchResult = {};
+    //     async.parallel({
+    //         getNewsInfo: function (cb) {
+    //             NewsInfo.searchNews(req.body, function (error, data) {
+    //                 if (error || data == undefined) {
+    //                     cb(error, null);
+    //                 } else {
+    //                     searchResult.NewsInfo = data;
+    //                     cb();
+    //                 }
+    //             })
+    //         }
+    //     }, function (error) {
+    //         if (error) {
+    //             res.callback(error, null);
+    //         } else {
+    //             res.callback(null, searchResult);
+    //         }
+    //     })
+    // },
+        globalSearchForNews: function (req, res) {
+        var searchResult = {};
+        async.parallel({
+             NewsInfoByTitle: function (cb) {
+                NewsInfo.searchNewsByTitle(req.body, function (error, data) {
+                    if (error || data == undefined) {
+                        cb(error, null);
+                    } else {
+                        searchResult.NewsInfo = data;
+                        cb();
+                    }
+                })
+            },
+            NewsInfoByDesc: function (cb) {
+                NewsInfo.searchNewsByDesc(req.body, function (error, data) {
+                    if (error || data == undefined) {
+                        cb(error, null);
+                    } else {
+                        searchResult.newsInfoDesc = data;
+                        cb();
+                    }
+                })
+            },
+         
+        }, function (error) {
+            if (error) {
+                console.log("CompanyController >>> gobalSearch >>> finalError >>> ", error);
+                res.callback(error, null);
+            } else {
+                res.callback(null, searchResult);
+            }
+        })
+    },
                /**
      * for Get all news
      */
