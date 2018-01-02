@@ -13,6 +13,42 @@
         "id": "name",
         "validation": ["required", "trim", "unique"],
         "url": ""
+    },
+    {
+        "name": "User Name",
+        "type": "text",
+        "tableRef": "userName",
+        "placeholder": "Enter userName",
+        "id": "userName",
+        "validation": ["", "trim", "unique"],
+        "url": ""
+    },
+     {
+        "name": "User Age",
+        "type": "text",
+        "tableRef": "age",
+        "placeholder": "Enter age",
+        "id": "age",
+        "validation": ["", "trim", "unique"],
+        "url": ""
+    },
+      {
+        "name": "User State",
+        "type": "text",
+        "tableRef": "state",
+        "placeholder": "Enter state",
+        "id": "state",
+        "validation": ["", "trim", "unique"],
+        "url": ""
+    },
+      {
+        "name": "User Contry",
+        "type": "text",
+        "tableRef": "country",
+        "placeholder": "Enter country",
+        "id": "country",
+        "validation": ["", "trim", "unique"],
+        "url": ""
     }, {
         "name": "Email",
         "type": "text",

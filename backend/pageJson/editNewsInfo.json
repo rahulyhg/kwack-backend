@@ -112,15 +112,17 @@
         "tableRef": "realTotalCount",
         "placeholder": "Enter realTotalCount",
         "id": "realTotalCount",
-        "url": ""
+        "url": "",
+        "disabled": "true"
     },
-    {
+      {
         "name": "Comment Total Count",
         "type": "number",
         "tableRef": "commentTotal",
         "placeholder": "Enter commentTotal",
         "id": "commentTotal",
-        "url": ""
+        "url": "",
+        "disabled": "true"
     },
      {
         "name": "Total Like",
@@ -128,9 +130,47 @@
         "tableRef": "likeTotal",
         "placeholder": "Enter likeTotal",
         "id": "likeTotal",
-        "url": ""
-    }
-    ],
+        "url": "",
+        "disabled": "true"
+    },
+     {
+            "name": "Trending",
+            "type": "tags",
+            "tableRef": "trending",
+            "id": "trending",
+            "validation": ["", "trim", ""],
+            "url": "",
+            "dropDownField": "",
+            "dropDownType": "single",
+            "onView": true,
+            "dropDown": ["YES", "NO"]
+        },
+          {
+            "name": "Set Poll",
+            "type": "tags",
+            "tableRef": "IsPoll",
+            "id": "IsPoll",
+            "validation": ["", "trim", ""],
+            "url": "",
+            "dropDownField": "",
+            "dropDownType": "single",
+            "onView": true,
+            "dropDown": ["YES", "NO"]
+        },
+          {
+            "name": "Set Kwack",
+            "type": "tags",
+            "tableRef": "IsKwack",
+            "id": "IsKwack",
+            "validation": ["", "trim", ""],
+            "url": "",
+            "dropDownField": "",
+            "dropDownType": "single",
+            "onView": true,
+            "dropDown": ["YES", "NO"]
+        }
+    
+   ],
     "action": [{
         "name": "submit",
         "action": "submitNewsInfo",

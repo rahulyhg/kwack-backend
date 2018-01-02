@@ -112,7 +112,8 @@
         "tableRef": "realTotalCount",
         "placeholder": "Enter realTotalCount",
         "id": "realTotalCount",
-        "url": ""
+        "url": "",
+        "disabled": "true"
     },
       {
         "name": "Comment Total Count",
@@ -120,7 +121,8 @@
         "tableRef": "commentTotal",
         "placeholder": "Enter commentTotal",
         "id": "commentTotal",
-        "url": ""
+        "url": "",
+        "disabled": "true"
     },
      {
         "name": "Total Like",
@@ -128,7 +130,8 @@
         "tableRef": "likeTotal",
         "placeholder": "Enter likeTotal",
         "id": "likeTotal",
-        "url": ""
+        "url": "",
+        "disabled": "true"
     },
      {
             "name": "Trending",

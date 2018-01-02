@@ -42,7 +42,6 @@ var model = {
      */
 
     addComment: function (userId, newsId, comment, kwack, callback) {
-        console.log("inside api", userId, newsId, comment, kwack)
         async.waterfall([
             function (callback1) {
                 var comment1 = {}
@@ -113,13 +112,10 @@ var model = {
 
             }
         ], function (err, data) {
-            console.log("exe final:");
 
             if (err || _.isEmpty(data)) {
-                console.log("exe final is empty:");
                 callback(err, [])
             } else {
-                console.log("exe final callback:");
                 callback(null, data)
             }
         });
@@ -165,7 +161,6 @@ var model = {
                         var data1 = {}
                         data1._id = found._id;
                         data1.commentTotal = found.commentTotal - 1
-                        console.log("data1 is", data1)
                         NewsInfo.saveData(data1, function (err, created) {
                             if (err) {
                                 callback2(err, null);
@@ -204,13 +199,10 @@ var model = {
 
             }
         ], function (err, data) {
-            console.log("exe final:");
 
             if (err || _.isEmpty(data)) {
-                console.log("exe final is empty:");
                 callback(err, [])
             } else {
-                console.log("exe final callback:");
                 callback(null, data)
             }
         });
