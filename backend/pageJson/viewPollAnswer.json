@@ -4,11 +4,12 @@
     "pageType": "view",
     "sendIdWithCreate": true,
     "urlFields": ["_id"],
-    "fields": [{
-        "name": "news",
-        "isSort": "",
-        "tableRef": "news"
-    }],
+    "fields": [  {
+            "name": "news",
+            "isSort": "",
+            "tableRef": "news",
+            "field": "title"
+        }],
     "action": [{
         "name": "edit",
         "icon": "fa-pencil",

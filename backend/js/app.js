@@ -87,6 +87,11 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             url: "/jagz",
             templateUrl: "views/jagz.html",
             controller: 'JagzCtrl'
+        })
+           .state('newsDetail', {
+           url: "/newsDetail/:id/{page:.*}/{keyword:.*}",
+            templateUrl: "views/template.html",
+            controller: 'NewsDetailsCtrl'
         });
 
     $urlRouterProvider.otherwise("/dashboard");

@@ -1,10 +1,10 @@
 {
-    "title": "Create User",
-    "name": "User",
-    "jsonPage": "viewUser",
+    "title": "Create PollAnswer",
+    "name": "PollAnswer",
+    "jsonPage": "viewPollAnswer",
     "desciption": "",
     "pageType": "create",
-    "urlFields": ["User"],
+    "urlFields": ["PollAnswer"],
     "fields": [{
             "name": "User",
             "type": "tags",
@@ -18,32 +18,29 @@
             "url": "User/search"
         },
         {
-        "name": "News",
-        "type": "text",
-        "tableRef": "news",
-        "placeholder": "Enter news",
-        "id": "news",
-        "validation": ["required", "trim", "unique"],
-        "url": ""
-    },
-     {
-        "name": "Images",
-        "type": "box",
-        "tableRef": "images",
-        "validation": ["required", "trim", ""],
-        "field": [{
-                "name": "Options",
-                "type": "text",
-                "tableRef": "option",
-                "placeholder": "Enter option",
-                "id": "option",
-                "validation": ["", "trim", ""],
-                "onView": true,
-                "view": true,
-                "url": ""
-            }
-        ]
-    }],
+            "name": "news",
+            "type": "tags",
+            "tableRef": "news",
+            "dropDownType": "single",
+            "dropDownField": "title",
+            "searchApi": "searchCall",
+            "placeholder": "Enter news Name",
+            "id": "news",
+            "validation": ["", "trim", ""],
+            "url": "NewsInfo/search"
+        },
+        {
+            "name": "pollOptions",
+            "type": "tags",
+            "tableRef": "pollOptions",
+            "id": "pollOptions",
+            "validation": ["", "trim", ""],
+            "url": "",
+            "dropDownField": "",
+            "dropDownType": "single",
+            "onView": true,
+            "dropDown": ["YES", "NO"]
+        }],
     "action": [{
         "name": "submit",
         "action": "submitPollAnswer",

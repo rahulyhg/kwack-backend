@@ -13,8 +13,7 @@
         "name": "edit",
         "icon": "fa-pencil",
         "buttonClass": "btn-primary",
-        "type": "page",
-        "action": "editNewsInfo",
+        "type": "newsDetail",
         "fieldsToSend": {
             "_id": "_id"
         }

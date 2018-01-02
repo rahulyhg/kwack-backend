@@ -16,7 +16,10 @@ var schema = new Schema({
 schema.plugin(deepPopulate, {
     Populate: {
         'news': {
-            select: ' _id title'
+            select: '_id title'
+        },
+         'user': {
+            select: '_id name'
         }
     }
 });
@@ -24,7 +27,7 @@ schema.plugin(uniqueValidator);
 schema.plugin(timestamps);
 module.exports = mongoose.model('PollAnswer', schema);
 
-var exports = _.cloneDeep(require("sails-wohlig-service")(schema,'news','news'));
+var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user", "news user", "order", "asc"));
 var model = {
       /**
      * this function provides details about the poll

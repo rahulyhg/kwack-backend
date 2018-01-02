@@ -324,7 +324,23 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.getAllItems();
 
     })
-
+    .controller('NewsDetailsCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
+        $scope.json = JsonService;
+        $scope.template = TemplateService.changecontent("newsDetail");
+        $scope.menutitle = NavigationService.makeactive("newsDetail");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+        JsonService.getJson($stateParams.id, function () {});
+        
+        // var formData = {};
+        // formData._id = JSON.parse($stateParams.keyword)._id;
+        // console.log("ContestCtrl");
+        // NavigationService.apiCall("Contest/getOne", formData, function (data) {
+        //     console.log("inside contest ctrl:", data.data.name);
+        //     $scope.tableData = data.data;
+        //     console.log("inside contest ctrl*****:", data.data);
+        // });
+    })
     .controller('DetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, toastr) {
         $scope.json = JsonService;
         JsonService.setKeyword($stateParams.keyword);

@@ -12,7 +12,11 @@ var schema = new Schema({
 
     },
     repliesTo: [{
-        reply: String
+        reply: String,
+         UserId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     }],
     likes: [{
         type: Schema.Types.ObjectId,
@@ -40,11 +44,12 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getKwack: function (newsId,userId, callback) {
+        console.log("inside kwack get",newsId,userId)
          Comment.findOne({
                     news: newsId,
                     user:userId
                 }).exec(function (err, found) {
-                    console.log("inside api found",found)
+                    console.log("inside api found gwt kwack",found)
                     if (err) {
                         callback(err, null);
                     } else if (_.isEmpty(found)) {
@@ -258,16 +263,18 @@ var model = {
      * this function add  reply for news
      * @param {commentId} input commentId
      *  * @param {reply} input reply
+     *  *  * @param {userId} input userId
      * @param {callback} callback function with err and response
      */
-    addReply: function (commentId, reply, callback) {
-
+    addReply: function (commentId, reply, user,callback) {
+console.log("%%%%%%%%%%%%%%%%%%%%%%%5550",commentId,reply,user)
         Comment.update({
             _id: commentId
         }, {
             $push: {
                 'repliesTo': {
-                    reply: reply
+                    UserId:user,
+                    reply:reply
                 }
             }
         }).exec(function (err, found) {
@@ -282,7 +289,7 @@ var model = {
         });
     },
 
-    /**
+    /**reply
      * this function remove  reply for news
      * @param {commentId} input commentId
      *  * @param {replyId} input replyId
