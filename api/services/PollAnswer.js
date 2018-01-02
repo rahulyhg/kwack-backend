@@ -29,6 +29,7 @@ var model = {
       /**
      * this function provides details about the poll
      * @param {newsId} input newsId
+      * * @param {userId} input userId
      * @param {callback} callback function with err and response
      */
     getPoll: function (newsId,userId, callback) {
