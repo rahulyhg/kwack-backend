@@ -13,15 +13,16 @@ var schema = new Schema({
     },
     repliesTo: [{
         reply: String,
-         UserId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
+        UserId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
     }],
-    likes: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-
+     likes: [{
+        userId: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        },
     }],
     kwack: {
         type: String
@@ -29,36 +30,45 @@ var schema = new Schema({
 
 });
 
-schema.plugin(deepPopulate, {});
+schema.plugin(deepPopulate, {
+    Populate: {
+        'news': {
+            select: '_id title'
+        },
+        'user': {
+            select: '_id name'
+        }
+    }
+});
 schema.plugin(uniqueValidator);
 schema.plugin(timestamps);
 module.exports = mongoose.model('Comment', schema);
 
-var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
+var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user", "news user", "order", "asc"));
 var model = {
 
-          /**
+    /**
      * this function provides details about the poll
      * @param {newsId} input newsId
      * * @param {userId} input userId
      * @param {callback} callback function with err and response
      */
-    getKwack: function (newsId,userId, callback) {
-        console.log("inside kwack get",newsId,userId)
-         Comment.findOne({
-                    news: newsId,
-                    user:userId
-                }).exec(function (err, found) {
-                    console.log("inside api found gwt kwack",found)
-                    if (err) {
-                        callback(err, null);
-                    } else if (_.isEmpty(found)) {
-                        callback("noDataound", null);
-                    } else {
-                        callback(null, found);
-                    }
+    getKwack: function (newsId, userId, callback) {
+        console.log("inside kwack get", newsId, userId)
+        Comment.findOne({
+            news: newsId,
+            user: userId
+        }).exec(function (err, found) {
+            console.log("inside api found gwt kwack", found)
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
 
-                })
+        })
     },
 
     /**
@@ -266,15 +276,15 @@ var model = {
      *  *  * @param {userId} input userId
      * @param {callback} callback function with err and response
      */
-    addReply: function (commentId, reply, user,callback) {
-console.log("%%%%%%%%%%%%%%%%%%%%%%%5550",commentId,reply,user)
+    addReply: function (commentId, reply, user, callback) {
+        console.log("%%%%%%%%%%%%%%%%%%%%%%%5550", commentId, reply, user)
         Comment.update({
             _id: commentId
         }, {
             $push: {
                 'repliesTo': {
-                    UserId:user,
-                    reply:reply
+                    UserId: user,
+                    reply: reply
                 }
             }
         }).exec(function (err, found) {
@@ -303,6 +313,33 @@ console.log("%%%%%%%%%%%%%%%%%%%%%%%5550",commentId,reply,user)
             $pull: {
                 'repliesTo': {
                     _id: replyId
+                }
+            }
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
+    /**
+     * this function add  Like for Comment
+     * @param {commentId} input commentId
+     *  *  * @param {userId} input userId
+     * @param {callback} callback function with err and response
+     */
+    addLike: function (commentId, user, callback) {
+        console.log("%%%%%%%%%%%%%%%%%%%%%%%5550", commentId, user)
+        Comment.update({
+            _id: commentId
+        }, {
+            $push: {
+                'likes': {
+                    userId: user
                 }
             }
         }).exec(function (err, found) {

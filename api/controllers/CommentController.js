@@ -91,5 +91,20 @@ var controller = {
             })
         }
     },
+                   /**
+     * to add like for Comment 
+     */
+ addLike: function (req, res) {
+        if (req.body) {
+            Comment.addLike(req.body.commentId,req.body.user, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
 };
 module.exports = _.assign(module.exports, controller);
