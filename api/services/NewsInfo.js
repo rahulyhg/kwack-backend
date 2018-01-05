@@ -44,8 +44,9 @@ var schema = new Schema({
         type: String,
 
     },
-    interest: {
-        name: String
+   interest: {
+        type: String,
+
     },
     realTotalCount: {
         type: Number,

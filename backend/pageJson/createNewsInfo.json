@@ -98,7 +98,7 @@
             }
         ]
     },
-      {
+   {
         "name": "Interest",
         "type": "text",
         "tableRef": "interest",
