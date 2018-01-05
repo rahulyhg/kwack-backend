@@ -5,8 +5,7 @@ myApp.service('JsonService', function ($http, TemplateService, $state, toastr, $
   var JsonService = this;
   this.setKeyword = function (data) {
     try {
-      this.keyword = JSON.parse(data);
-      console.log(this.keyword);
+      this.keyword = {_id:data};
     } catch (e) {
       console.log("keyword is not is json format");
     }
@@ -74,49 +73,41 @@ myApp.service('JsonService', function ($http, TemplateService, $state, toastr, $
     var sendTo = {
       id: action.action
     };
-    console.log("action",action.type);
+    console.log(action);
     if (action.type == "box") {
-       console.log("action",action.type);
       JsonService.modal = action;
       globalfunction.openModal(function (data) {
         console.log(data);
       });
     } else if (action.type == "redirect") {
-       console.log("action",action.type);
       if (action.linkType == "admin") {
-         console.log("action",action.type);
         window.location.href = adminurl + action.action;
       } else if (action.linkType == "internal") {
-         console.log("action",action.type);
         window.location.href = "#!/" + action.action;
       } else {
-         console.log("action",action.type);
         window.location.href = action.action;
       }
     } else {
-       console.log("action",action);
       if (value && action && action.fieldsToSend) {
-         console.log("action",action.type);
         var keyword = {};
         _.each(action.fieldsToSend, function (n, key) {
           keyword[key] = value[n];
         });
-        sendTo.keyword = JSON.stringify(keyword);
+        sendTo.keyword = keyword._id;
+        console.log(sendTo);
       }
       if (action && action.type == "page") {
-         console.log("action",action.type);
         $state.go("page", sendTo);
       } else if (action && action.type == "newsDetail") {
-         if (action.fieldsToSend) {
-           var keyword = {};
-           _.each(action.fieldsToSend, function (n, key) {
-             keyword[key] = value[n];
+        if (action.fieldsToSend) {
+          var keyword = {};
+          _.each(action.fieldsToSend, function (n, key) {
+            keyword[key] = value[n];
           });
           sendTo.keyword = JSON.stringify(keyword);
         }
         $state.go("newsDetail", sendTo);
-        } else if (action && action.type == "apiCallConfirm") {
-         console.log("action",action.type);
+      } else if (action && action.type == "apiCallConfirm") {
         globalfunction.confDel(function (value2) {
           if (value2) {
             NavigationService.delete(action.api, value, function (data) {
@@ -132,9 +123,4 @@ myApp.service('JsonService', function ($http, TemplateService, $state, toastr, $
       }
     }
   };
-
-
-
-
-
 });

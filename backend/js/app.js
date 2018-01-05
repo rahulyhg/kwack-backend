@@ -64,6 +64,11 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             templateUrl: "views/template.html",
             controller: 'CreateCountryCtrl'
         })
+         .state('newsDetail', {
+            templateUrl: "views/template.html",
+            url: "/newsDetail/:id/{page:.*}/{keyword:.*}",
+            controller: 'NewsDetailCtrl'
+        })
 
         .state('editcountry', {
             url: "/country-edit/:id",
@@ -87,11 +92,6 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             url: "/jagz",
             templateUrl: "views/jagz.html",
             controller: 'JagzCtrl'
-        })
-           .state('newsDetail', {
-           url: "/newsDetail/:id/{page:.*}/{keyword:.*}",
-            templateUrl: "views/template.html",
-            controller: 'NewsDetailsCtrl'
         });
 
     $urlRouterProvider.otherwise("/dashboard");

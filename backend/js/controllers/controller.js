@@ -14,6 +14,56 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             $state.go("login");
         }
     })
+       .controller('NewsDetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
+        $scope.json = JsonService;
+        $scope.template = TemplateService.changecontent("newsDetail");
+        $scope.menutitle = NavigationService.makeactive("newsDetail");
+           TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+        console.log("$stateParams---", JSON.stringify($stateParams.keyword));
+        $scope.data = {};
+        $scope.productData = {};
+        $scope.productData.commission = [];
+        $scope.productData.priceList = [];
+        $scope.levels = {};
+      
+            $scope.data = {};
+            var jsonData = {};
+            var st=JSON.stringify($stateParams.keyword)
+            jsonData = JSON.parse(st);
+            console.log("formDTA",jsonData)
+              $scope.data._id = jsonData.substring(10, 34);
+           console.log("formData",$scope.data)
+             NavigationService.apiCall("NewsInfo/getOne",
+            $scope.data,
+            function (data) {
+                if (data.value === true) {
+                    $scope.formdata=data.data
+                    console.log("getNews", data.data);
+                    
+                }
+            });
+                 $scope.saveProduct = function (formdata) {
+            console.log("productData--", formdata);
+            formdata._id= $scope.data._id
+             NavigationService.apiCall("NewsInfo/save",
+           formdata,
+            function (data) {
+                if (data.value === true) {
+                    $scope.formdata=data.data
+                    console.log("getNews********************", data.data);
+                    
+                }
+            });
+                $state.go("page", {
+                    id: "viewNewsInfo"
+                });
+            
+
+        };
+
+       
+    })
 
     .controller('JagzCtrl', function ($scope, TemplateService, NavigationService, $timeout, $state, $interval) {
 
@@ -324,23 +374,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.getAllItems();
 
     })
-    .controller('NewsDetailsCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
-        $scope.json = JsonService;
-        $scope.template = TemplateService.changecontent("newsDetail");
-        $scope.menutitle = NavigationService.makeactive("newsDetail");
-        TemplateService.title = $scope.menutitle;
-        $scope.navigation = NavigationService.getnav();
-        JsonService.getJson($stateParams.id, function () {});
-        
-        // var formData = {};
-        // formData._id = JSON.parse($stateParams.keyword)._id;
-        // console.log("ContestCtrl");
-        // NavigationService.apiCall("Contest/getOne", formData, function (data) {
-        //     console.log("inside contest ctrl:", data.data.name);
-        //     $scope.tableData = data.data;
-        //     console.log("inside contest ctrl*****:", data.data);
-        // });
-    })
+
     .controller('DetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, toastr) {
         $scope.json = JsonService;
         JsonService.setKeyword($stateParams.keyword);
