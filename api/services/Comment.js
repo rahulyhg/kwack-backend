@@ -326,33 +326,77 @@ var model = {
 
         });
     },
-    /**
+
+         /**
      * this function add  Like for Comment
      * @param {commentId} input commentId
      *  *  * @param {userId} input userId
      * @param {callback} callback function with err and response
      */
-    addLike: function (commentId, user, callback) {
+    addOrRemoveLike: function (commentId, user, callback) {
         console.log("%%%%%%%%%%%%%%%%%%%%%%%5550", commentId, user)
-        Comment.update({
-            _id: commentId
-        }, {
-            $push: {
-                'likes': {
-                    userId: user
-                }
+        Comment.findOne({
+            _id: commentId,
+            
+            'likes.userId': {
+                $in: [mongoose.Types.ObjectId(user)]
             }
+      
         }).exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
-                callback("noDataound", null);
+                Comment.addLike(commentId, user, callback);
             } else {
-                callback(null, found);
+                Comment.removeLike(commentId, user, callback);
             }
 
         });
+
     },
+    addLike: function (commentId, user, callback) {
+        console.log("inside add Like")
+        AppUser.update({
+            _id: commentId
+        }, {
+                $push: {
+                    'likes': {
+                        userId: user
+                    }
+                }
+            }).deepPopulate('wishList').exec(function (err, found) {
+                if (err) {
+                    callback(err, null);
+                } else if (_.isEmpty(found)) {
+                    callback("noDataound", null);
+                } else {
+                    callback(null, found);
+                }
+
+            });
+    },
+    removeLike: function (commentId, user, callback) {
+           console.log("inside remove Like")
+        AppUser.update({
+            _id: mongoose.Types.ObjectId(data.user)
+        }, {
+                $pull: {
+                    'likes': {
+                        userId: user
+                    }
+                }
+            }).exec(function (err, found) {
+                if (err) {
+                    callback(err, null);
+                } else if (_.isEmpty(found)) {
+                    callback(null, "noDataound");
+                } else {
+                    callback(null, found);
+                }
+
+            });
+    },
+
 
 
 

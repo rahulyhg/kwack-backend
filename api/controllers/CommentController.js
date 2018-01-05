@@ -94,9 +94,33 @@ var controller = {
                    /**
      * to add like for Comment 
      */
- addLike: function (req, res) {
+ addOrRemoveLike: function (req, res) {
+        if (req.body) {
+            Comment.addOrRemoveLike(req.body.commentId,req.body.user, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+     addLike: function (req, res) {
         if (req.body) {
             Comment.addLike(req.body.commentId,req.body.user, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+     removeLike: function (req, res) {
+        if (req.body) {
+            Comment.removeLike(req.body.commentId,req.body.user, res.callback);
         } else {
             res.json({
                 value: false,
