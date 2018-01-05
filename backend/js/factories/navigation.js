@@ -13,21 +13,33 @@ myApp.factory('NavigationService', function ($http) {
     
     },
     {
-        name: "newsInfo",
+        name: "All News",
         classis: "active",
         sref: "#!/page/viewNewsInfo//",
       
-    },
-    {
-        name: "pollanswer",
-        classis: "active",
-           uiSref:"pollanswerview",
-
-    },
-     {
+    },  {
         name: "Interests",
         classis: "active",
         sref: "#!/page/viewInterests//",
+        
+    },
+    // {
+    //     name: "pollanswer",
+    //     classis: "active",
+    //        uiSref:"pollanswerview",
+
+    // },
+      {
+        name: "Comments",
+        classis: "active",
+        sref: "#!/page/viewComment//",
+        
+    },
+   
+     {
+        name: "Polls",
+        classis: "active",
+        sref: "#!/page/viewPollAnswer//",
         
     }];
 

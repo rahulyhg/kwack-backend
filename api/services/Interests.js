@@ -12,9 +12,13 @@ module.exports = mongoose.model('Interests', schema);
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
 
-
-       searchInterests: function (data, callback) {
-      var trimText = data.searchText.trim();
+    /**
+     * this function for search Interests
+     * @param {searchText} input searchText
+     * @param {callback} callback function with err and response
+     */
+    searchInterests: function (searchText, callback) {
+        var trimText = searchText.trim();
         var search = new RegExp('^' + trimText);
 
         var queryString = {
@@ -36,15 +40,12 @@ var model = {
             }
         });
     },
-     /**
+    /**
      * this function for get all Interests list
      * @param {callback} callback function with err and response
      */
-      getAllInterests: function (callback) {
-
-        Interests.find({
-
-        }).exec(function (err, found) {
+    getAllInterests: function (callback) {
+        Interests.find({}).exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {

@@ -1,11 +1,13 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
-
+       /**
+     * for get all Interests by search
+     */
  globalSearch: function (req, res) {
         var searchResult = {};
         async.parallel({
             getInterests: function (cb) {
-                Interests.searchInterests(req.body, function (error, data) {
+                Interests.searchInterests(req.body.searchText, function (error, data) {
                     if (error || data == undefined) {
                         cb(error, null);
                     } else {

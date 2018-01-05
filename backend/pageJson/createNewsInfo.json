@@ -74,7 +74,7 @@
         "type": "box",
         "tableRef": "pollOptions",
         "validation": ["required", "trim", ""],
-        "field": [{
+        "fields": [{
                 "name": "title",
                 "type": "text",
                 "tableRef": "title",
@@ -98,7 +98,7 @@
             }
         ]
     },
-      {
+   {
         "name": "Interest",
         "type": "text",
         "tableRef": "interest",

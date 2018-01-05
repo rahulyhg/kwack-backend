@@ -1,6 +1,8 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
-
+           /**
+     * for Get all news by search
+     */
         globalSearchForNews: function (req, res) {
         var searchResult = {};
         async.parallel({
@@ -34,7 +36,7 @@ var controller = {
         })
     },
                /**
-     * for Get all news
+     * for Get all Trending News
      */
  getTrendingNews: function (req, res) {
         if (req.body) {
@@ -109,7 +111,7 @@ var controller = {
         }
     },
                /**
-     * for Get one news
+     * for Get one news by NewsId
      */
  getOneNews: function (req, res) {
         if (req.body) {
@@ -123,20 +125,6 @@ var controller = {
             })
         }
     }, 
-              /**
-     * for save vote
-     */
- addVote: function (req, res) {
-        if (req.body) {
-            NewsInfo.addVote(req.body.pollname,req.body.newsId, res.callback);
-        } else {
-            res.json({
-                value: false,
-                data: {
-                    message: "Invalid Request"
-                }
-            })
-        }
-    },  
+    
 };
 module.exports = _.assign(module.exports, controller);

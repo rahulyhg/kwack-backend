@@ -1,0 +1,46 @@
+{
+    "title": "Comment",
+    "description": "List of Comment",
+    "pageType": "view",
+    "sendIdWithCreate": true,
+    "urlFields": ["_id"],
+    "fields": [{
+        "name": "news",
+        "isSort": "",
+        "tableRef": "news"
+       
+    }],
+    "action": [{
+        "name": "edit",
+        "icon": "fa-pencil",
+        "buttonClass": "btn-primary",
+        "type": "page",
+        "action": "editComment",
+        "fieldsToSend": {
+            "_id": "_id"
+        }
+    }, {
+        "name": "delete",
+        "icon": "fa-trash",
+        "buttonClass": "btn-danger",
+        "type": "apiCallConfirm",
+        "title": "Delete Comment",
+        "content": "Are you sure you want to delete Comment?",
+        "api": "Comment/delete",
+        "fieldsToSend": {
+            "name": "_id",
+            "value": "_id"
+        }
+    }],
+    "button": [ {
+        "name": "Create",
+        "icon": "plus",
+        "class": "btn-success",
+        "type": "page",
+        "action": "createComment"
+    }],
+    "apiCall": {
+        "url": "Comment/search",
+        "params": "_id"
+    }
+}
