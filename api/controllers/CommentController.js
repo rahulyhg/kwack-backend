@@ -1,7 +1,7 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
              /**
-     * for get all Comment
+     * for get Kwack for Particular news and user
      */
  getKwack: function (req, res) {
         if (req.body) {
@@ -77,7 +77,7 @@ var controller = {
         }
     },
                   /**
-     * to add reply 
+     * to remove reply 
      */
  removeReply: function (req, res) {
         if (req.body) {
@@ -92,7 +92,7 @@ var controller = {
         }
     },
                    /**
-     * to add like for Comment 
+     * to add or remove like for Comment 
      */
  addOrRemoveLike: function (req, res) {
         if (req.body) {
@@ -106,6 +106,9 @@ var controller = {
             })
         }
     },
+                  /**
+     * to add like for Comment 
+     */
      addLike: function (req, res) {
         if (req.body) {
             Comment.addLike(req.body.commentId,req.body.user, res.callback);
@@ -118,6 +121,9 @@ var controller = {
             })
         }
     },
+                  /**
+     * to remove or remove like for Comment 
+     */
      removeLike: function (req, res) {
         if (req.body) {
             Comment.removeLike(req.body.commentId,req.body.user, res.callback);

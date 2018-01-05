@@ -48,13 +48,12 @@ var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user", "
 var model = {
 
     /**
-     * this function provides details about the poll
+     * this function provides Kwack for particular news and user
      * @param {newsId} input newsId
      * * @param {userId} input userId
      * @param {callback} callback function with err and response
      */
     getKwack: function (newsId, userId, callback) {
-        console.log("inside kwack get", newsId, userId)
         Comment.findOne({
             news: newsId,
             user: userId
@@ -277,7 +276,6 @@ var model = {
      * @param {callback} callback function with err and response
      */
     addReply: function (commentId, reply, user, callback) {
-        console.log("%%%%%%%%%%%%%%%%%%%%%%%5550", commentId, reply, user)
         Comment.update({
             _id: commentId
         }, {
@@ -328,13 +326,12 @@ var model = {
     },
 
          /**
-     * this function add  Like for Comment
+     * this function add  Like Or Remove for Comment
      * @param {commentId} input commentId
-     *  *  * @param {userId} input userId
+     *  *  * @param {user} input user
      * @param {callback} callback function with err and response
      */
     addOrRemoveLike: function (commentId, user, callback) {
-        console.log("%%%%%%%%%%%%%%%%%%%%%%%5550", commentId, user)
         Comment.findOne({
             _id: commentId,
             
@@ -354,6 +351,13 @@ var model = {
         });
 
     },
+
+            /**
+     * this function add  Like  for Comment
+     * @param {commentId} input commentId
+     *  *  * @param {user} input user
+     * @param {callback} callback function with err and response
+     */
     addLike: function (commentId, user, callback) {
         console.log("inside add Like")
         AppUser.update({
@@ -375,6 +379,12 @@ var model = {
 
             });
     },
+             /**
+     * this function Remove  Like  for Comment
+     * @param {commentId} input commentId
+     *  *  * @param {user} input user
+     * @param {callback} callback function with err and response
+     */
     removeLike: function (commentId, user, callback) {
            console.log("inside remove Like")
         AppUser.update({

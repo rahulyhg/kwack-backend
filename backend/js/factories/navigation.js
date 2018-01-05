@@ -13,10 +13,15 @@ myApp.factory('NavigationService', function ($http) {
     
     },
     {
-        name: "newsInfo",
+        name: "All News",
         classis: "active",
         sref: "#!/page/viewNewsInfo//",
       
+    },  {
+        name: "Interests",
+        classis: "active",
+        sref: "#!/page/viewInterests//",
+        
     },
     // {
     //     name: "pollanswer",
@@ -25,19 +30,14 @@ myApp.factory('NavigationService', function ($http) {
 
     // },
       {
-        name: "Comment",
+        name: "Comments",
         classis: "active",
         sref: "#!/page/viewComment//",
         
     },
+   
      {
-        name: "Interests",
-        classis: "active",
-        sref: "#!/page/viewInterests//",
-        
-    },
-     {
-        name: "pollanswer",
+        name: "Polls",
         classis: "active",
         sref: "#!/page/viewPollAnswer//",
         
