@@ -356,7 +356,7 @@ var model = {
     },
     addLike: function (commentId, user, callback) {
         console.log("inside add Like")
-        AppUser.update({
+        Comment.update({
             _id: commentId
         }, {
                 $push: {
@@ -377,8 +377,8 @@ var model = {
     },
     removeLike: function (commentId, user, callback) {
            console.log("inside remove Like")
-        AppUser.update({
-            _id: mongoose.Types.ObjectId(data.user)
+           Comment.update({
+            _id: mongoose.Types.ObjectId(commentId)
         }, {
                 $pull: {
                     'likes': {
