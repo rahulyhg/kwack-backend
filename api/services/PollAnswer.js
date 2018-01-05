@@ -29,6 +29,26 @@ module.exports = mongoose.model('PollAnswer', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user", "news user", "order", "asc"));
 var model = {
+         /**
+     * this function provides details about the poll
+     * @param {newsId} input newsId
+      * * @param {userId} input userId
+     * @param {callback} callback function with err and response
+     */
+    getAllPoll: function (callback) {
+         PollAnswer.find({
+                }).deepPopulate('news user').exec(function (err, found) {
+                    console.log("inside api found",found)
+                    if (err) {
+                        callback(err, null);
+                    } else if (_.isEmpty(found)) {
+                        callback("noDataound", null);
+                    } else {
+                        callback(null, found);
+                    }
+
+                })
+    },
       /**
      * this function provides details about the poll
      * @param {newsId} input newsId

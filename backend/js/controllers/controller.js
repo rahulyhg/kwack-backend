@@ -14,6 +14,80 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             $state.go("login");
         }
     })
+     .controller('pollanswerviewCtrl', function ($scope,$uibModal, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr) {
+        //Used to name the .html file
+        $scope.template = TemplateService.changecontent("pollanswerview");
+        $scope.menutitle = NavigationService.makeactive("pollanswerview");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+       NavigationService.apiCall("PollAnswer/getAllPoll",
+            $scope.data,
+            function (data) {
+                if (data.value === true) {
+                    $scope.formdata=data.data
+                    console.log("getNews",  $scope.formdata);
+                    
+                }
+            });
+
+     $scope.delete = function (data) {
+            console.log(data);
+            $scope.url = "PollAnswer/delete";
+            $scope.constraints = {};
+            $scope.constraints._id = data;
+            NavigationService.apiCall($scope.url, $scope.constraints, function (data) {
+                console.log("data.value", data);
+                if (data.value) {
+                    toastr.success('Successfully Deleted', 'Rules Meaasge');
+                    $state.reload()
+                                  } else {
+                    toastr.error('Something went wrong while Deleting', 'Rules Meaasge');
+                }
+
+            });
+        }
+    })
+     .controller('pollDetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
+        $scope.json = JsonService;
+        $scope.template = TemplateService.changecontent("pollDetail");
+        $scope.menutitle = NavigationService.makeactive("pollDetail");
+           TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+        console.log("$stateParams---", ($stateParams.id));
+        $scope.data={};
+        $scope.data._id= $stateParams.id
+           NavigationService.apiCall("PollAnswer/getOne",
+            $scope.data,
+            function (data) {
+                if (data.value === true) {
+                    $scope.formdata=data.data
+                    console.log("getNews", data.data);
+                    
+                }
+            });
+                        $scope.saveProduct = function (formdata) {
+            console.log("productData--", formdata);
+            formdata._id= $scope.data._id
+             NavigationService.apiCall("PollAnswer/save",
+           formdata,
+            function (data) {
+                if (data.value === true) {
+                    $scope.formdata=data.data
+                    console.log("getNews********************", data.data);
+                    
+                }
+            });
+                $state.go("pollanswerview");
+            
+
+        };
+       
+
+       
+    })
+
        .controller('NewsDetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
         $scope.json = JsonService;
         $scope.template = TemplateService.changecontent("newsDetail");

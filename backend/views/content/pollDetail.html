@@ -1,0 +1,40 @@
+<div class="heading-sec">
+    <div class="row">
+        <div class="col-md-12 column">
+            <div class="heading-profile">
+                <h2 ng-if="productData.value">Edit Product</h2>
+                <h2 ng-if="!productData.value">View Product</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<form name="productForm" ng-submit="saveProduct(formdata)">
+    <div class="widget">
+        <div class="form-elements-sec">
+            <div class="sec">
+                <div class="form-group" fields>
+                    <label>News Title*</label>
+                    <input type="text" name="name" placeholder="Product Name" ng-model="formdata.news.title" class="form-control" required>
+
+                </div>
+                <div class="form-group" fields>
+                    <label>User Name*</label>
+                    <input type="text" name="name" placeholder="Product Name" ng-model="formdata.user.name" class="form-control" required>
+
+                </div>
+               
+                <div class="form-group" fields>
+                    <label>Poll*</label>
+                    <input type="text" name="name" placeholder="Product Name" ng-model="formdata.pollOptions" class="form-control" required>
+
+                </div>
+               
+ </div>
+    </div>
+
+    <div class="text-center mt20 odd-even-button">
+        <button class="btn btn-default" type="submit">Save</button>
+        <a class="btn btn-danger" href="#/page/viewProduct//">Cancel</a>
+
+    </div>
+</form>

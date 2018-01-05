@@ -69,6 +69,16 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             url: "/newsDetail/:id/{page:.*}/{keyword:.*}",
             controller: 'NewsDetailCtrl'
         })
+             .state('pollanswerview', {
+            url: "/pollanswerview",
+            templateUrl: "views/template.html",
+            controller: 'pollanswerviewCtrl'
+        })
+            .state('pollDetail', {
+            templateUrl: "views/template.html",
+            url: "/pollDetail/:id",
+            controller: 'pollDetailCtrl'
+        })
 
         .state('editcountry', {
             url: "/country-edit/:id",

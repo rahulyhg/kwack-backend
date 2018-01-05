@@ -21,7 +21,7 @@ myApp.factory('NavigationService', function ($http) {
     {
         name: "pollanswer",
         classis: "active",
-        sref: "#!/page/viewPollAnswer//",
+           uiSref:"pollanswerview",
 
     },
      {
