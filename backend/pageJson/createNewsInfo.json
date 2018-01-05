@@ -74,7 +74,7 @@
         "type": "box",
         "tableRef": "pollOptions",
         "validation": ["required", "trim", ""],
-        "field": [{
+        "fields": [{
                 "name": "title",
                 "type": "text",
                 "tableRef": "title",

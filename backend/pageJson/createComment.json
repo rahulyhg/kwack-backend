@@ -1,0 +1,63 @@
+{
+    "title": "Create Comment",
+    "name": "Comment",
+    "jsonPage": "viewComment",
+    "desciption": "",
+    "pageType": "create",
+    "urlFields": ["Comment"],
+    "fields": [{
+            "name": "User",
+            "type": "tags",
+            "tableRef": "user",
+            "dropDownType": "single",
+            "dropDownField": "name",
+            "searchApi": "searchCall",
+            "placeholder": "Enter user Name",
+            "id": "user",
+            "validation": ["", "trim", ""],
+            "url": "User/search"
+        },
+        {
+            "name": "news",
+            "type": "tags",
+            "tableRef": "news",
+            "dropDownType": "single",
+            "dropDownField": "title",
+            "searchApi": "searchCall",
+            "placeholder": "Enter news Name",
+            "id": "news",
+            "validation": ["", "trim", ""],
+            "url": "NewsInfo/search"
+        },
+           {
+        "name": "Comment",
+        "type": "text",
+        "tableRef": "comment",
+        "placeholder": "Enter comment",
+        "id": "comment",
+        "validation": ["", "trim", "unique"],
+        "url": ""
+    }],
+    "action": [{
+        "name": "submit",
+        "action": "submitComment",
+        "stateName": {
+            "page": "page",
+            "json": {
+                "id": "viewComment"
+            }
+        }
+    }, {
+        "name": "cancel",
+        "sideMenuRedirect": true,
+        "stateName": {
+            "page": "page",
+            "json": {
+                "id": "viewComment"
+            }
+        }
+    }],
+    "apiCall": {
+        "url": "Comment/save"
+    }
+}

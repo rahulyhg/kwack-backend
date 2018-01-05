@@ -2,8 +2,7 @@
     <div class="row">
         <div class="col-md-12 column">
             <div class="heading-profile">
-                <h2 ng-if="productData.value">Edit Product</h2>
-                <h2 ng-if="!productData.value">Create Product</h2>
+                <h2 >Edit Product</h2>
             </div>
         </div>
     </div>
@@ -14,34 +13,34 @@
             <div class="sec">
                 <div class="form-group" fields>
                     <label>Title*</label>
-                    <input type="text" name="name" placeholder="Product Name" ng-model="formdata.title" class="form-control" required>
+                    <input type="text" name="name" placeholder="Title" ng-model="formdata.title" class="form-control" required>
 
                 </div>
                 <div class="form-group" fields>
-                    <label>description*</label>
-                    <input type="text" name="name" placeholder="Product Name" ng-model="formdata.description" class="form-control" required>
+                    <label>Description*</label>
+                    <input type="text" name="name" placeholder="Description" ng-model="formdata.description" class="form-control" required>
 
                 </div>
                
                 <div class="form-group" fields>
-                    <label>interest*</label>
-                    <input type="text" name="name" placeholder="Product Name" ng-model="formdata.interest" class="form-control" required>
+                    <label>Interest*</label>
+                    <input type="text" name="name" placeholder="Interest" ng-model="formdata.interest" class="form-control" required>
 
                 </div>
                 <div class="form-group" fields>
                     <label>url*</label>
-                    <input type="text" name="name" placeholder="Product Name" ng-model="formdata.url" class="form-control" required>
+                    <input type="text" name="name" placeholder="url" ng-model="formdata.url" class="form-control" required>
 
                 </div>
                
                 
                 <div class="form-group" fields> 
-                    <label>realTotalCount*</label>
-                    <input type="text" name="name" placeholder="total count" ng-model="formdata.realTotalCount" class="form-control" required>
+                    <label>Read Total Count*</label>
+                    <input type="text" name="name"  ng-model="formdata.realTotalCount" class="form-control" disabled>
 
                 </div>
                <div class="form-group">
-                <label>IsKwack</label>
+                <label>Is Kwack</label>
 
                 <select class="form-control"  ng-model="formdata.IsKwack">
               <option value="YES">YES</option>
@@ -49,13 +48,13 @@
             </select>
             </div>
             <div class="form-group" fields ng-if="formdata.IsKwack=='YES'">
-                    <label>Total Comments*</label>
-                    <input type="text" name="name" placeholder="Product Name" ng-model="formdata.comments.length" class="form-control"  disabled>
+                    <label>Total Kwacks</label>
+                    <input type="text" name="name"  ng-model="formdata.comments.length" class="form-control"  disabled>
 
                 </div>
           
              <div class="form-group">
-                <label>IsPoll</label>
+                <label>Is Poll</label>
 
                 <select class="form-control"  ng-model="formdata.IsPoll">
               <option value="YES">YES</option>
@@ -63,12 +62,12 @@
             </select>
             </div>
                <div class="form-group" fields  ng-if="formdata.IsPoll=='YES'">
-                    <label>Total Poll*</label>
-                    <input type="text" name="name" placeholder="Product Name" ng-model="formdata.polls.length" class="form-control" disabled>
+                    <label>Total Poll</label>
+                    <input type="text" name="name"  ng-model="formdata.polls.length" class="form-control" disabled>
 
                 </div>
              <div class="form-group">
-                <label>trending</label>
+                <label>Is Trending</label>
 
                 <select class="form-control"  ng-model="formdata.trending">
               <option value="YES">YES</option>

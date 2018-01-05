@@ -18,16 +18,28 @@ myApp.factory('NavigationService', function ($http) {
         sref: "#!/page/viewNewsInfo//",
       
     },
-    {
-        name: "pollanswer",
-        classis: "active",
-           uiSref:"pollanswerview",
+    // {
+    //     name: "pollanswer",
+    //     classis: "active",
+    //        uiSref:"pollanswerview",
 
+    // },
+      {
+        name: "Comment",
+        classis: "active",
+        sref: "#!/page/viewComment//",
+        
     },
      {
         name: "Interests",
         classis: "active",
         sref: "#!/page/viewInterests//",
+        
+    },
+     {
+        name: "pollanswer",
+        classis: "active",
+        sref: "#!/page/viewPollAnswer//",
         
     }];
 
