@@ -88,55 +88,63 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
        
     })
 
-       .controller('NewsDetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
+     .controller('NewsDetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
         $scope.json = JsonService;
         $scope.template = TemplateService.changecontent("newsDetail");
         $scope.menutitle = NavigationService.makeactive("newsDetail");
-           TemplateService.title = $scope.menutitle;
+        TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
-        console.log("$stateParams---", JSON.stringify($stateParams.keyword));
+        // console.log("$stateParams---", JSON.stringify($stateParams.keyword));
+        // var obj = JSON.parse($stateParams.keyword)._id;
+        var jsonData = null;
+        console.log("obj", $stateParams);
+        try {
+            jsonData = JSON.parse($stateParams.keyword)._id;
+        } catch (e) {
+            jsonData = $stateParams.keyword;
+            console.log("StateParams: ", $stateParams.keyword);
+        }
+        console.log("obj", jsonData);
         $scope.data = {};
         $scope.productData = {};
         $scope.productData.commission = [];
         $scope.productData.priceList = [];
         $scope.levels = {};
-      
-            $scope.data = {};
-            var jsonData = {};
-            var st=JSON.stringify($stateParams.keyword)
-            jsonData = JSON.parse(st);
-            console.log("formDTA",jsonData)
-              $scope.data._id = jsonData.substring(10, 34);
-           console.log("formData",$scope.data)
-             NavigationService.apiCall("NewsInfo/getOne",
+
+        $scope.data = {};
+        // var jsonData = {};
+        // var st = JSON.stringify($stateParams.keyword)
+        // jsonData = JSON.parse(st);
+        console.log("formDTA", jsonData)
+        // $scope.data._id = jsonData.substring(10, 34);
+        $scope.data._id = jsonData;
+        console.log("formData", $scope.data)
+        NavigationService.apiCall("NewsInfo/getOne",
             $scope.data,
             function (data) {
                 if (data.value === true) {
-                    $scope.formdata=data.data
+                    $scope.formdata = data.data
                     console.log("getNews", data.data);
-                    
+
                 }
             });
-                 $scope.saveProduct = function (formdata) {
+        $scope.saveProduct = function (formdata) {
             console.log("productData--", formdata);
-            formdata._id= $scope.data._id
-             NavigationService.apiCall("NewsInfo/save",
-           formdata,
-            function (data) {
-                if (data.value === true) {
-                    $scope.formdata=data.data
-                    console.log("getNews********************", data.data);
-                    
-                }
-            });
-                $state.go("page", {
-                    id: "viewNewsInfo"
+            formdata._id = $scope.data._id
+            NavigationService.apiCall("NewsInfo/save",
+                formdata,
+                function (data) {
+                    if (data.value === true) {
+                        $scope.formdata = data.data
+                        console.log("getNews********************", data.data);
+
+                    }
                 });
-            
+            // $state.go("page", {
+            //     id: "viewNewsInfo"
+            // });
 
         };
-
-       
     })
 
     .controller('JagzCtrl', function ($scope, TemplateService, NavigationService, $timeout, $state, $interval) {
