@@ -54,7 +54,6 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.menutitle = NavigationService.makeactive("pollDetail");
         TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
-
         $scope.data = {};
         $scope.data._id = $stateParams.id
         NavigationService.apiCall("PollAnswer/getOne",
