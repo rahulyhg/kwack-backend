@@ -55,7 +55,6 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
 
-        console.log("$stateParams---", ($stateParams.id));
         $scope.data = {};
         $scope.data._id = $stateParams.id
         NavigationService.apiCall("PollAnswer/getOne",
@@ -63,19 +62,16 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             function (data) {
                 if (data.value === true) {
                     $scope.formdata = data.data
-                    console.log("getNews", data.data);
 
                 }
             });
         $scope.saveProduct = function (formdata) {
-            console.log("productData--", formdata);
             formdata._id = $scope.data._id
             NavigationService.apiCall("PollAnswer/save",
                 formdata,
                 function (data) {
                     if (data.value === true) {
                         $scope.formdata = data.data
-                        console.log("getNews********************", data.data);
 
                     }
                 });
@@ -97,14 +93,11 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         // console.log("$stateParams---", JSON.stringify($stateParams.keyword));
         // var obj = JSON.parse($stateParams.keyword)._id;
         var jsonData = null;
-        console.log("obj", $stateParams);
         try {
             jsonData = JSON.parse($stateParams.keyword)._id;
         } catch (e) {
             jsonData = $stateParams.keyword;
-            console.log("StateParams: ", $stateParams.keyword);
         }
-        console.log("obj", jsonData);
         $scope.data = {};
         $scope.productData = {};
         $scope.productData.commission = [];
@@ -115,29 +108,22 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         // var jsonData = {};
         // var st = JSON.stringify($stateParams.keyword)
         // jsonData = JSON.parse(st);
-        console.log("formDTA", jsonData)
         // $scope.data._id = jsonData.substring(10, 34);
         $scope.data._id = jsonData;
-        console.log("formData", $scope.data)
         NavigationService.apiCall("NewsInfo/getOne",
             $scope.data,
             function (data) {
                 if (data.value === true) {
                     $scope.formdata = data.data
-                    console.log("getNews", data.data);
-
                 }
             });
         $scope.saveProduct = function (formdata) {
-            console.log("productData--", formdata);
             formdata._id = $scope.data._id
             NavigationService.apiCall("NewsInfo/save",
                 formdata,
                 function (data) {
                     if (data.value === true) {
                         $scope.formdata = data.data
-                        console.log("getNews********************", data.data);
-
                     }
                 });
             $state.go("page", {
@@ -158,18 +144,15 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             jsonData = JSON.parse($stateParams.keyword)._id;
         } catch (e) {
             jsonData = $stateParams.keyword;
-            // console.log("StateParams: ", $stateParams.keyword);
         }
         console.log("obj", jsonData);
         $scope.data = {}
         $scope.data.commentId = jsonData;
-        // console.log("formData", $scope.data)
         NavigationService.apiCall("Comment/getComment",
             $scope.data,
             function (data) {
                 if (data.value === true) {
                     $scope.formdata = data.data
-                    console.log("getComment******************", data.data);
 
                 }
             });
@@ -178,28 +161,23 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             $scope.dataToSend = {}
             $scope.dataToSend.commentId = jsonData
             $scope.dataToSend.replyId = id
-            console.log(" $scope.dataToSend", $scope.dataToSend)
             NavigationService.apiCall("Comment/removeReply",
                 $scope.dataToSend,
                 function (data) {
                     if (data.value === true) {
                         $scope.formdata = data.data
-                        console.log("^^^^^^^^^^^^^^^^^^^^^********************", data.data);
                         $state.reload();
                     }
                 });
 
 
         }
-             $scope.saveComment = function (id) {
-         console.log("productData--", id);
+        $scope.saveComment = function (id) {
             NavigationService.apiCall("Comment/save",
                 id,
                 function (data) {
                     if (data.value === true) {
                         $scope.formdata = data.data
-                        console.log("getNews********************", data.data);
-
                     }
                 });
             $state.go("page", {

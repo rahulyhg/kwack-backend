@@ -116,7 +116,7 @@ var schema = new Schema({
         default: "User",
         enum: ['User', 'Admin']
 
-        
+
     }
 });
 
@@ -135,12 +135,12 @@ module.exports = mongoose.model('User', schema);
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "user", "user"));
 var model = {
 
- /**
+    /**
      * this function for send otp
      * @param {email} input email
      * @param {callback} callback function with err and response
      */
-  sendOtp: function (email, callback) {
+    sendOtp: function (email, callback) {
         console.log("inside send otp", email)
         var emailOtp = (Math.random() + "").substring(2, 6);
         var foundData = {};
@@ -150,7 +150,7 @@ var model = {
             otp: emailOtp
         }, {
             new: true
-     }).exec(function (err, found) {
+        }).exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
@@ -162,12 +162,12 @@ var model = {
         });
     },
 
- /**
+    /**
      * this function for verify otp
      * @param {otp} input otp
      * @param {callback} callback function with err and response
      */
-  verifyOTPForResetPass: function (otp, callback) {
+    verifyOTPForResetPass: function (otp, callback) {
         User.findOne({
             otp: otp
         }).exec(function (error, found) {
@@ -228,6 +228,29 @@ var model = {
 
         });
     },
+   //This is api for add intrest
+    demo: function (id, interest, callback) {
+        console.log("id and intrest is",id,interest)
+
+          User.findOneAndUpdate({
+            _id: ObjectId(id)
+        }, {
+            $push: {
+                interests: {
+                    $each:interest
+                }
+            }
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
 
     /**
      * this function add details about the user interests
@@ -243,6 +266,15 @@ var model = {
                 name: interest[idx].name,
             });
         }
+        User.findOneAndUpdate({
+            _id: ObjectId(data._id)
+        }, {
+            $push: {
+                interests: {
+                    $each: data.interests
+                }
+            }
+        }).exec(callback);
         data1._id = userId;
         User.saveData(data1, function (err, created) {
             if (err) {
@@ -262,7 +294,7 @@ var model = {
      * @param {callback} callback function with err and response
      */
     removeInterests: function (userId, interests, callback) {
-        console.log("inside reove api0",userId,interests)
+        console.log("inside reove api0", userId, interests)
         User.update({
             _id: userId
         }, {

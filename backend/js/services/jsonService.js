@@ -104,10 +104,10 @@ myApp.service('JsonService', function ($http, TemplateService, $state, toastr, $
           _.each(action.fieldsToSend, function (n, key) {
             keyword[key] = value[n];
           });
-          console.log("consolidated keyword: ", keyword);
-          console.log("consolidated keyword: ", JSON.stringify(keyword));
+          // console.log("consolidated keyword: ", keyword);
+          // console.log("consolidated keyword: ", JSON.stringify(keyword));
           sendTo.keyword = keyword._id;
-          console.log("consolidated stateparams: ", sendTo);
+          // console.log("consolidated stateparams: ", sendTo);
           // sendTo.keyword = JSON.stringify(sendTo.keyword);
         }
         $state.go("newsDetail", sendTo);
