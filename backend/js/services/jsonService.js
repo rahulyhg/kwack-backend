@@ -111,6 +111,20 @@ myApp.service('JsonService', function ($http, TemplateService, $state, toastr, $
           // sendTo.keyword = JSON.stringify(sendTo.keyword);
         }
         $state.go("newsDetail", sendTo);
+      }
+      else if (action && action.type == "commentdetail") {
+        if (action.fieldsToSend) {
+          var keyword = {};
+          _.each(action.fieldsToSend, function (n, key) {
+            keyword[key] = value[n];
+          });
+          console.log("consolidated keyword: ", keyword);
+          console.log("consolidated keyword: ", JSON.stringify(keyword));
+          sendTo.keyword = keyword._id;
+          console.log("consolidated stateparams: ", sendTo);
+          // sendTo.keyword = JSON.stringify(sendTo.keyword);
+        }
+        $state.go("commentdetail", sendTo);
       } else if (action && action.type == "apiCallConfirm") {
         globalfunction.confDel(function (value2) {
           if (value2) {

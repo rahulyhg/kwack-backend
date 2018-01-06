@@ -14,8 +14,7 @@
         "name": "edit",
         "icon": "fa-pencil",
         "buttonClass": "btn-primary",
-        "type": "page",
-        "action": "editComment",
+        "type": "commentdetail",
         "fieldsToSend": {
             "_id": "_id"
         }

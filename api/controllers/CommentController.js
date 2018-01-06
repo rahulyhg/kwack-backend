@@ -1,5 +1,20 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+               /**
+     * for get Kwack for Particular news and user
+     */
+ getComment: function (req, res) {
+        if (req.body) {
+            Comment.getComment(req.body.commentId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
              /**
      * for get Kwack for Particular news and user
      */

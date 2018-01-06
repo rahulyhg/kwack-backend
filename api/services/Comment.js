@@ -13,7 +13,7 @@ var schema = new Schema({
     },
     repliesTo: [{
         reply: String,
-        UserId: {
+        user: {
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
@@ -48,8 +48,29 @@ schema.plugin(uniqueValidator);
 schema.plugin(timestamps);
 module.exports = mongoose.model('Comment', schema);
 
-var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user", "news user", "order", "asc"));
+var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user UserId", "news user UserId", "order", "asc"));
 var model = {
+    /**
+     * this function provides Kwack for particular CommentId
+     * @param {commentId} input commentId
+     * @param {callback} callback function with err and response
+     */
+    getComment: function (commentId, callback) {
+        Comment.findOne({
+            _id: commentId,
+        }).deepPopulate('user news repliesTo.user').exec(function (err, found) {
+            console.log("inside api found gwt kwack", found)
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        })
+    },
+
 
     /**
      * this function provides Kwack for particular news and user
@@ -285,7 +306,7 @@ var model = {
         }, {
             $push: {
                 'repliesTo': {
-                    UserId: user,
+                    user: user,
                     reply: reply
                 }
             }

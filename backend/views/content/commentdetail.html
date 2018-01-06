@@ -1,0 +1,75 @@
+Hhhhiiiiiiiiiiiiiiiiiiiiiiiiii<div class="heading-sec">
+    <div class="row">
+        <div class="col-md-12 column">
+            <div class="heading-profile">
+                <h2 >Edit Comment</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<form name="productForm" ng-submit="saveComment(formdata)">
+<div class="widget">
+    <div class="form-elements-sec">
+        <div class="sec">
+            <div class="form-group" fields>
+                <label>News</label>
+                <input type="text" name="name" placeholder="Product Name" ng-model="formdata.news.title" class="form-control" required>
+                   
+
+            </div>
+            <div class="form-group" fields>
+                <label>User Name</label>
+                <input type="text" name="name" placeholder="Product Tags" ng-model="formdata.user.name" class="form-control" required>
+            </div>
+            <div class="form-group" fields>
+                <label>Comment</label>
+                <input type="text" name="unit" placeholder="Product Unit" ng-model="formdata.comment" class="form-control" required>
+            </div>
+                <div class="form-group" fields>
+                <label>Total Likes</label>
+                <input type="text" name="unit" placeholder="Product Unit" ng-model="formdata.likes.length" class="form-control" required>
+            </div>
+          
+        </div>
+      
+            <div class="sec">
+                <div>
+                    <table class="table table-input" ng-if="model.length != 0">
+                        <thead>
+                            <tr>
+                                <th>Reply</th>
+                                <th>user Name</th>
+                                 <th width="150px">Actions</th> 
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="re in formdata.repliesTo | filter:search.text ">
+                                <td>{{re.reply}}</td>
+                                <td>{{re.user.name}}</td>
+                                 <td>
+                                        <!--<a class="btn btn-primary" ng-click="editBox('Edit',productData)">
+                                          <i class="Fa fa-pencil"></i>
+                                      </a>-->
+                                        <a class="btn btn-danger" ng-click="deleteReply(re._id)">
+                                          <i class="fa fa-trash"></i>
+                                      </a>
+                                    </td> 
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+       
+
+    </div>
+</div>
+
+<div class="text-center mt20 odd-even-button">
+    <button class="btn btn-default" type="submit">Save</button>
+    <a class="btn btn-danger" href="#/page/viewProduct//">Cancel</a>
+
+</div>
+</form>

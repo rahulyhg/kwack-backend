@@ -14,24 +14,24 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             $state.go("login");
         }
     })
-     .controller('pollanswerviewCtrl', function ($scope,$uibModal, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr) {
+    .controller('pollanswerviewCtrl', function ($scope, $uibModal, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr) {
         //Used to name the .html file
         $scope.template = TemplateService.changecontent("pollanswerview");
         $scope.menutitle = NavigationService.makeactive("pollanswerview");
         TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
 
-       NavigationService.apiCall("PollAnswer/getAllPoll",
+        NavigationService.apiCall("PollAnswer/getAllPoll",
             $scope.data,
             function (data) {
                 if (data.value === true) {
-                    $scope.formdata=data.data
-                    console.log("getNews",  $scope.formdata);
-                    
+                    $scope.formdata = data.data
+                    console.log("getNews", $scope.formdata);
+
                 }
             });
 
-     $scope.delete = function (data) {
+        $scope.delete = function (data) {
             console.log(data);
             $scope.url = "PollAnswer/delete";
             $scope.constraints = {};
@@ -41,54 +41,54 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 if (data.value) {
                     toastr.success('Successfully Deleted', 'Rules Meaasge');
                     $state.reload()
-                                  } else {
+                } else {
                     toastr.error('Something went wrong while Deleting', 'Rules Meaasge');
                 }
 
             });
         }
     })
-     .controller('pollDetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
+    .controller('pollDetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
         $scope.json = JsonService;
         $scope.template = TemplateService.changecontent("pollDetail");
         $scope.menutitle = NavigationService.makeactive("pollDetail");
-           TemplateService.title = $scope.menutitle;
+        TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
 
         console.log("$stateParams---", ($stateParams.id));
-        $scope.data={};
-        $scope.data._id= $stateParams.id
-           NavigationService.apiCall("PollAnswer/getOne",
+        $scope.data = {};
+        $scope.data._id = $stateParams.id
+        NavigationService.apiCall("PollAnswer/getOne",
             $scope.data,
             function (data) {
                 if (data.value === true) {
-                    $scope.formdata=data.data
+                    $scope.formdata = data.data
                     console.log("getNews", data.data);
-                    
+
                 }
             });
-                        $scope.saveProduct = function (formdata) {
+        $scope.saveProduct = function (formdata) {
             console.log("productData--", formdata);
-            formdata._id= $scope.data._id
-             NavigationService.apiCall("PollAnswer/save",
-           formdata,
-            function (data) {
-                if (data.value === true) {
-                    $scope.formdata=data.data
-                    console.log("getNews********************", data.data);
-                    
-                }
-            });
-                $state.go("pollanswerview");
-            
+            formdata._id = $scope.data._id
+            NavigationService.apiCall("PollAnswer/save",
+                formdata,
+                function (data) {
+                    if (data.value === true) {
+                        $scope.formdata = data.data
+                        console.log("getNews********************", data.data);
+
+                    }
+                });
+            $state.go("pollanswerview");
+
 
         };
-       
 
-       
+
+
     })
 
-     .controller('NewsDetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
+    .controller('NewsDetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
         $scope.json = JsonService;
         $scope.template = TemplateService.changecontent("newsDetail");
         $scope.menutitle = NavigationService.makeactive("newsDetail");
@@ -140,11 +140,74 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
                     }
                 });
-            // $state.go("page", {
-            //     id: "viewNewsInfo"
-            // });
+            $state.go("page", {
+                id: "viewNewsInfo"
+            });
 
         };
+    })
+    .controller('CommentdetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
+        $scope.json = JsonService;
+        $scope.template = TemplateService.changecontent("commentdetail");
+        $scope.menutitle = NavigationService.makeactive("commentdetail");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+        var jsonData = null;
+        console.log("obj", $stateParams);
+        try {
+            jsonData = JSON.parse($stateParams.keyword)._id;
+        } catch (e) {
+            jsonData = $stateParams.keyword;
+            // console.log("StateParams: ", $stateParams.keyword);
+        }
+        console.log("obj", jsonData);
+        $scope.data = {}
+        $scope.data.commentId = jsonData;
+        // console.log("formData", $scope.data)
+        NavigationService.apiCall("Comment/getComment",
+            $scope.data,
+            function (data) {
+                if (data.value === true) {
+                    $scope.formdata = data.data
+                    console.log("getComment******************", data.data);
+
+                }
+            });
+        $scope.deleteReply = function (id) {
+            console.log("productData--", id);
+            $scope.dataToSend = {}
+            $scope.dataToSend.commentId = jsonData
+            $scope.dataToSend.replyId = id
+            console.log(" $scope.dataToSend", $scope.dataToSend)
+            NavigationService.apiCall("Comment/removeReply",
+                $scope.dataToSend,
+                function (data) {
+                    if (data.value === true) {
+                        $scope.formdata = data.data
+                        console.log("^^^^^^^^^^^^^^^^^^^^^********************", data.data);
+                        $state.reload();
+                    }
+                });
+
+
+        }
+             $scope.saveComment = function (id) {
+         console.log("productData--", id);
+            NavigationService.apiCall("Comment/save",
+                id,
+                function (data) {
+                    if (data.value === true) {
+                        $scope.formdata = data.data
+                        console.log("getNews********************", data.data);
+
+                    }
+                });
+            $state.go("page", {
+                id: "viewNewsInfo"
+            });
+
+
+        }
     })
 
     .controller('JagzCtrl', function ($scope, TemplateService, NavigationService, $timeout, $state, $interval) {
@@ -507,7 +570,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         };
     })
 
-  .controller('DetailFieldCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal, toastr) {
+    .controller('DetailFieldCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal, toastr) {
         if (!$scope.type.type) {
             $scope.type.type = "text";
         }
