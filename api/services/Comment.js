@@ -390,15 +390,11 @@ var model = {
      * @param {callback} callback function with err and response
      */
     removeLike: function (commentId, user, callback) {
-<<<<<<< HEAD
-        console.log("inside remove Like")
-        AppUser.update({
-            _id: mongoose.Types.ObjectId(data.user)
-=======
+
            console.log("inside remove Like")
            Comment.update({
             _id: mongoose.Types.ObjectId(commentId)
->>>>>>> c9485882ea890679ba6fd2eb46243da4ba1a0a70
+
         }, {
             $pull: {
                 'likes': {
