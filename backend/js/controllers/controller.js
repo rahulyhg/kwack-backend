@@ -499,7 +499,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         };
     })
 
-    .controller('DetailFieldCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal, toastr) {
+  .controller('DetailFieldCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal, toastr) {
         if (!$scope.type.type) {
             $scope.type.type = "text";
         }
@@ -598,8 +598,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
             };
         }
-
-         if ($scope.type.type == "box") {
+        if ($scope.type.type == "box") {
 
             if (!_.isArray($scope.formData[$scope.type.tableRef]) && $scope.formData[$scope.type.tableRef] === '') {
                 $scope.formData[$scope.type.tableRef] = [];
@@ -629,15 +628,12 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.editBox = function (state, data) {
             $scope.state = state;
             $scope.data = data;
-            console.log("dDDDDDDDDdd",data)
             if (!$scope.formData[$scope.type.tableRef]) {
                 $scope.formData[$scope.type.tableRef] = []
             }
-      
-                console.log("AAAAAAAAAAAAA",$scope.type.tableRef)
+            if (!_.isEmpty(data)) {
                 $scope.formData[$scope.type.tableRef].push(data);
-
-            console.log("$scope.formData",$scope.formData)
+            }
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'views/modal/modal.html',
@@ -654,7 +650,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             data.splice(index, 1);
         };
         // if ($scope.type.type == "box") {
-
+        //     console.log("$scope.formData$scope.formData$scope.formData", $scope.formData)
         //     if (!_.isArray($scope.formData[$scope.type.tableRef]) && $scope.formData[$scope.type.tableRef] === '') {
         //         $scope.formData[$scope.type.tableRef] = [];
         //         $scope.model = [];
@@ -671,11 +667,14 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         // $scope.createBox = function (state) {
         //     $scope.state = state;
         //     $scope.model.push({});
-        //     $scope.editBox("Create", $scope.model[$scope.model.length - 1]);
+        //     console.log("$scope.model$scope.model$scope.model", $scope.model, ($scope.model.length - 1))
+        //     $scope.modelLength = ($scope.model.length - 1);
+        //     $scope.editBox("Create", $scope.model[$scope.modelLength]);
         // };
         // $scope.editBox = function (state, data) {
         //     $scope.state = state;
         //     $scope.data = data;
+        //     console.log("datadata", data)
         //     var modalInstance = $uibModal.open({
         //         animation: $scope.animationsEnabled,
         //         templateUrl: 'views/modal/modal.html',

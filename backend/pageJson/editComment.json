@@ -5,19 +5,18 @@
     "desciption": "",
     "pageType": "edit",
     "urlFields": ["_id"],
-     "fields": [
-          {
-      "name": "User",
+      "fields": [{
+            "name": "User",
             "type": "tags",
             "tableRef": "user",
             "dropDownType": "single",
             "dropDownField": "name",
             "searchApi": "searchCall",
-            "placeholder": "Enter User Name",
+            "placeholder": "Enter user Name",
             "id": "user",
             "validation": ["", "trim", ""],
             "url": "User/search"
-    },
+        },
         {
             "name": "news",
             "type": "tags",
@@ -38,6 +37,36 @@
         "id": "comment",
         "validation": ["", "trim", "unique"],
         "url": ""
+    },
+     {
+        "name": "repliesTo",
+        "type": "box",
+        "tableRef": "repliesTo",
+        "validation": ["", "trim", ""],
+        "fields": [{
+                "name": "reply",
+                "type": "text",
+                "tableRef": "reply",
+                "placeholder": "reply",
+                "id": "reply",
+                "validation": ["", "trim", ""],
+                "onView": true,
+                "view": true,
+                "url": ""
+            },
+            {
+            "name": "User",
+            "type": "tags",
+            "tableRef": "user",
+            "dropDownType": "single",
+            "dropDownField": "name",
+            "searchApi": "searchCall",
+            "placeholder": "Enter user Name",
+            "id": "user",
+            "validation": ["", "trim", ""],
+            "url": "User/search"
+        }
+        ]
     }],
     "action": [{
         "name": "submit",

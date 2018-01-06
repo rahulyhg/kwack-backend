@@ -37,6 +37,36 @@
         "id": "comment",
         "validation": ["", "trim", "unique"],
         "url": ""
+    },
+     {
+        "name": "repliesTo",
+        "type": "box",
+        "tableRef": "repliesTo",
+        "validation": ["", "trim", ""],
+        "fields": [{
+                "name": "reply",
+                "type": "text",
+                "tableRef": "reply",
+                "placeholder": "reply",
+                "id": "reply",
+                "validation": ["", "trim", ""],
+                "onView": true,
+                "view": true,
+                "url": ""
+            },
+            {
+            "name": "UserId",
+            "type": "tags",
+            "tableRef": "UserId",
+            "dropDownType": "single",
+            "dropDownField": "name",
+            "searchApi": "searchCall",
+            "placeholder": "Enter user Name",
+            "id": "UserId",
+            "validation": ["", "trim", ""],
+            "url": "User/search"
+            }
+        ]
     }],
     "action": [{
         "name": "submit",

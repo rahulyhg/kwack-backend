@@ -18,7 +18,7 @@ var schema = new Schema({
             ref: 'User'
         },
     }],
-     likes: [{
+    likes: [{
         userId: {
             type: Schema.Types.ObjectId,
             ref: 'User'
@@ -33,9 +33,13 @@ var schema = new Schema({
 schema.plugin(deepPopulate, {
     Populate: {
         'news': {
+
             select: '_id title'
         },
         'user': {
+            select: '_id name'
+        },
+        'UserId': {
             select: '_id name'
         }
     }
@@ -325,7 +329,7 @@ var model = {
         });
     },
 
-         /**
+    /**
      * this function add  Like Or Remove for Comment
      * @param {commentId} input commentId
      *  *  * @param {user} input user
@@ -334,11 +338,11 @@ var model = {
     addOrRemoveLike: function (commentId, user, callback) {
         Comment.findOne({
             _id: commentId,
-            
+
             'likes.userId': {
                 $in: [mongoose.Types.ObjectId(user)]
             }
-      
+
         }).exec(function (err, found) {
             if (err) {
                 callback(err, null);
@@ -352,7 +356,7 @@ var model = {
 
     },
 
-            /**
+    /**
      * this function add  Like  for Comment
      * @param {commentId} input commentId
      *  *  * @param {user} input user
@@ -363,48 +367,48 @@ var model = {
         AppUser.update({
             _id: commentId
         }, {
-                $push: {
-                    'likes': {
-                        userId: user
-                    }
+            $push: {
+                'likes': {
+                    userId: user
                 }
-            }).deepPopulate('wishList').exec(function (err, found) {
-                if (err) {
-                    callback(err, null);
-                } else if (_.isEmpty(found)) {
-                    callback("noDataound", null);
-                } else {
-                    callback(null, found);
-                }
+            }
+        }).deepPopulate('wishList').exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
 
-            });
+        });
     },
-             /**
+    /**
      * this function Remove  Like  for Comment
      * @param {commentId} input commentId
      *  *  * @param {user} input user
      * @param {callback} callback function with err and response
      */
     removeLike: function (commentId, user, callback) {
-           console.log("inside remove Like")
+        console.log("inside remove Like")
         AppUser.update({
             _id: mongoose.Types.ObjectId(data.user)
         }, {
-                $pull: {
-                    'likes': {
-                        userId: user
-                    }
+            $pull: {
+                'likes': {
+                    userId: user
                 }
-            }).exec(function (err, found) {
-                if (err) {
-                    callback(err, null);
-                } else if (_.isEmpty(found)) {
-                    callback(null, "noDataound");
-                } else {
-                    callback(null, found);
-                }
+            }
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback(null, "noDataound");
+            } else {
+                callback(null, found);
+            }
 
-            });
+        });
     },
 
 
