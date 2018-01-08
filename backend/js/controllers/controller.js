@@ -98,12 +98,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             jsonData = $stateParams.keyword;
         }
         $scope.data = {};
-        $scope.productData = {};
-        $scope.productData.commission = [];
-        $scope.productData.priceList = [];
-        $scope.levels = {};
-
-        $scope.data = {};
+        
         // var jsonData = {};
         // var st = JSON.stringify($stateParams.keyword)
         // jsonData = JSON.parse(st);
@@ -114,6 +109,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             function (data) {
                 if (data.value === true) {
                     $scope.formdata = data.data
+                    console.log("  $scope.formdata",  $scope.formdata)
                 }
             });
         $scope.saveProduct = function (formdata) {

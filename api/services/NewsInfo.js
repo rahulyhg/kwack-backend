@@ -335,7 +335,7 @@ var model = {
         // console.log("newsId",newsId)
         NewsInfo.findOne({
             _id: newsId
-        }).deepPopulate('polls.poll comments.comment').exec(function (err, found) {
+        }).deepPopulate('polls.poll comments.comment.user').exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
