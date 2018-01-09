@@ -69,35 +69,7 @@
         "id": "pollQuestion",
         "url": ""
     },
-     {
-        "name": "pollOptions",
-        "type": "box",
-        "tableRef": "pollOptions",
-        "validation": ["required", "trim", ""],
-        "fields": [{
-                "name": "title",
-                "type": "text",
-                "tableRef": "title",
-                "placeholder": "Entertitle",
-                "id": "title",
-                "validation": ["", "trim", ""],
-                "onView": true,
-                "view": true,
-                "url": ""
-            },
-            {
-                "name": "percentage",
-                "type": "text",
-                "tableRef": "percentage",
-                "placeholder": "Enter percentage",
-                "id": "percentage",
-                "validation": ["", "trim", ""],
-                "onView": true,
-                "view": true,
-                "url": ""
-            }
-        ]
-    },
+    
    {
         "name": "Interest",
         "type": "text",
