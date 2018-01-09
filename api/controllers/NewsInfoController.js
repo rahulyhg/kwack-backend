@@ -1,5 +1,19 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+
+ demo: function (req, res) {
+        if (req.body) {
+            NewsInfo.demo(req.body.startDate,req.body.endDate,res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+
            /**
      * for Get all news by search
      */

@@ -44,7 +44,7 @@ var schema = new Schema({
         type: String,
 
     },
-   interest: {
+    interest: {
         type: String,
 
     },
@@ -104,7 +104,129 @@ module.exports = mongoose.model('NewsInfo', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
-       searchNewsByDesc: function (data, callback) {
+    //  demo: function (startDate,endDate,callback) {
+    //     NewsInfo.find({
+    //         createdAt: {
+    //             $gte: moment(startDate).startOf('day'), 
+    //             $lte: moment(endDate).endOf('day')
+    //         }
+    //     },{createdAt:1,}).deepPopulate('polls.poll comments.comment').exec(function (err, found) {
+    //         if (err) {
+    //             callback(err, null);
+    //         } else if (_.isEmpty(found)) {
+
+    //             callback("noDataound", null);
+    //         } else {
+    //               console.log("found",found)
+    //             callback(null, found);
+    //         }
+
+    //     });
+    // },
+
+
+    demo: function (startDate, endDate, callback) {
+
+        // var findObj = {};
+        // if (data.createdAt) {
+        //     findObj.createdAt = {
+        //         $gte: moment(startDate).startOf('day'),
+        //         $lte: moment(endDate).endOf('day')
+        //     }
+        // }
+        // if (data.interest) {
+        //     findObj.interest = {$in: data.interest};
+        // }
+        async.waterfall([
+            function (callback1) {
+                if (intrest) {
+                    NewsInfo.find({
+                        createdAt: {
+                            $gte: moment(startDate).startOf('day'),
+                            $lte: moment(endDate).endOf('day')
+                        },
+                        interest: data.interest ? {
+                            $in: data.interest
+                        } : {
+                            $or: [
+                            {$exists: true}, {$exists: false}]
+                        }
+                    }).deepPopulate().exec(function (err, found) {
+                        if (err) {
+                            callback(err, null);
+                        } else if (_.isEmpty(found)) {
+
+                            callback("noDataound", null);
+                        } else {
+                            console.log("found", found)
+                            callback(null, found);
+                        }
+
+                    });
+                } else {
+
+                }
+
+            },
+            function (foundData, callback2) {
+                console.log("2nd function", foundData)
+                // NewsInfo.findOne({
+                //     _id: Ids.newsId
+                // }).exec(function (err, found) {
+                //     console.log("found data is", found)
+                //     if (err) {
+                //         callback2(err, null);
+                //     } else if (_.isEmpty(found)) {
+                //         callback2("noDataound", null);
+                //     } else {
+                //         var data2 = {}
+                //         data2._id = found._id;
+                //         data2.realTotalCount = found.realTotalCount + 1
+                //         NewsInfo.saveData(data2, function (err, created) {
+                //             if (err) {
+                //                 callback2(err, null);
+                //             } else if (_.isEmpty(created)) {
+                //                 callback2(null, "noDataound");
+                //             } else {
+
+                //                 callback2(null, Ids);
+                //             }
+                //         });
+                //     }
+
+                // })
+
+            },
+            function (Ids, callback3) {
+                // console.log("2nd function", Ids)
+                // NewsInfo.findOne({
+                //     _id: Ids.newsId
+                // }).exec(function (err, found) {
+                //     console.log("found data is", found)
+                //     if (err) {
+                //         callback3(err, null);
+                //     } else if (_.isEmpty(found)) {
+                //         callback3("noDataound", null);
+                //     } else {
+                //         callback3(null, found);
+                //     }
+
+                // })
+            }
+        ], function (err, data) {
+            console.log("exe final:", data);
+
+            if (err || _.isEmpty(data)) {
+                console.log("exe final is empty:");
+                callback(err, [])
+            } else {
+                console.log("exe final callback:");
+                callback(null, data)
+            }
+        });
+    },
+
+    searchNewsByDesc: function (data, callback) {
         var trimText = data.searchText.trim();
         var search = new RegExp('' + trimText);
 
@@ -113,7 +235,7 @@ var model = {
                 $regex: search,
                 $options: "i"
             }
-            
+
         }
 
         NewsInfo.find(queryString).limit(5).exec(function (error, NewsInfoFound) {
@@ -137,7 +259,7 @@ var model = {
                 $regex: search,
                 $options: "i"
             }
-            
+
         }
 
         NewsInfo.find(queryString).limit(5).exec(function (error, NewsInfoFound) {
