@@ -18,7 +18,7 @@ server {
 		proxy_set_header X-Forwarded-Proto $scheme;
 	}
 	location /backend {
-		root /home/hata-backend;
+		root /home/info/kwack-backend;
 		index index.html index.htm;
 	}
 }
