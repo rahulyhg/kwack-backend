@@ -17,6 +17,28 @@ module.exports = mongoose.model('Readlogs', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
+          /**
+     * this function provides details about the poll
+     * @param {newsId} input newsId
+      * * @param {userId} input userId
+     * @param {callback} callback function with err and response
+     */
+    checkingNewsReadOrNot: function (newsId,userId, callback) {
+         Readlogs.findOne({
+                    news: newsId,
+                    user:userId
+                }).exec(function (err, found) {
+                    console.log("inside api found",found)
+                    if (err) {
+                        callback(err, null);
+                    } else if (_.isEmpty(found)) {
+                        callback("noDataound", null);
+                    } else {
+                        callback(null, found);
+                    }
+
+                })
+    },
     /**
      * this function add readLogs for news and count total readlogs
      * @param {newsId} input newsId
