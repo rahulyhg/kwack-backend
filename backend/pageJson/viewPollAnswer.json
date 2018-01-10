@@ -31,7 +31,13 @@
             "value": "_id"
         }
     }],
-    "button": [ ],
+    "button": [ {
+        "name": "Create",
+        "icon": "plus",
+        "class": "btn-success",
+        "type": "page",
+        "action": "createPollAnswer"
+    }],
     "apiCall": {
         "url": "PollAnswer/search",
         "params": "_id"
