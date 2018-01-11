@@ -24,11 +24,12 @@ var model = {
      * @param {callback} callback function with err and response
      */
     checkingNewsReadOrNot: function (newsId,userId, callback) {
+        console.log("newsId,userId,newsId,userId,",newsId,userId)
          Readlogs.findOne({
                     news: newsId,
                     user:userId
                 }).exec(function (err, found) {
-                    console.log("inside api found",found)
+                    // console.log("inside api found",found)
                     if (err) {
                         callback(err, null);
                     } else if (_.isEmpty(found)) {
@@ -46,7 +47,7 @@ var model = {
      * @param {callback} callback function with err and response
      */
 
-    readLogs: function (userId, newsId, callback) {
+    readLogsCount: function (userId, newsId, callback) {
 
         async.waterfall([
             function (callback1) {

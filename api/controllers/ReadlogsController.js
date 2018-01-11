@@ -22,9 +22,9 @@ var controller = {
              /**
      *  to add readlogs and count 
      */
- readLogs: function (req, res) {
+ readLogsCount: function (req, res) {
         if (req.body) {
-            Readlogs.readLogs(req.body.userId,req.body.newsId, res.callback);
+            Readlogs.readLogsCount(req.body.userId,req.body.newsId, res.callback);
         } else {
             res.json({
                 value: false,
