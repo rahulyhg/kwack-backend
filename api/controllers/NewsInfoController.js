@@ -1,9 +1,22 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
 
- demo: function (req, res) {
+//  demo: function (req, res) {
+//         if (req.body) {
+//             NewsInfo.demo(req.body.startDate,req.body.endDate,req.body.interest,req.body.kwack,req.body.poll,res.callback);
+//         } else {
+//             res.json({
+//                 value: false,
+//                 data: {
+//                     message: "Invalid Request"
+//                 }
+//             })
+//         }
+//     },
+
+ IsPollKwackIf: function (req, res) {
         if (req.body) {
-            NewsInfo.demo(req.body.startDate,req.body.endDate,res.callback);
+            NewsInfo.IsPollKwackIf(req.body.startDate,req.body.endDate,req.body.interest,req.body.userId,req.body.poll,req.body.kwack,res.callback);
         } else {
             res.json({
                 value: false,
@@ -13,6 +26,7 @@ var controller = {
             })
         }
     },
+
 
            /**
      * for Get all news by search

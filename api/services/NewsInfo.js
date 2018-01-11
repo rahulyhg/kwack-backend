@@ -104,20 +104,43 @@ module.exports = mongoose.model('NewsInfo', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
-    //  demo: function (startDate,endDate,callback) {
-    //     NewsInfo.find({
-    //         createdAt: {
-    //             $gte: moment(startDate).startOf('day'), 
-    //             $lte: moment(endDate).endOf('day')
-    //         }
-    //     },{createdAt:1,}).deepPopulate('polls.poll comments.comment').exec(function (err, found) {
+
+    //************INPUT FOR API */
+    // {
+    // "startDate":"2018-01-01",
+    // "endDate":"2018-01-10",
+    // "interest":["News"],
+    // "kwack":"true"
+    // }
+    // demo: function (startDate, endDate,interest,kwack,poll,callback) {
+    // var findObj = {
+    // createdAt: {
+    //     $gte: moment(startDate).startOf('day'),
+    //     $lte: moment(endDate).endOf('day')
+    // }
+    //  };
+    //      if(!_.isEmpty(interest)){
+    //  findObj.interest={
+    //       $in:interest 
+    //     }
+    //      }
+    //      if(kwack){
+    //          console.log("inside kwack")
+    //          findObj.IsKwack = "YES";
+    //      }
+    //        if(poll){
+    //          console.log("inside kwack")
+    //          findObj.IsPoll = "YES";
+    //      }
+    //     NewsInfo.find(findObj,{interest:1,createdAt:1,IsKwack:1,IsPoll:1}).deepPopulate().lean().exec(function (err, found) {
+    //         console.log("found***********",found)
     //         if (err) {
     //             callback(err, null);
     //         } else if (_.isEmpty(found)) {
 
     //             callback("noDataound", null);
     //         } else {
-    //               console.log("found",found)
+    //             console.log("found", found)
     //             callback(null, found);
     //         }
 
@@ -125,99 +148,157 @@ var model = {
     // },
 
 
-    demo: function (startDate, endDate, callback) {
 
-        // var findObj = {};
-        // if (data.createdAt) {
-        //     findObj.createdAt = {
-        //         $gte: moment(startDate).startOf('day'),
-        //         $lte: moment(endDate).endOf('day')
-        //     }
-        // }
-        // if (data.interest) {
-        //     findObj.interest = {$in: data.interest};
-        // }
+
+
+
+
+
+
+//INPUT for this api is 
+//{
+// "userId":"5a55b4c0c7bb192cd7f88255",
+// "kwack":"true",
+// "startDate":"2018-01-01",
+// "endDate":"2020-01-10",
+// "interest":["News","Politics"]
+// }
+
+    IsPollKwackIf: function (startDate, endDate, interest, userId, poll, kwack, callback) {
+        console.log("$$$$$$$$$$$$$$$$$$$$$$4444",startDate,endDate)
+        var filter = {};
+
         async.waterfall([
             function (callback1) {
-                if (intrest) {
-                    NewsInfo.find({
-                        createdAt: {
-                            $gte: moment(startDate).startOf('day'),
-                            $lte: moment(endDate).endOf('day')
-                        },
-                        interest: data.interest ? {
-                            $in: data.interest
-                        } : {
-                            $or: [
-                            {$exists: true}, {$exists: false}]
-                        }
-                    }).deepPopulate().exec(function (err, found) {
+                var pollArr = [];
+                if (poll) {
+                    PollAnswer.find({
+                        user: userId,
+                    }, {
+                        news: 1
+                    }).exec(function (err, found) {
+                        console.log("inside api found POLLLLLLLLLLLL", found)
+                        // _.forEach(found, function (poll) {
+                        //     pollArr.push(poll.news)
+                        // })
                         if (err) {
-                            callback(err, null);
+                            callback1(err, null);
                         } else if (_.isEmpty(found)) {
+                            pollArr = found;
+                            if (kwack) {
+                                callKwack();
+                            } else {
+                                callback1("noDataound poll", null);
+                            }
 
-                            callback("noDataound", null);
                         } else {
-                            console.log("found", found)
-                            callback(null, found);
+                            pollArr = found;
+                            var dataToSend = {}
+                            dataToSend.startDate = startDate;
+                            dataToSend.endDate = endDate;
+                            if (kwack) {
+                                callKwack();
+                            } else {
+                                console.log("Call back is going fromm hereEEEEEEEEEEEEEEEEEEE",dataToSend)
+                                callback1(null, pollArr, dataToSend, interest);
+                            }
                         }
-
-                    });
+                    })
                 } else {
-
+                    callKwack();
                 }
 
+                function callKwack() {
+                    if (kwack) {
+                        Comment.find({
+                            user: userId,
+                        }, {
+                            news: 1
+                        }).exec(function (err, found) {
+                             var dataToSend = {}
+                            dataToSend.startDate = startDate;
+                            dataToSend.endDate = endDate;
+                            console.log("inside api found", found)
+                            if (err) {
+                                callback1(err, null);
+                            } else if (_.isEmpty(found)) {
+                                callback1(null, pollArr, dataToSend, interest);
+                            } else {
+                                if (!_.isEmpty(pollArr)) {
+                                    pollArr = _.compact(_.concat(pollArr, found));
+                                } else {
+                                    pollArr = found;
+                                }
+                                console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^",dataToSend)
+                                callback1(null, pollArr, dataToSend, interest);
+                            }
+
+                        })
+                    }
+                }
             },
-            function (foundData, callback2) {
-                console.log("2nd function", foundData)
-                // NewsInfo.findOne({
-                //     _id: Ids.newsId
-                // }).exec(function (err, found) {
-                //     console.log("found data is", found)
-                //     if (err) {
-                //         callback2(err, null);
-                //     } else if (_.isEmpty(found)) {
-                //         callback2("noDataound", null);
-                //     } else {
-                //         var data2 = {}
-                //         data2._id = found._id;
-                //         data2.realTotalCount = found.realTotalCount + 1
-                //         NewsInfo.saveData(data2, function (err, created) {
-                //             if (err) {
-                //                 callback2(err, null);
-                //             } else if (_.isEmpty(created)) {
-                //                 callback2(null, "noDataound");
-                //             } else {
+            function (pollArr, dataToSend, interest, callback2) {
+                console.log("2nd function", pollArr, interest, dataToSend )
+                var pollArrs = [];
+                _.each(pollArr, function (n) {
+                    pollArrs.push(n.news);
+                });
+                console.log("  ============================ pollArrs =====================", pollArrs);
+                filter._id = {}
+                filter._id.$in = pollArrs;
+                if (dataToSend.startDate !=undefined) {
+                    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+                    filter.createdAt = {
+                        $gte: moment(startDate).startOf('day'),
+                        $lte: moment(endDate).endOf('day')
+                    }
+                }
 
-                //                 callback2(null, Ids);
-                //             }
-                //         });
-                //     }
+                // filter.interest.$in = interest;
+                if (interest) {
+                    filter.interest = {
+                        $in: interest
+                    }
+                }
 
-                // })
+                NewsInfo.find(filter, {
+                    title: 1,
+                    createdAt: 1,
+                    interest: 1
+                }).lean().exec(function (err, found) {
+                    console.log("inside api found*************", found)
+                    if (err) {
+                        callback2(err, null);
+                    } else if (_.isEmpty(found)) {
+                        callback2("noDataound", null);
+                    } else {
+                        callback2(null, found);
+                    }
+
+                })
 
             },
-            function (Ids, callback3) {
-                // console.log("2nd function", Ids)
-                // NewsInfo.findOne({
-                //     _id: Ids.newsId
-                // }).exec(function (err, found) {
-                //     console.log("found data is", found)
-                //     if (err) {
-                //         callback3(err, null);
-                //     } else if (_.isEmpty(found)) {
-                //         callback3("noDataound", null);
-                //     } else {
-                //         callback3(null, found);
-                //     }
+            //  function (Ids, callback3) {
+            //     console.log("%%%%%%%%%%%%%%%%%", Ids)
+            //     // NewsInfo.findOne({
+            //     //     _id: Ids.newsId
+            //     // }).exec(function (err, found) {
+            //     //     console.log("found data is", found)
+            //     //     if (err) {
+            //     //         callback3(err, null);
+            //     //     } else if (_.isEmpty(found)) {
+            //     //         callback3("noDataound", null);
+            //     //     } else {
+            //     //         callback3(null, found);
+            //     //     }
 
-                // })
-            }
+            //     // })
+            // }
         ], function (err, data) {
-            console.log("exe final:", data);
+            // console.log("exe final:", data);
 
             if (err || _.isEmpty(data)) {
-                console.log("exe final is empty:");
+                // console.log("exe final is empty:");
                 callback(err, [])
             } else {
                 console.log("exe final callback:");
@@ -225,6 +306,8 @@ var model = {
             }
         });
     },
+
+
 
     searchNewsByDesc: function (data, callback) {
         var trimText = data.searchText.trim();

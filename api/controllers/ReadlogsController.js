@@ -17,6 +17,7 @@ var controller = {
         }
     },
         
+        
 
              /**
      *  to add readlogs and count 
