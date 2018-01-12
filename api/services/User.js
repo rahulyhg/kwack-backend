@@ -8,6 +8,9 @@ var schema = new Schema({
     age: {
         type: String,
     },
+     bio: {
+        type: String,
+    },
     country: {
         type: String
     },
@@ -30,10 +33,12 @@ var schema = new Schema({
         type: Number,
     },
     followCount: {
-        type: Number,
+         type: Number,
+        default: 0
     },
     followingCount: {
-        type: Number,
+         type: Number,
+        default: 0
     },
     inviteFrinend: [{
         id: {
