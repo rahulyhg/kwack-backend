@@ -156,7 +156,7 @@ var model = {
 
 
 //INPUT for this api is 
-//{
+// {
 // "userId":"5a55b4c0c7bb192cd7f88255",
 // "kwack":"true",
 // "startDate":"2018-01-01",
@@ -239,6 +239,7 @@ var model = {
                 }
             },
             function (pollArr, dataToSend, interest, callback2) {
+                
                 console.log("2nd function************", pollArr, interest, dataToSend )
                 var pollArrs = [];
                 _.each(pollArr, function (n) {
@@ -254,11 +255,15 @@ var model = {
                         $lte: moment(endDate).endOf('day')
                     }
                 }
+                  var interestArr = [];
+                _.each(interest, function (n) {
+                    interestArr.push(n.name);
+                });
 
                 // filter.interest.$in = interest;
                 if (interest) {
                     filter.interest = {
-                        $in: interest
+                        $in: interestArr
                     }
                 }
 
@@ -279,22 +284,6 @@ var model = {
                 })
 
             },
-            //  function (Ids, callback3) {
-            //     console.log("%%%%%%%%%%%%%%%%%", Ids)
-            //     // NewsInfo.findOne({
-            //     //     _id: Ids.newsId
-            //     // }).exec(function (err, found) {
-            //     //     console.log("found data is", found)
-            //     //     if (err) {
-            //     //         callback3(err, null);
-            //     //     } else if (_.isEmpty(found)) {
-            //     //         callback3("noDataound", null);
-            //     //     } else {
-            //     //         callback3(null, found);
-            //     //     }
-
-            //     // })
-            // }
         ], function (err, data) {
             // console.log("exe final:", data);
 

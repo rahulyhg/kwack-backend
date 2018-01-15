@@ -17,6 +17,10 @@ var schema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'User'
         },
+        likes: [{
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }],
     }],
     likes: [{
         userId: {
@@ -50,6 +54,26 @@ module.exports = mongoose.model('Comment', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user UserId", "news user UserId", "order", "asc"));
 var model = {
+        /**
+     * this function provides Kwack for particular CommentId
+     * @param {commentId} input commentId
+     * @param {callback} callback function with err and response
+     */
+    addLikeToReply: function (commentId, callback) {
+        Comment.findOne({
+            _id: commentId,
+        }).deepPopulate('user news repliesTo.user').exec(function (err, found) {
+            console.log("inside api found gwt kwack", found)
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        })
+    },
     /**
      * this function provides Kwack for particular CommentId
      * @param {commentId} input commentId
@@ -412,8 +436,8 @@ var model = {
      */
     removeLike: function (commentId, user, callback) {
 
-           console.log("inside remove Like")
-           Comment.update({
+        console.log("inside remove Like")
+        Comment.update({
             _id: mongoose.Types.ObjectId(commentId)
 
         }, {
