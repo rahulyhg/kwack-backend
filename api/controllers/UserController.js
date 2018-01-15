@@ -5,7 +5,7 @@ var controller = {
      */
  getAllUser: function (req, res) {
         if (req.body) {
-            User.getAllUser(res.callback);
+            User.getAllUser(req.body.userId,res.callback);
         } else {
             res.json({
                 value: false,

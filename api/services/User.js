@@ -8,7 +8,7 @@ var schema = new Schema({
     age: {
         type: String,
     },
-     bio: {
+    bio: {
         type: String,
     },
     country: {
@@ -33,11 +33,11 @@ var schema = new Schema({
         type: Number,
     },
     followCount: {
-         type: Number,
+        type: Number,
         default: 0
     },
     followingCount: {
-         type: Number,
+        type: Number,
         default: 0
     },
     inviteFrinend: [{
@@ -138,17 +138,22 @@ module.exports = mongoose.model('User', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "user", "user"));
 var model = {
-     getAllUser: function (callback) {
-        User.find({}).exec(function (err, found) {
-            if (err) {
-                callback(err, null);
-            } else if (_.isEmpty(found)) {
-                callback("noDataound", null);
-            } else {
-                callback(null, found);
-            }
+    getAllUser: function (userId,callback) {
+        User.find({
+                _id: {
+                    $ne: userId
+                }
+            })
+            .exec(function (err, found) {
+                if (err) {
+                    callback(err, null);
+                } else if (_.isEmpty(found)) {
+                    callback("noDataound", null);
+                } else {
+                    callback(null, found);
+                }
 
-        });
+            });
     },
 
     /**
@@ -244,16 +249,16 @@ var model = {
 
         });
     },
-   //This is api for add intrest
+    //This is api for add intrest
     demo: function (id, interest, callback) {
-        console.log("id and intrest is",id,interest)
+        console.log("id and intrest is", id, interest)
 
-          User.findOneAndUpdate({
+        User.findOneAndUpdate({
             _id: ObjectId(id)
         }, {
             $push: {
                 interests: {
-                    $each:interest
+                    $each: interest
                 }
             }
         }).exec(function (err, found) {
@@ -282,7 +287,7 @@ var model = {
                 name: interest[idx].name,
             });
         }
-        
+
         data1._id = userId;
         User.saveData(data1, function (err, created) {
             if (err) {
