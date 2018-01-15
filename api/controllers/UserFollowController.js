@@ -15,5 +15,17 @@ var controller = {
             })
         }
     },
+     removeFollowerCount: function (req, res) {
+        if (req.body) {
+            UserFollow.removeFollowerCount(req.body.userFollowed,req.body.userFollwing, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
 };
 module.exports = _.assign(module.exports, controller);
