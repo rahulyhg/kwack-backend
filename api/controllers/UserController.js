@@ -1,5 +1,20 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+                /**
+     * for get all Interests list
+     */
+ getAllUser: function (req, res) {
+        if (req.body) {
+            User.getAllUser(res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
            /**
      * for users to add interests 
      */

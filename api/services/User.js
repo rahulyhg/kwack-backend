@@ -138,6 +138,18 @@ module.exports = mongoose.model('User', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "user", "user"));
 var model = {
+     getAllUser: function (callback) {
+        User.find({}).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
 
     /**
      * this function for send otp
