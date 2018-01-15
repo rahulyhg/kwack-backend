@@ -110,7 +110,13 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             function (data) {
                 if (data.value === true) {
                     $scope.formdata = data.data
-                    console.log("  $scope.formdata",  $scope.formdata)
+                }
+            });
+               NavigationService.apiCall("Interests/search",{},
+            function (data) {
+                if (data.value === true) {
+                    $scope.Interests = data.data.results
+
                 }
             });
         $scope.saveProduct = function (formdata) {

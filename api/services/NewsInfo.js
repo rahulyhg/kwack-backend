@@ -155,17 +155,17 @@ var model = {
 
 
 
-//INPUT for this api is 
-// {
-// "userId":"5a55b4c0c7bb192cd7f88255",
-// "kwack":"true",
-// "startDate":"2018-01-01",
-// "endDate":"2020-01-10",
-// "interest":["News","Politics"]
-// }
+    //INPUT for this api is 
+    // {
+    // "userId":"5a55b4c0c7bb192cd7f88255",
+    // "kwack":"true",
+    // "startDate":"2018-01-01",
+    // "endDate":"2020-01-10",
+    // "interest":["News","Politics"]
+    // }
 
     IsPollKwackIf: function (startDate, endDate, interest, userId, polls, kwacks, callback) {
-        console.log("$$$$$$$$$$$$$$$$$$$$$$4444",startDate,endDate,polls,userId,kwacks)
+        console.log("$$$$$$$$$$$$$$$$$$$$$$4444", startDate, endDate, polls, userId, kwacks)
         var filter = {};
 
         async.waterfall([
@@ -199,7 +199,7 @@ var model = {
                             if (kwacks) {
                                 callKwack();
                             } else {
-                                console.log("Call back is going fromm hereEEEEEEEEEEEEEEEEEEE",dataToSend)
+                                console.log("Call back is going fromm hereEEEEEEEEEEEEEEEEEEE", dataToSend)
                                 callback1(null, pollArr, dataToSend, interest);
                             }
                         }
@@ -216,7 +216,7 @@ var model = {
                         }, {
                             news: 1
                         }).exec(function (err, found) {
-                             var dataToSend = {}
+                            var dataToSend = {}
                             dataToSend.startDate = startDate;
                             dataToSend.endDate = endDate;
                             console.log("inside api found", found)
@@ -230,7 +230,7 @@ var model = {
                                 } else {
                                     pollArr = found;
                                 }
-                                console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^",dataToSend)
+                                console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^", dataToSend)
                                 callback1(null, pollArr, dataToSend, interest);
                             }
 
@@ -239,8 +239,8 @@ var model = {
                 }
             },
             function (pollArr, dataToSend, interest, callback2) {
-                
-                console.log("2nd function************", pollArr, interest, dataToSend )
+
+                console.log("2nd function************", pollArr, interest, dataToSend)
                 var pollArrs = [];
                 _.each(pollArr, function (n) {
                     pollArrs.push(n.news);
@@ -248,18 +248,18 @@ var model = {
                 console.log("  ============================ pollArrs =====================", pollArrs);
                 filter._id = {}
                 filter._id.$in = pollArrs;
-                if (dataToSend.startDate !=undefined) {
+                if (dataToSend.startDate != undefined) {
                     console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
                     filter.createdAt = {
                         $gte: moment(startDate).startOf('day'),
                         $lte: moment(endDate).endOf('day')
                     }
                 }
-                  var interestArr = [];
+                var interestArr = [];
                 _.each(interest, function (n) {
                     interestArr.push(n.name);
                 });
-
+                console.log("interestArrinterestArrinterestArrinterestArr", interestArr)
                 // filter.interest.$in = interest;
                 if (interest) {
                     filter.interest = {
