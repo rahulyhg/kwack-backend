@@ -270,15 +270,7 @@ var model = {
                 name: interest[idx].name,
             });
         }
-        User.findOneAndUpdate({
-            _id: ObjectId(data._id)
-        }, {
-            $push: {
-                interests: {
-                    $each: data.interests
-                }
-            }
-        }).exec(callback);
+        
         data1._id = userId;
         User.saveData(data1, function (err, created) {
             if (err) {

@@ -164,14 +164,14 @@ var model = {
 // "interest":["News","Politics"]
 // }
 
-    IsPollKwackIf: function (startDate, endDate, interest, userId, poll, kwack, callback) {
-        console.log("$$$$$$$$$$$$$$$$$$$$$$4444",startDate,endDate)
+    IsPollKwackIf: function (startDate, endDate, interest, userId, polls, kwacks, callback) {
+        console.log("$$$$$$$$$$$$$$$$$$$$$$4444",startDate,endDate,polls,userId,kwacks)
         var filter = {};
 
         async.waterfall([
             function (callback1) {
                 var pollArr = [];
-                if (poll) {
+                if (polls) {
                     PollAnswer.find({
                         user: userId,
                     }, {
@@ -185,7 +185,7 @@ var model = {
                             callback1(err, null);
                         } else if (_.isEmpty(found)) {
                             pollArr = found;
-                            if (kwack) {
+                            if (kwacks) {
                                 callKwack();
                             } else {
                                 callback1("noDataound poll", null);
@@ -196,7 +196,7 @@ var model = {
                             var dataToSend = {}
                             dataToSend.startDate = startDate;
                             dataToSend.endDate = endDate;
-                            if (kwack) {
+                            if (kwacks) {
                                 callKwack();
                             } else {
                                 console.log("Call back is going fromm hereEEEEEEEEEEEEEEEEEEE",dataToSend)
@@ -209,7 +209,8 @@ var model = {
                 }
 
                 function callKwack() {
-                    if (kwack) {
+                    console.log("inside kwack")
+                    if (kwacks) {
                         Comment.find({
                             user: userId,
                         }, {
@@ -238,7 +239,7 @@ var model = {
                 }
             },
             function (pollArr, dataToSend, interest, callback2) {
-                console.log("2nd function", pollArr, interest, dataToSend )
+                console.log("2nd function************", pollArr, interest, dataToSend )
                 var pollArrs = [];
                 _.each(pollArr, function (n) {
                     pollArrs.push(n.news);
