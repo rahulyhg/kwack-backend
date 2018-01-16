@@ -41,7 +41,18 @@ myApp.factory('NavigationService', function ($http) {
         classis: "active",
         sref: "#!/page/viewPollAnswer//",
         
-    }];
+    },
+    //  {
+    //     name: "UserFollow",
+    //     classis: "active",
+    //     sref: "#!/page/viewUserFollow//",
+        
+    // },
+  {
+            name: "User's Follow Following",
+            classis: "active",
+            uiSref: "userViewCount"
+        }];
 
     return {
         getnav: function () {

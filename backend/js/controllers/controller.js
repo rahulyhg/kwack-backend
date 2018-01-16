@@ -84,6 +84,136 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
     })
 
+    .controller('UserViewCountrCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, $uibModal, toastr) {
+        //Used to name the .html file
+        $scope.template = TemplateService.changecontent("userViewCount");
+        $scope.menutitle = NavigationService.makeactive("userViewCount");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+        $scope.changeInput = function () {
+            if ($scope.formData.input != '') {
+                $scope.formData.input = '';
+            } else {
+                $scope.formData.input = $scope.formData.input;
+            }
+        };
+        $scope.changeAll = function () {
+            $scope.formData = {};
+            $scope.formData.page = 1;
+            $scope.formData.type = '';
+            $scope.formData.keyword = '';
+            $scope.viewTable();
+        };
+        $scope.formData = {};
+        $scope.formData.page = 1;
+        $scope.formData.type = '';
+        $scope.formData.keyword = '';
+        // $scope.selectedStatus = 'All';
+        $scope.searchInTable = function (data) {
+            $scope.formData.page = 1;
+            if (data.length >= 2) {
+                $scope.formData.keyword = data;
+                $scope.viewTable();
+            } else if (data.length == '') {
+                $scope.formData.keyword = data;
+                $scope.viewTable();
+            }
+        }
+        $scope.viewTable = function () {
+            // $scope.url = "Medal/getAllMedals";
+            $scope.url = "User/search";
+            $scope.formData.page = $scope.formData.page++;
+            NavigationService.apiCall($scope.url, $scope.formData, function (data) {
+                console.log("data.value", data);
+                if (data.value) {
+                    $scope.items = data.data.results;
+                    console.log(" $scope.items", $scope.items);
+                }
+
+                $scope.totalItems = data.data.total;
+                $scope.maxRow = data.data.options.count;
+            });
+        }
+        $scope.viewTable();
+        $scope.updateTable = function () {
+            // $scope.url = "Medal/getAllMedals";
+            $scope.url = "gallery/getSchool";
+            $scope.formData = '';
+            NavigationService.apiCall($scope.url, $scope.formData, function (data) {
+                console.log("Hi", data);
+            });
+        }
+        $scope.viewUser = function (data) {
+            console.log("*************************", data)
+            $state.go("viewUserCountDetail", {
+                userId: data
+            });
+        };
+
+        $scope.noDelete = function () {
+            $scope.modalInstance.close();
+        }
+        $scope.delete = function (data) {
+            console.log(data);
+            $scope.url = "gallery/delete";
+            $scope.constraints = {};
+            $scope.constraints._id = data;
+            NavigationService.apiCall($scope.url, $scope.constraints, function (data) {
+                console.log("data.value", data);
+                if (data.value) {
+                    toastr.success('Successfully Deleted', 'Rules Meaasge');
+                    $scope.modalInstance.close();
+                    $scope.viewTable();
+                } else {
+                    toastr.error('Something went wrong while Deleting', 'Rules Meaasge');
+                }
+
+            });
+        }
+
+
+    })
+    .controller('viewUserCountDetailCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, $uibModal, toastr) {
+        //Used to name the .html file
+        $scope.template = TemplateService.changecontent("viewUserCountDetail");
+        $scope.menutitle = NavigationService.makeactive("viewUserCountDetail");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+        $scope.dataTosend = {}
+        $scope.dataTosend._id = $stateParams.userId
+
+        NavigationService.apiCall("User/getOne",
+            $scope.dataTosend,
+            function (data) {
+                console.log("*************", data)
+                if (data.value === true) {
+                    $scope.formdata = data.data
+                }
+            });
+        $scope.dataForm = {}
+        $scope.dataForm.userId = $stateParams.userId
+        NavigationService.apiCall("UserFollow/getAllFollowerName",
+            $scope.dataForm,
+            function (data) {
+
+                if (data.value === true) {
+                    $scope.usreFollowinfData = data.data
+                    console.log("*******^^^^^^^^^^^^^^^^^^^^*******", $scope.usreFollowinfData)
+                }
+            });
+        NavigationService.apiCall("UserFollow/getAllFollowingName",
+            $scope.dataForm,
+            function (data) {
+
+                if (data.value === true) {
+                    $scope.usreFollowedfData = data.data
+                    console.log("*******^^^^^^^^^^^^^^^^^^^^*******", $scope.usreFollowedfData)
+                }
+            });
+
+    })
+
     .controller('NewsDetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
         $scope.json = JsonService;
         $scope.template = TemplateService.changecontent("newsDetail");
@@ -99,7 +229,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             jsonData = $stateParams.keyword;
         }
         $scope.data = {};
-        
+
         // var jsonData = {};
         // var st = JSON.stringify($stateParams.keyword)
         // jsonData = JSON.parse(st);
@@ -112,7 +242,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                     $scope.formdata = data.data
                 }
             });
-               NavigationService.apiCall("Interests/search",{},
+        NavigationService.apiCall("Interests/search", {},
             function (data) {
                 if (data.value === true) {
                     $scope.Interests = data.data.results

@@ -30,7 +30,7 @@ module.exports = [
     "bower_components/moment/min/moment.min.js",
     "bower_components/angular-ui-sortable/sortable.js",
     "bower_components/intl-tel-input/lib/libphonenumber/build/utils.js",
-    "bower_components/intl-tel-input/build/js/intlTelInput.js",
+    "bower_componentsbower_componentsbower_componentsbower_componentsbower_componentsbower_componentsbower_componentsbower_componentsbower_componentsbower_components/intl-tel-input/build/js/intlTelInput.js",
     "bower_components/international-phone-number/releases/international-phone-number.js",
     'bower_components/textAngular/dist/textAngular-rangy.min.js',
     'bower_components/textAngular/dist/textAngular-sanitize.min.js',

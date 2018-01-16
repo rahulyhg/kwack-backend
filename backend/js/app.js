@@ -74,6 +74,16 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             url: "/commentdetail/:id/{page:.*}/{keyword:.*}",
             controller: 'CommentdetailCtrl'
         })
+         .state('userViewCount', {
+            url: "/userViewCount",
+            templateUrl: "views/template.html",
+            controller: 'UserViewCountrCtrl'
+        })
+          .state('viewUserCountDetail', {
+            url: "/viewUserCountDetail/:userId",
+            templateUrl: "views/template.html",
+            controller: 'viewUserCountDetailCtrl'
+        })
              .state('pollanswerview', {
             url: "/pollanswerview",
             templateUrl: "views/template.html",

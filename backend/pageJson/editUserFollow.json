@@ -1,0 +1,60 @@
+{
+    "title": "Edit UserFollow",
+    "name": "UserFollow",
+    "jsonPage": "viewUserFollow",
+    "desciption": "",
+    "pageType": "edit",
+    "urlFields": ["_id"],
+       "fields": [{
+            "name": "User",
+            "type": "tags",
+            "tableRef": "user",
+            "dropDownType": "single",
+            "dropDownField": "name",
+            "searchApi": "searchCall",
+            "placeholder": "Enter user Name",
+            "id": "user",
+            "validation": ["", "trim", ""],
+            "url": "User/search"
+        },
+       {
+            "name": "User",
+            "type": "tags",
+            "tableRef": "userBeenFollowed",
+            "dropDownType": "single",
+            "dropDownField": "name",
+            "searchApi": "searchCall",
+            "placeholder": "Enter user Name",
+            "id": "userBeenFollowed",
+            "validation": ["", "trim", ""],
+            "url": "User/search"
+        }],
+    "action": [{
+        "name": "submit",
+        "action": "submitUserFollow",
+        "stateName": {
+            "page": "page",
+            "json": {
+                "id": "viewUserFollow"
+            }
+        }
+    }, {
+        "name": "cancel",
+        "sideMenuRedirect": true,
+        "stateName": {
+            "page": "page",
+            "json": {
+                "id": "viewUserFollow"
+            }
+        }
+    }],
+    "apiCall": {
+        "url": "UserFollow/save",
+        "params": "_id"
+    },
+    "preApi": {
+        "url": "UserFollow/getOne",
+        "params": "_id"
+    }
+
+}

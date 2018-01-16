@@ -1,0 +1,39 @@
+{
+    "title": "UserFollow",
+    "description": "List of UserFollow",
+    "pageType": "view",
+    "sendIdWithCreate": true,
+    "urlFields": ["_id"],
+    "fields": [{
+        "name": "user",
+        "isSort": "",
+        "tableRef": "user"
+    }],
+    "action": [{
+        "name": "edit",
+        "icon": "fa-pencil",
+        "buttonClass": "btn-primary",
+        "type": "page",
+        "action": "editUserFollow",
+        "fieldsToSend": {
+            "_id": "_id"
+        }
+    }, {
+        "name": "delete",
+        "icon": "fa-trash",
+        "buttonClass": "btn-danger",
+        "type": "apiCallConfirm",
+        "title": "Delete UserFollow",
+        "content": "Are you sure you want to delete UserFollow?",
+        "api": "UserFollow/delete",
+        "fieldsToSend": {
+            "name": "_id",
+            "value": "_id"
+        }
+    }],
+    "button": [],
+    "apiCall": {
+        "url": "UserFollow/search",
+        "params": "_id"
+    }
+}

@@ -23,8 +23,36 @@ schema.plugin(uniqueValidator);
 schema.plugin(timestamps);
 module.exports = mongoose.model('UserFollow', schema);
 
-var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user", "news user", "order", "asc"));
+var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user userBeenFollowed", "news user userBeenFollowed", "order", "asc"));
 var model = {
+    getAllFollowerName: function (userId, callback) {
+        UserFollow.find({
+            user:userId
+        }).deepPopulate("user userBeenFollowed").exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
+    getAllFollowingName: function (userId, callback) {
+        UserFollow.find({
+              userBeenFollowed:userId
+        }).deepPopulate("user userBeenFollowed").exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
     /**
      * this function add Follow and Following Count for User
      * @param {userFollowed} input userFollowed
@@ -63,7 +91,7 @@ var model = {
                     } else {
                         var data2 = {}
                         data2._id = found._id;
-                        data2.followCount = found.followCount + 1
+                        data2.followingCount = found.followingCount + 1
                         User.saveData(data2, function (err, created) {
                             if (err) {
                                 callback2(err, null);
@@ -90,7 +118,7 @@ var model = {
                     } else {
                         var data2 = {}
                         data2._id = found._id;
-                        data2.followingCount = found.followingCount + 1
+                        data2.followCount = found.followCount + 1
                         User.saveData(data2, function (err, created) {
                             if (err) {
                                 callback3(err, null);
@@ -144,9 +172,9 @@ var model = {
                             } else if (_.isEmpty(created)) {
                                 callback1(null, "noDataound");
                             } else {
-                                dataToSend={}
-                                dataToSend.userFollowed=userFollowed
-                                 dataToSend.userFollwing=userFollwing
+                                dataToSend = {}
+                                dataToSend.userFollowed = userFollowed
+                                dataToSend.userFollwing = userFollwing
                                 callback1(null, dataToSend);
                             }
                         });
@@ -165,7 +193,7 @@ var model = {
                     } else {
                         var data2 = {}
                         data2._id = found._id;
-                        data2.followCount = found.followCount - 1
+                        data2.followingCount = found.followingCount - 1
                         User.saveData(data2, function (err, created) {
                             if (err) {
                                 callback2(err, null);
@@ -192,7 +220,7 @@ var model = {
                     } else {
                         var data2 = {}
                         data2._id = found._id;
-                        data2.followingCount = found.followingCount - 1
+                        data2.followCount = found.followCount - 1
                         User.saveData(data2, function (err, created) {
                             if (err) {
                                 callback3(err, null);
