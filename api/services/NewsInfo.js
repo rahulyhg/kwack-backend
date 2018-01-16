@@ -79,6 +79,10 @@ var schema = new Schema({
         ref: 'Comment',
         index: true
     }],
+     isExplore: {
+        type: String,
+        enum: ['YES', 'NO']
+    },
     trending: {
         type: String,
         default: "NO",
@@ -86,7 +90,7 @@ var schema = new Schema({
     },
     IsPoll: {
         type: String,
-        default: "NO",
+        default: "YES",
         enum: ['YES', 'NO']
     },
     IsKwack: {
