@@ -108,6 +108,21 @@ var controller = {
             })
         }
     },
+                 /**
+     * for Get Nes By Interest
+     */
+ getExploreNews: function (req, res) {
+        if (req.body) {
+            NewsInfo.getExploreNews(req.body,res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
                 /**
      * for Get all Just Now news
      */

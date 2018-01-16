@@ -79,7 +79,7 @@ var schema = new Schema({
         ref: 'Comment',
         index: true
     }],
-     isExplore: {
+    isExplore: {
         type: String,
         enum: ['YES', 'NO']
     },
@@ -162,7 +162,7 @@ var model = {
     //INPUT for this api is 
     // {
     // "userId":"5a55b4c0c7bb192cd7f88255",
-    // "kwack":"true",
+    // "kwacks":"true",
     // "startDate":"2018-01-01",
     // "endDate":"2020-01-10",
     // "interest":["News","Politics"]
@@ -259,22 +259,21 @@ var model = {
                         $lte: moment(endDate).endOf('day')
                     }
                 }
-                var interestArr = [];
-                _.each(interest, function (n) {
-                    interestArr.push(n.name);
-                });
+
                 console.log("interestArrinterestArrinterestArrinterestArr", interestArr)
                 // filter.interest.$in = interest;
-                if (interest) {
+                if (!_.isEmpty(interest)) {
+                    var interestArr = [];
+                    _.each(interest, function (n) {
+                        interestArr.push(n.name);
+                    });
                     filter.interest = {
                         $in: interestArr
                     }
                 }
 
                 NewsInfo.find(filter, {
-                    title: 1,
-                    createdAt: 1,
-                    interest: 1
+
                 }).lean().exec(function (err, found) {
                     console.log("inside api found*************", found)
                     if (err) {
@@ -493,6 +492,54 @@ var model = {
         };
         NewsInfo.find({
                 interest: data.userInterest
+            })
+            .deepPopulate("polls.poll comments.comment")
+            .order(options)
+            .keyword(options)
+            .page(options,
+                function (err, found) {
+                    if (err) {
+                        callback(err, null);
+                    } else if (found) {
+                        callback(null, found);
+                    } else {
+                        callback("Invalid data", null);
+                    }
+                });
+    },
+
+    /**
+     * this function for search News by interest
+     * @param {callback} callback function with err and response
+     */
+    getExploreNews: function (data, callback) {
+        if (data.count) {
+            var maxCount = data.count;
+        } else {
+            var maxCount = Config.maxRow;
+        }
+        var maxRow = maxCount
+        var page = 1;
+        if (data.page) {
+            page = data.page;
+        }
+        var field = data.field;
+        var options = {
+            field: data.field,
+            filters: {
+                keyword: {
+                    fields: ['name'],
+                    term: data.keyword
+                }
+            },
+            sort: {
+                createdAt: -1
+            },
+            start: (page - 1) * maxRow,
+            count: maxRow
+        };
+        NewsInfo.find({
+                isExplore: "YES"
             })
             .deepPopulate("polls.poll comments.comment")
             .order(options)
