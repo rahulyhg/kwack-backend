@@ -534,7 +534,7 @@ var model = {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
-                callback("noDatao und", null);
+                callback("noDatafound", null);
             } else {
                 callback(null, found);
             }

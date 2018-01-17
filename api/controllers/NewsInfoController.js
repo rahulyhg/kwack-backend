@@ -123,6 +123,21 @@ var controller = {
             })
         }
     },
+                   /**
+     * for Get Nes By Interest
+     */
+ getSocialNews: function (req, res) {
+        if (req.body) {
+            NewsInfo.getSocialNews(req.body,res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
                 /**
      * for Get all Just Now news
      */
