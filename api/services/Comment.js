@@ -54,7 +54,7 @@ module.exports = mongoose.model('Comment', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user UserId", "news user UserId", "order", "asc"));
 var model = {
-        /**
+    /**
      * this function provides Kwack for particular CommentId
      * @param {commentId} input commentId
      * @param {callback} callback function with err and response
@@ -460,6 +460,86 @@ var model = {
 
 
 
+    // addLikeToReply: function (replyId, userId, callback) {
+    //     console.log("replyId", replyId)
+    //     Comment.findOneAndUpdate({
+    // repliesTo: {
+    //     $elemMatch: {
+    //         _id: replyId
+    //     }
+    // }
+    //     },
+    //     {
+    //     $push: {
+    //         'repliesTo': {
+    //            likes:userId
+    //         }
+    //     }
+    // }).deepPopulate('').exec(function (err, found) {
+    //         console.log("******************found reply", found)
+    //         if (err) {
+    //             callback(err, null);
+    //         } else if (_.isEmpty(found)) {
+    //             callback("noDataound", null);
+    //         } else {
+    //             callback(null, found);
+    //         }
 
+    //     });
+    // },
+    addLikeToReply: function (comm,replyId, userId, callback) {
+
+        console.log("replyId", replyId, userId)
+        Comment.findOneAndUpdate({
+          _id:comm,
+            repliesTo: {
+                $elemMatch: {
+                    _id: replyId
+                }
+            }
+        }, {
+            $push: {
+                'repliesTo.$.likes': userId
+            }
+        },{
+            new:true
+        }).deepPopulate('').exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDatao und", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
+   removeLikeToReply: function (comm,replyId, userId, callback) {
+
+        console.log("replyId", replyId, userId)
+        Comment.findOneAndUpdate({
+          _id:comm,
+            repliesTo: {
+                $elemMatch: {
+                    _id: replyId
+                }
+            }
+        }, {
+            $pull: {
+                'repliesTo.$.likes': userId
+            }
+        },{
+            new:true
+        }).deepPopulate('').exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDatao und", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
+    },
 };
 module.exports = _.assign(module.exports, exports, model);

@@ -166,5 +166,29 @@ var controller = {
             })
         }
     },
+       addLikeToReply: function (req, res) {
+        if (req.body) {
+            Comment.addLikeToReply(req.body.comm,req.body.replyId,req.body.userId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+     removeLikeToReply: function (req, res) {
+        if (req.body) {
+            Comment.removeLikeToReply(req.body.comm,req.body.replyId,req.body.userId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
 };
 module.exports = _.assign(module.exports, controller);
