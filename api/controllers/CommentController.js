@@ -16,7 +16,7 @@ var controller = {
         }
     },
                /**
-     * for get Kwack for Particular news and user
+     * for get Kwack for Particular commentId
      */
  getComment: function (req, res) {
         if (req.body) {
@@ -92,7 +92,7 @@ var controller = {
         }
     },
                /**
-     * to add reply 
+     * to add reply for Comment
      */
  addReply: function (req, res) {
         if (req.body) {
@@ -107,7 +107,7 @@ var controller = {
         }
     },
                   /**
-     * to remove reply 
+     * to remove reply for Comment
      */
  removeReply: function (req, res) {
         if (req.body) {
@@ -166,6 +166,10 @@ var controller = {
             })
         }
     },
+                /**
+     * to add like for Reply 
+     */
+
        addLikeToReply: function (req, res) {
         if (req.body) {
             Comment.addLikeToReply(req.body.comm,req.body.replyId,req.body.userId, res.callback);
@@ -178,6 +182,9 @@ var controller = {
             })
         }
     },
+                /**
+     * to remove like for Reply 
+     */
      removeLikeToReply: function (req, res) {
         if (req.body) {
             Comment.removeLikeToReply(req.body.comm,req.body.replyId,req.body.userId, res.callback);

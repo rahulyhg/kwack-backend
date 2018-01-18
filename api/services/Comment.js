@@ -62,26 +62,7 @@ module.exports = mongoose.model('Comment', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user UserId", "news user UserId", "order", "asc"));
 var model = {
-    /**
-     * this function provides Kwack for particular CommentId
-     * @param {commentId} input commentId
-     * @param {callback} callback function with err and response
-     */
-    addLikeToReply: function (commentId, callback) {
-        Comment.findOne({
-            _id: commentId,
-        }).deepPopulate('user news repliesTo.user').exec(function (err, found) {
-            console.log("inside api found gwt kwack", found)
-            if (err) {
-                callback(err, null);
-            } else if (_.isEmpty(found)) {
-                callback("noDataound", null);
-            } else {
-                callback(null, found);
-            }
-
-        })
-    },
+  
     /**
      * this function provides Kwack for particular CommentId
      * @param {commentId} input commentId
@@ -129,9 +110,11 @@ var model = {
 
     /**
      * this function add comment for news
-     * @param {newsId} input newsId
-     *  * @param {userId} input userId
+     * @param {userId} input userId
+     *  * @param {newsId} input newsId
      * *  * @param {comment} input comment
+     * *  * * @param {kwack} input kwack
+     *  * *  * * @param {anonymous} input anonymous
      * @param {callback} callback function with err and response
      */
 
@@ -330,7 +313,8 @@ var model = {
      * this function add  reply for news
      * @param {commentId} input commentId
      *  * @param {reply} input reply
-     *  *  * @param {userId} input userId
+     *  *  * @param {user} input user
+     *   *  *  * @param {anonymous} input anonymous
      * @param {callback} callback function with err and response
      */
     addReply: function (commentId, reply, user,anonymous, callback) {
@@ -389,7 +373,7 @@ var model = {
     },
 
     /**
-     * this function add  Like Or Remove for Comment
+     * this function add  Like Or Remove Like  for Comment
      * @param {commentId} input commentId
      *  *  * @param {user} input user
      * @param {callback} callback function with err and response
@@ -472,35 +456,15 @@ var model = {
         });
     },
 
+  /**
+     * this function add like for particular Reply
+     * @param {comm} input comm
+     *  * @param {replyId} input replyId
+     *   *  * @param {userId} input userId
+     * @param {callback} callback function with err and response
+     */
 
 
-    // addLikeToReply: function (replyId, userId, callback) {
-    //     console.log("replyId", replyId)
-    //     Comment.findOneAndUpdate({
-    // repliesTo: {
-    //     $elemMatch: {
-    //         _id: replyId
-    //     }
-    // }
-    //     },
-    //     {
-    //     $push: {
-    //         'repliesTo': {
-    //            likes:userId
-    //         }
-    //     }
-    // }).deepPopulate('').exec(function (err, found) {
-    //         console.log("******************found reply", found)
-    //         if (err) {
-    //             callback(err, null);
-    //         } else if (_.isEmpty(found)) {
-    //             callback("noDataound", null);
-    //         } else {
-    //             callback(null, found);
-    //         }
-
-    //     });
-    // },
     addLikeToReply: function (comm, replyId, userId, callback) {
 
         console.log("replyId", replyId, userId)
@@ -528,6 +492,14 @@ var model = {
 
         });
     },
+
+      /**
+     * this function remove like for particular Reply
+     * @param {comm} input comm
+     *  * @param {replyId} input replyId
+     *   *  * @param {userId} input userId
+     * @param {callback} callback function with err and response
+     */
     removeLikeToReply: function (comm, replyId, userId, callback) {
 
         console.log("replyId", replyId, userId)
