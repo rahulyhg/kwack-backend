@@ -13,6 +13,10 @@ var schema = new Schema({
     },
     repliesTo: [{
         reply: String,
+        anonymous: {
+            type: String,
+            default: "NO"
+        },
         user: {
             type: Schema.Types.ObjectId,
             ref: 'User'
@@ -30,6 +34,10 @@ var schema = new Schema({
     }],
     kwack: {
         type: String
+    },
+    anonymous: {
+        type: String,
+        default: "NO"
     }
 
 });
@@ -127,14 +135,15 @@ var model = {
      * @param {callback} callback function with err and response
      */
 
-    addComment: function (userId, newsId, comment, kwack, callback) {
+    addComment: function (userId, newsId, comment, kwack, anonymous, callback) {
         async.waterfall([
             function (callback1) {
                 var comment1 = {}
                 comment1.user = userId
                 comment1.news = newsId
                 comment1.comment = comment
-                comment1.kwack = kwack
+                comment1.kwack = kwack,
+                    comment1.anonymous = anonymous
                 Comment.saveData(comment1, function (err, created) {
                     if (err) {
                         callback1(err, null);
@@ -324,17 +333,22 @@ var model = {
      *  *  * @param {userId} input userId
      * @param {callback} callback function with err and response
      */
-    addReply: function (commentId, reply, user, callback) {
+    addReply: function (commentId, reply, user,anonymous, callback) {
+        console.log("anonymousanonymous",commentId,reply,user,anonymous)
         Comment.update({
-            _id: commentId
+            _id: commentId,
         }, {
             $push: {
                 'repliesTo': {
                     user: user,
-                    reply: reply
+                    reply: reply,
+                    anonymous:anonymous
                 }
             }
-        }).exec(function (err, found) {
+            
+        }
+             
+            ).exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
@@ -487,11 +501,11 @@ var model = {
 
     //     });
     // },
-    addLikeToReply: function (comm,replyId, userId, callback) {
+    addLikeToReply: function (comm, replyId, userId, callback) {
 
         console.log("replyId", replyId, userId)
         Comment.findOneAndUpdate({
-          _id:comm,
+            _id: comm,
             repliesTo: {
                 $elemMatch: {
                     _id: replyId
@@ -501,8 +515,8 @@ var model = {
             $push: {
                 'repliesTo.$.likes': userId
             }
-        },{
-            new:true
+        }, {
+            new: true
         }).deepPopulate('').exec(function (err, found) {
             if (err) {
                 callback(err, null);
@@ -514,11 +528,11 @@ var model = {
 
         });
     },
-   removeLikeToReply: function (comm,replyId, userId, callback) {
+    removeLikeToReply: function (comm, replyId, userId, callback) {
 
         console.log("replyId", replyId, userId)
         Comment.findOneAndUpdate({
-          _id:comm,
+            _id: comm,
             repliesTo: {
                 $elemMatch: {
                     _id: replyId
@@ -528,8 +542,8 @@ var model = {
             $pull: {
                 'repliesTo.$.likes': userId
             }
-        },{
-            new:true
+        }, {
+            new: true
         }).deepPopulate('').exec(function (err, found) {
             if (err) {
                 callback(err, null);

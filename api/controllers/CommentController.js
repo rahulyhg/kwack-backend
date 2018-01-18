@@ -51,7 +51,7 @@ var controller = {
  addComment: function (req, res) {
         if (req.body) {
             console.log("req.body",req.body)
-            Comment.addComment(req.body.userId,req.body.newsId,req.body.comment,req.body.kwack, res.callback);
+            Comment.addComment(req.body.userId,req.body.newsId,req.body.comment,req.body.kwack,req.body.anonymous, res.callback);
         } else {
             res.json({
                 value: false,
@@ -96,7 +96,7 @@ var controller = {
      */
  addReply: function (req, res) {
         if (req.body) {
-            Comment.addReply(req.body.commentId,req.body.reply,req.body.user, res.callback);
+            Comment.addReply(req.body.commentId,req.body.reply,req.body.user,req.body.anonymous, res.callback);
         } else {
             res.json({
                 value: false,
