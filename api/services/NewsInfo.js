@@ -79,7 +79,11 @@ var schema = new Schema({
         ref: 'Comment',
         index: true
     }],
-    isExplore: {
+    isSocial: {
+        type: String,
+        enum: ['YES', 'NO']
+    },
+      isExplore: {
         type: String,
         enum: ['YES', 'NO']
     },
@@ -168,6 +172,16 @@ var model = {
     // "interest":["News","Politics"]
     // }
 
+ /**
+     * this function is for Fillter the news
+     * @param {startDate} input startDate
+      * * @param {endDate} input endDate
+     * * * @param {interest} input interest
+     * * * * @param {userId} input userId
+     *  * * * * @param {polls} input polls
+     * *  * * * * @param {kwacks} input kwacks
+     * @param {callback} callback function with err and response
+     */
     IsPollKwackIf: function (startDate, endDate, interest, userId, polls, kwacks, callback) {
         console.log("$$$$$$$$$$$$$$$$$$$$$$4444", startDate, endDate, polls, userId, kwacks)
         var filter = {};
@@ -273,7 +287,9 @@ var model = {
                 }
 
                 NewsInfo.find(filter, {
-
+                    title: 1,
+                    createdAt: 1,
+                    interest: 1
                 }).lean().exec(function (err, found) {
                     console.log("inside api found*************", found)
                     if (err) {
@@ -540,6 +556,54 @@ var model = {
         };
         NewsInfo.find({
                 isExplore: "YES"
+            })
+            .deepPopulate("polls.poll comments.comment")
+            .order(options)
+            .keyword(options)
+            .page(options,
+                function (err, found) {
+                    if (err) {
+                        callback(err, null);
+                    } else if (found) {
+                        callback(null, found);
+                    } else {
+                        callback("Invalid data", null);
+                    }
+                });
+    },
+
+    /**
+     * this function for search News by interest
+     * @param {callback} callback function with err and response
+     */
+    getSocialNews: function (data, callback) {
+        if (data.count) {
+            var maxCount = data.count;
+        } else {
+            var maxCount = Config.maxRow;
+        }
+        var maxRow = maxCount
+        var page = 1;
+        if (data.page) {
+            page = data.page;
+        }
+        var field = data.field;
+        var options = {
+            field: data.field,
+            filters: {
+                keyword: {
+                    fields: ['name'],
+                    term: data.keyword
+                }
+            },
+            sort: {
+                createdAt: -1
+            },
+            start: (page - 1) * maxRow,
+            count: maxRow
+        };
+        NewsInfo.find({
+                isSocial: "YES"
             })
             .deepPopulate("polls.poll comments.comment")
             .order(options)

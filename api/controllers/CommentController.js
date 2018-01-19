@@ -16,7 +16,7 @@ var controller = {
         }
     },
                /**
-     * for get Kwack for Particular news and user
+     * for get Kwack for Particular commentId
      */
  getComment: function (req, res) {
         if (req.body) {
@@ -51,7 +51,7 @@ var controller = {
  addComment: function (req, res) {
         if (req.body) {
             console.log("req.body",req.body)
-            Comment.addComment(req.body.userId,req.body.newsId,req.body.comment,req.body.kwack, res.callback);
+            Comment.addComment(req.body.userId,req.body.newsId,req.body.comment,req.body.kwack,req.body.anonymous, res.callback);
         } else {
             res.json({
                 value: false,
@@ -92,11 +92,11 @@ var controller = {
         }
     },
                /**
-     * to add reply 
+     * to add reply for Comment
      */
  addReply: function (req, res) {
         if (req.body) {
-            Comment.addReply(req.body.commentId,req.body.reply,req.body.user, res.callback);
+            Comment.addReply(req.body.commentId,req.body.reply,req.body.user,req.body.anonymous, res.callback);
         } else {
             res.json({
                 value: false,
@@ -107,7 +107,7 @@ var controller = {
         }
     },
                   /**
-     * to remove reply 
+     * to remove reply for Comment
      */
  removeReply: function (req, res) {
         if (req.body) {
@@ -157,6 +157,37 @@ var controller = {
      removeLike: function (req, res) {
         if (req.body) {
             Comment.removeLike(req.body.commentId,req.body.user, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+                /**
+     * to add like for Reply 
+     */
+
+       addLikeToReply: function (req, res) {
+        if (req.body) {
+            Comment.addLikeToReply(req.body.comm,req.body.replyId,req.body.userId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+                /**
+     * to remove like for Reply 
+     */
+     removeLikeToReply: function (req, res) {
+        if (req.body) {
+            Comment.removeLikeToReply(req.body.comm,req.body.replyId,req.body.userId, res.callback);
         } else {
             res.json({
                 value: false,

@@ -14,6 +14,11 @@ var controller = {
 //         }
 //     },
 
+
+           /**
+     * for Get all news by Fillter    
+     */
+
  IsPollKwackIf: function (req, res) {
         if (req.body) {
             NewsInfo.IsPollKwackIf(req.body.startDate,req.body.endDate,req.body.interest,req.body.userId,req.body.polls,req.body.kwacks,res.callback);
@@ -114,6 +119,21 @@ var controller = {
  getExploreNews: function (req, res) {
         if (req.body) {
             NewsInfo.getExploreNews(req.body,res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+                   /**
+     * for Get Nes By Interest
+     */
+ getSocialNews: function (req, res) {
+        if (req.body) {
+            NewsInfo.getSocialNews(req.body,res.callback);
         } else {
             res.json({
                 value: false,
