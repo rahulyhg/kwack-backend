@@ -14,6 +14,11 @@ var controller = {
 //         }
 //     },
 
+
+           /**
+     * for Get all news by Fillter    
+     */
+
  IsPollKwackIf: function (req, res) {
         if (req.body) {
             NewsInfo.IsPollKwackIf(req.body.startDate,req.body.endDate,req.body.interest,req.body.userId,req.body.polls,req.body.kwacks,res.callback);

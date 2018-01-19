@@ -172,6 +172,16 @@ var model = {
     // "interest":["News","Politics"]
     // }
 
+ /**
+     * this function is for Fillter the news
+     * @param {startDate} input startDate
+      * * @param {endDate} input endDate
+     * * * @param {interest} input interest
+     * * * * @param {userId} input userId
+     *  * * * * @param {polls} input polls
+     * *  * * * * @param {kwacks} input kwacks
+     * @param {callback} callback function with err and response
+     */
     IsPollKwackIf: function (startDate, endDate, interest, userId, polls, kwacks, callback) {
         console.log("$$$$$$$$$$$$$$$$$$$$$$4444", startDate, endDate, polls, userId, kwacks)
         var filter = {};
@@ -277,7 +287,9 @@ var model = {
                 }
 
                 NewsInfo.find(filter, {
-
+                    title: 1,
+                    createdAt: 1,
+                    interest: 1
                 }).lean().exec(function (err, found) {
                     console.log("inside api found*************", found)
                     if (err) {
