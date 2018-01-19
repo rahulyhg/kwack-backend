@@ -23,6 +23,15 @@
         "validation": ["", "trim", "unique"],
         "url": ""
     },
+        {
+        "name": "User Bio",
+        "type": "text",
+        "tableRef": "bio",
+        "placeholder": "Enter bio",
+        "id": "bio",
+        "validation": ["", "trim", "unique"],
+        "url": ""
+    },
      {
         "name": "User Age",
         "type": "text",
