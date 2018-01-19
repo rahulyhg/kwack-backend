@@ -317,7 +317,11 @@ var model = {
     },
 
 
-
+    /**
+     * this function for search news in searchbox by news description
+     *  @param {searchText} input searchText
+     * @param {callback} callback function with err and response
+     */
     searchNewsByDesc: function (data, callback) {
         var trimText = data.searchText.trim();
         var search = new RegExp('' + trimText);
@@ -342,6 +346,11 @@ var model = {
             }
         });
     },
+      /**
+     * this function for search news in searchbox by news Title
+     *  @param {searchText} input searchText
+     * @param {callback} callback function with err and response
+     */
     searchNewsByTitle: function (data, callback) {
         var trimText = data.searchText.trim();
         var search = new RegExp('' + trimText);
@@ -366,8 +375,9 @@ var model = {
             }
         });
     },
+
     /**
-     * this function for get One News
+     * this function for get Trending News
      * @param {callback} callback function with err and response
      */
     getTrendingNews: function (callback) {
@@ -384,8 +394,10 @@ var model = {
 
         });
     },
+
     /**
-     * this function for search All News
+     * this function for search All News with paggination
+     * @param {page} input page
      * @param {callback} callback function with err and response
      */
     getAllNews1: function (data, callback) {
@@ -431,7 +443,8 @@ var model = {
                 });
     },
     /**
-     * this function for search New added News
+     * this function for search New added News with paggination
+     * @param {page} input page
      * @param {callback} callback function with err and response
      */
     getAllNewsJustNow: function (data, callback) {
@@ -477,7 +490,9 @@ var model = {
     },
 
     /**
-     * this function for search News by interest
+     * this function for search News by interest with paggination
+     * @param {page} input page
+     * * @param {userInterest} input userInterest
      * @param {callback} callback function with err and response
      */
     getNewsByInterest: function (data, callback) {
@@ -525,7 +540,8 @@ var model = {
     },
 
     /**
-     * this function for search News by interest
+     * this function for search Explore News  with paggination
+     *  @param {page} input page 
      * @param {callback} callback function with err and response
      */
     getExploreNews: function (data, callback) {
@@ -573,7 +589,8 @@ var model = {
     },
 
     /**
-     * this function for search News by interest
+     * this function for search Social News
+     * @param {page} input page 
      * @param {callback} callback function with err and response
      */
     getSocialNews: function (data, callback) {
@@ -620,25 +637,10 @@ var model = {
                 });
     },
 
-    /**
-     * this function for search All News
-     * @param {callback} callback function with err and response
-     */
-    getAllNews: function (callback) {
 
-        NewsInfo.find({}).exec(function (err, found) {
-            if (err) {
-                callback(err, null);
-            } else if (_.isEmpty(found)) {
-                callback("noDataound", null);
-            } else {
-                callback(null, found);
-            }
-
-        });
-    },
     /**
-     * this function for get One News
+     * this function for get One News for particular NewsId
+     * @param {newsId} input newsId 
      * @param {callback} callback function with err and response
      */
     getOneNews: function (newsId, callback) {

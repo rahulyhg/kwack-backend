@@ -34,11 +34,12 @@ var controller = {
 
 
            /**
-     * for Get all news by search
+     * for Get all news By serching in searchbox
      */
         globalSearchForNews: function (req, res) {
         var searchResult = {};
         async.parallel({
+            //this is for finding news by title
              NewsInfoByTitle: function (cb) {
                 NewsInfo.searchNewsByTitle(req.body, function (error, data) {
                     if (error || data == undefined) {
@@ -49,6 +50,7 @@ var controller = {
                     }
                 })
             },
+             //this is for finding news by Description
             NewsInfoByDesc: function (cb) {
                 NewsInfo.searchNewsByDesc(req.body, function (error, data) {
                     if (error || data == undefined) {
@@ -114,7 +116,7 @@ var controller = {
         }
     },
                  /**
-     * for Get Nes By Interest
+     * for Get Explore News
      */
  getExploreNews: function (req, res) {
         if (req.body) {
@@ -129,7 +131,7 @@ var controller = {
         }
     },
                    /**
-     * for Get Nes By Interest
+     * for Get Social News
      */
  getSocialNews: function (req, res) {
         if (req.body) {
@@ -143,21 +145,7 @@ var controller = {
             })
         }
     },
-                /**
-     * for Get all Just Now news
-     */
- getAllNewsJustNow: function (req, res) {
-        if (req.body) {
-            NewsInfo.getAllNewsJustNow(req.body,res.callback);
-        } else {
-            res.json({
-                value: false,
-                data: {
-                    message: "Invalid Request"
-                }
-            })
-        }
-    },
+    
              /**
      * for Get all news
      */
