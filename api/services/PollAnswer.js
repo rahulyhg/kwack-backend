@@ -30,9 +30,7 @@ module.exports = mongoose.model('PollAnswer', schema);
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user", "news user", "order", "asc"));
 var model = {
          /**
-     * this function provides details about the poll
-     * @param {newsId} input newsId
-      * * @param {userId} input userId
+     * this function provides All Polls
      * @param {callback} callback function with err and response
      */
     getAllPoll: function (callback) {
@@ -50,7 +48,7 @@ var model = {
                 })
     },
       /**
-     * this function provides details about the poll
+     * this function provides details about the poll for particular user
      * @param {newsId} input newsId
       * * @param {userId} input userId
      * @param {callback} callback function with err and response
@@ -71,17 +69,12 @@ var model = {
 
                 })
     },
-        /**
-     * this function provides details about the poll
-     * @param {newsId} input newsId
-     * @param {optionId} input optionId
-     * @param {userId} input userId
-     * @param {callback} callback function with err and response
-     */
+   
  /**
      * this function for news to add vote 
-     * @param {pollname} input userEmail
-     *  * @param {newsId} input newsId
+     * @param {newsId} input newsId
+     *  * @param {pollname} input pollname
+     *   *  * @param {userId} input newsId
      * @param {callback} callback function with err and response
      */
     addPollAnswer: function (newsId, pollname,userId, callback) {

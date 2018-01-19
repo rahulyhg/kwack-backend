@@ -16,7 +16,7 @@ var controller = {
         }
     },
           /**
-     * for get all PollAnswer
+     * for get all PollAnswer for particular User
      */
  getPoll: function (req, res) {
         if (req.body) {
