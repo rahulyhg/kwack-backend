@@ -718,37 +718,22 @@ var model = {
                             });
 
                         } else {
-                            console.log("&&&&&&&&&&&&&", body.totalResults);
-                            console.log("Found is", found)
                             // callback(null, body.totalResults);
                             _.each(found, function (news) {
-                                // console.log("news", news)
-
                                 _.each(body.articles, function (value, index) {
                                     if (news.url == value.url) {
 
                                         value.newsFound = true;
-                                        // console.log("inside if condition", value);
-                                        // break;
                                     }
-
-                                    
-
-
-
-
                                 });
-
-
                             })
                             _.each(body.articles, function (value, index) {
-
                                 if (!value.newsFound) {
                                     var dataToSave = {}
                                     dataToSave.title = value.title,
                                         dataToSave.description = value.description
                                     dataToSave.url = value.url
-                                    dataToSave.imageUrl = value.imageUrl
+                                    dataToSave.imageUrl = value.urlToImage
                                     NewsInfo.saveData(dataToSave, function (err, created) {
                                         if (err) {
                                             console.log("Error occurred while storing news: ", err);
@@ -757,15 +742,9 @@ var model = {
                                         } else {
                                             console.log("article " + index + " saved successfully");
                                         }
-
                                     });
-                                    console.log("*********data to store is", value.newsFound)
                                 }
-
-
-
                             });
-
                         }
 
                     });
