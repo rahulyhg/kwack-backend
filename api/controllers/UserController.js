@@ -1,11 +1,11 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
-                /**
+    /**
      * for get all Interests list
      */
- getAllUser: function (req, res) {
+    getAllUser: function (req, res) {
         if (req.body) {
-            User.getAllUser(req.body.userId,res.callback);
+            User.getAllUser(req.body.userId, res.callback);
         } else {
             res.json({
                 value: false,
@@ -15,12 +15,12 @@ var controller = {
             })
         }
     },
-           /**
+    /**
      * for users to add interests 
      */
- demo: function (req, res) {
+    demo: function (req, res) {
         if (req.body) {
-            User.demo(req.body.userId,req.body.interest,  res.callback);
+            User.demo(req.body.userId, req.body.interest, res.callback);
         } else {
             res.json({
                 value: false,
@@ -30,12 +30,12 @@ var controller = {
             })
         }
     },
-          /**
+    /**
      * for users to verify Account 
      */
- sendOtp: function (req, res) {
+    sendOtp: function (req, res) {
         if (req.body) {
-            User.sendOtp(req.body.email, res.callback);
+            User.sendOtp(req.body.mobile, res.callback);
         } else {
             res.json({
                 value: false,
@@ -45,10 +45,10 @@ var controller = {
             })
         }
     },
-             /**
+    /**
      * for users to verify otp 
      */
- verifyOTPForResetPass: function (req, res) {
+    verifyOTPForResetPass: function (req, res) {
         if (req.body) {
             User.verifyOTPForResetPass(req.body.otp, res.callback);
         } else {
@@ -60,10 +60,10 @@ var controller = {
             })
         }
     },
-            /**
+    /**
      * for get user by email
      */
- getUser: function (req, res) {
+    getUser: function (req, res) {
         if (req.body) {
             User.getUser(req.body.email, res.callback);
         } else {
@@ -75,10 +75,10 @@ var controller = {
             })
         }
     },
-         /**
+    /**
      * for users to verify Account 
      */
- VerifyUser: function (req, res) {
+    VerifyUser: function (req, res) {
         if (req.body) {
             User.VerifyUser(req.body.email, req.body.password, res.callback);
         } else {
@@ -90,12 +90,12 @@ var controller = {
             })
         }
     },
-       /**
+    /**
      * for users to add interests 
      */
- addInterests: function (req, res) {
+    addInterests: function (req, res) {
         if (req.body) {
-            User.addInterests(req.body.userId,req.body.interest,  res.callback);
+            User.addInterests(req.body.userId, req.body.interest, res.callback);
         } else {
             res.json({
                 value: false,
@@ -105,13 +105,13 @@ var controller = {
             })
         }
     },
-          /**
+    /**
      * for users to remove interests 
      */
- removeInterests: function (req, res) {
-     console.log("inisde remove",req.body)
+    removeInterests: function (req, res) {
+        console.log("inisde remove", req.body)
         if (req.body) {
-            User.removeInterests( req.body.userId,req.body.interests, res.callback);
+            User.removeInterests(req.body.userId, req.body.interests, res.callback);
         } else {
             res.json({
                 value: false,
@@ -121,12 +121,12 @@ var controller = {
             })
         }
     },
-              /**
+    /**
      * for users to add locations 
      */
- addLocations: function (req, res) {
+    addLocations: function (req, res) {
         if (req.body) {
-            User.addLocations( req.body.userId,req.body.locations, res.callback);
+            User.addLocations(req.body.userId, req.body.locations, res.callback);
         } else {
             res.json({
                 value: false,
@@ -136,12 +136,12 @@ var controller = {
             })
         }
     },
-              /**
+    /**
      * for users to remove locations 
      */
- removeLocations: function (req, res) {
+    removeLocations: function (req, res) {
         if (req.body) {
-            User.removeLocations(req.body.userId,req.body.locations, res.callback);
+            User.removeLocations(req.body.userId, req.body.locations, res.callback);
         } else {
             res.json({
                 value: false,
@@ -173,14 +173,14 @@ var controller = {
         } else {
 
         }
-// console.log("**************************",res)
+        // console.log("**************************",res)
         passport.authenticate('twitter', {
             scope: ['openid', 'profile', 'email'],
             failureRedirect: '/'
         }, res.socialLogin)(req, res);
     },
 
-     loginGoogle: function (req, res) {
+    loginGoogle: function (req, res) {
         if (req.query.returnUrl) {
             req.session.returnUrl = req.query.returnUrl;
         } else {
@@ -268,7 +268,22 @@ var controller = {
     },
     sendmail: function (req, res) {
         Config.sendEmail("chintan@wohlig.com", "jagruti@wohlig.com", "first email from endgrid", "", "<html><body>dome content</body></html>");
-    }
+    },
+    /**
+     * for users to delete 
+     */
+    deleteAccount: function (req, res) {
+        if (req.body) {
+            User.deleteAccount(req.body.userId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
 
 };
 module.exports = _.assign(module.exports, controller);

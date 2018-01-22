@@ -138,7 +138,7 @@ module.exports = mongoose.model('User', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "user", "user"));
 var model = {
-    getAllUser: function (userId,callback) {
+    getAllUser: function (userId, callback) {
         User.find({
                 _id: {
                     $ne: userId
@@ -161,12 +161,12 @@ var model = {
      * @param {email} input email
      * @param {callback} callback function with err and response
      */
-    sendOtp: function (email, callback) {
-        console.log("inside send otp", email)
+    sendOtp: function (mobile, callback) {
+        console.log("inside send otp", mobile)
         var emailOtp = (Math.random() + "").substring(2, 6);
         var foundData = {};
         User.findOneAndUpdate({
-            email: email
+            mobile: mobile
         }, {
             otp: emailOtp
         }, {
@@ -504,6 +504,87 @@ var model = {
      */
     getAllMedia: function (data, callback) {
 
-    }
+    },
+    /**
+     * this function for delete  user acc
+     *   @param {userId} input userId
+     * @param {callback} callback function with err and response
+     */
+    deleteAccount: function (userId, callback) {
+        async.waterfall([
+            function (callback1) {
+                var useracc = {}
+                useracc._id  = userId
+                Comment.deleteData(useracc, function (err, created) {
+                    if (err) {
+                        callback1(err, null);
+                    } else if (_.isEmpty(created)) {
+                        callback1(null, "noDataound");
+                    } else {
+                        data1 = {}
+                        data1.newsId = newsId;
+                        data1.commentId = created._id
+                        callback1(null, data1);
+                    }
+                });
+            },
+            function (Ids, callback2) {
+                NewsInfo.findOne({
+                    _id: Ids.newsId
+                }).exec(function (err, found) {
+                    if (err) {
+                        callback2(err, null);
+                    } else if (_.isEmpty(found)) {
+                        callback2("noDataound", null);
+                    } else {
+                        var data1 = {}
+                        data1._id = found._id;
+                        data1.commentTotal = found.commentTotal + 1
+                        NewsInfo.saveData(data1, function (err, created) {
+                            if (err) {
+                                callback2(err, null);
+                            } else if (_.isEmpty(created)) {
+                                callback2(null, "noDataound");
+                            } else {
+
+                                callback2(null, Ids);
+                            }
+                        });
+                    }
+
+                })
+
+            },
+            function (newsId, callback3) {
+                NewsInfo.update({
+                    _id: newsId.newsId
+                }, {
+                    $push: {
+                        'comments': {
+                            comment: newsId.commentId
+                        }
+                    }
+                }).exec(function (err, found) {
+                    if (err) {
+                        callback3(err, null);
+                    } else if (_.isEmpty(found)) {
+                        callback3("noDataound", null);
+                    } else {
+                        callback3(null, found);
+                    }
+
+                });
+
+
+            }
+        ], function (err, data) {
+
+            if (err || _.isEmpty(data)) {
+                callback(err, [])
+            } else {
+                callback(null, data)
+            }
+        });
+    },
 };
 module.exports = _.assign(module.exports, exports, model);
