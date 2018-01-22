@@ -83,7 +83,7 @@ var schema = new Schema({
         type: String,
         enum: ['YES', 'NO']
     },
-      isExplore: {
+    isExplore: {
         type: String,
         enum: ['YES', 'NO']
     },
@@ -172,10 +172,10 @@ var model = {
     // "interest":["News","Politics"]
     // }
 
- /**
+    /**
      * this function is for Fillter the news
      * @param {startDate} input startDate
-      * * @param {endDate} input endDate
+     * * @param {endDate} input endDate
      * * * @param {interest} input interest
      * * * * @param {userId} input userId
      *  * * * * @param {polls} input polls
@@ -346,7 +346,7 @@ var model = {
             }
         });
     },
-      /**
+    /**
      * this function for search news in searchbox by news Title
      *  @param {searchText} input searchText
      * @param {callback} callback function with err and response
@@ -658,14 +658,29 @@ var model = {
 
         });
     },
-     storeNews: function (callback) {
+    //    getAllNews: function ( callback) {
+    //     // console.log("newsId",newsId)
+    //     NewsInfo.find({
+
+    //     }).deepPopulate().exec(function (err, found) {
+    //         if (err) {
+    //             callback(err, null);
+    //         } else if (_.isEmpty(found)) {
+    //             callback("noDataound", null);
+    //         } else {
+    //             callback(null, found);
+    //         }
+
+    //     });
+    // },
+    storeNews: function (callback) {
         request.get({
             url: "https://newsapi.org/v2/top-headlines?sources=google-news-in&apiKey=1e3a77df57424c7e9ae1b65a2a0b696f",
             withCredentials: false,
         }, function (err, response, body) {
             // console.log("err",err)
             //  console.log("responseresponse",response)
-            console.log("bodybodybodybodybodybody", response.status)
+            // console.log("bodybodybodybodybodybody", response.status)
             if (err) {
                 callback(err, null);
             } else if (body) {
@@ -675,25 +690,86 @@ var model = {
                     //
                 }
                 if (body.status.toUpperCase() == 'OK') {
-                    console.log("&&&&&&&&&&&&&", body.totalResults);
-                    callback(null, body.totalResults);
-                    _.each(body.articles, function (value, index) {
-                        var dataToSave = {}
-                        dataToSave.title = value.title,
-                            dataToSave.description = value.description
-                        dataToSave.url = value.url
-                        dataToSave.imageUrl = value.imageUrl
-                        NewsInfo.saveData(dataToSave, function (err, created) {
-                            if (err) {
-                                console.log("Error occurred while storing news: ", err);
-                            } else if (_.isEmpty(created)) {
-                                console.log("no data created for article no: ", index);
-                            } else {
-                                console.log("article " + index + " saved successfully");
-                            }
+                    NewsInfo.find({
 
-                        });
+                    }, {
+                        url: 1
+                    }).deepPopulate().exec(function (err, found) {
+                        if (err) {
+                            console.log("inside err condition", err)
+                        } else if (_.isEmpty(found)) {
+                            console.log("inside is empaty condition")
+                            _.each(body.articles, function (value, index) {
+                                var dataToSave = {}
+                                dataToSave.title = value.title,
+                                    dataToSave.description = value.description
+                                dataToSave.url = value.url
+                                dataToSave.imageUrl = value.imageUrl
+                                NewsInfo.saveData(dataToSave, function (err, created) {
+                                    if (err) {
+                                        console.log("Error occurred while storing news: ", err);
+                                    } else if (_.isEmpty(created)) {
+                                        console.log("no data created for article no: ", index);
+                                    } else {
+                                        console.log("article " + index + " saved successfully");
+                                    }
+
+                                });
+                            });
+
+                        } else {
+                            console.log("&&&&&&&&&&&&&", body.totalResults);
+                            console.log("Found is", found)
+                            // callback(null, body.totalResults);
+                            _.each(found, function (news) {
+                                // console.log("news", news)
+
+                                _.each(body.articles, function (value, index) {
+                                    if (news.url == value.url) {
+
+                                        value.newsFound = true;
+                                        // console.log("inside if condition", value);
+                                        // break;
+                                    }
+
+                                    
+
+
+
+
+                                });
+
+
+                            })
+                            _.each(body.articles, function (value, index) {
+
+                                if (!value.newsFound) {
+                                    var dataToSave = {}
+                                    dataToSave.title = value.title,
+                                        dataToSave.description = value.description
+                                    dataToSave.url = value.url
+                                    dataToSave.imageUrl = value.imageUrl
+                                    NewsInfo.saveData(dataToSave, function (err, created) {
+                                        if (err) {
+                                            console.log("Error occurred while storing news: ", err);
+                                        } else if (_.isEmpty(created)) {
+                                            console.log("no data created for article no: ", index);
+                                        } else {
+                                            console.log("article " + index + " saved successfully");
+                                        }
+
+                                    });
+                                    console.log("*********data to store is", value.newsFound)
+                                }
+
+
+
+                            });
+
+                        }
+
                     });
+
                 }
             }
         });
