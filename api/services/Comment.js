@@ -25,6 +25,9 @@ var schema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'User'
         }],
+          kwack: {
+        type: String
+    },
     }],
     likes: [{
         userId: {
@@ -63,6 +66,26 @@ module.exports = mongoose.model('Comment', schema);
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user UserId", "news user UserId", "order", "asc"));
 var model = {
   
+      /**
+     * this function provides Kwack for particular userId
+     * @param {userId} input userId
+     * @param {callback} callback function with err and response
+     */
+    getKwackForOneUser: function (userId, callback) {
+        Comment.find({
+            user: userId,
+        }).deepPopulate().exec(function (err, found) {
+            console.log("inside api found gwt kwack", found)
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        })
+    },
     /**
      * this function provides Kwack for particular CommentId
      * @param {commentId} input commentId
@@ -317,7 +340,7 @@ var model = {
      *   *  *  * @param {anonymous} input anonymous
      * @param {callback} callback function with err and response
      */
-    addReply: function (commentId, reply, user,anonymous, callback) {
+    addReply: function (commentId, reply, user,anonymous,kwack, callback) {
         console.log("anonymousanonymous",commentId,reply,user,anonymous)
         Comment.update({
             _id: commentId,
@@ -326,7 +349,8 @@ var model = {
                 'repliesTo': {
                     user: user,
                     reply: reply,
-                    anonymous:anonymous
+                    anonymous:anonymous,
+                    kwack:kwack
                 }
             }
             
