@@ -29,6 +29,29 @@ module.exports = mongoose.model('PollAnswer', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user", "news user", "order", "asc"));
 var model = {
+
+
+      /**
+     * this function provides Kwack for particular CommentId
+     * @param {commentId} input commentId
+     * @param {callback} callback function with err and response
+     */
+    getPollForOneUser: function (userId, callback) {
+        PollAnswer.find({
+            user: userId,
+        }).deepPopulate().exec(function (err, found) {
+            console.log("inside api found gwt kwack", found)
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        })
+    },
+
          /**
      * this function provides All Polls
      * @param {callback} callback function with err and response

@@ -1,7 +1,22 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+        /**
+     * for users to save New Password
+     */
+    saveNewPassword: function (req, res) {
+        if (req.body) {
+            User.saveNewPassword(req.body.password,req.body.mobile, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
     /**
-     * for get all Interests list
+     * for get all User
      */
     getAllUser: function (req, res) {
         if (req.body) {
@@ -269,21 +284,7 @@ var controller = {
     sendmail: function (req, res) {
         Config.sendEmail("chintan@wohlig.com", "jagruti@wohlig.com", "first email from endgrid", "", "<html><body>dome content</body></html>");
     },
-    /**
-     * for users to delete 
-     */
-    deleteAccount: function (req, res) {
-        if (req.body) {
-            User.deleteAccount(req.body.userId, res.callback);
-        } else {
-            res.json({
-                value: false,
-                data: {
-                    message: "Invalid Request"
-                }
-            })
-        }
-    },
+   
 
 };
 module.exports = _.assign(module.exports, controller);

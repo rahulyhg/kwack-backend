@@ -25,7 +25,7 @@ module.exports = mongoose.model('UserFollow', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user userBeenFollowed", "news user userBeenFollowed", "order", "asc"));
 var model = {
-    getAllFollowerName: function (userId, callback) {
+    getAllFollowingName: function (userId, callback) {
         UserFollow.find({
             user:userId
         }).deepPopulate("user userBeenFollowed").exec(function (err, found) {
@@ -39,7 +39,7 @@ var model = {
 
         });
     },
-    getAllFollowingName: function (userId, callback) {
+    getAllFollowerName: function (userId, callback) {
         UserFollow.find({
               userBeenFollowed:userId
         }).deepPopulate("user userBeenFollowed").exec(function (err, found) {

@@ -138,6 +138,38 @@ module.exports = mongoose.model('User', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "user", "user"));
 var model = {
+    /**
+     * this function for save new Password
+     * @param {password} input password
+     *  * @param {mobile} input mobile
+     * @param {callback} callback function with err and response
+     */
+    saveNewPassword: function (password, mobile, callback) {
+           User.findOneAndUpdate({
+            mobile: mobile
+        }, {
+            password: password
+        }, {
+            new: true
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(created)) {
+                callback(null, "noDataound");
+            } else {
+                callback(null, created)
+            }
+
+        })
+    },
+
+
+
+  /**
+     * this function for Get All user expect log in user
+     * @param {userId} input password
+     * @param {callback} callback function with err and response
+     */
     getAllUser: function (userId, callback) {
         User.find({
                 _id: {
@@ -505,86 +537,6 @@ var model = {
     getAllMedia: function (data, callback) {
 
     },
-    /**
-     * this function for delete  user acc
-     *   @param {userId} input userId
-     * @param {callback} callback function with err and response
-     */
-    deleteAccount: function (userId, callback) {
-        async.waterfall([
-            function (callback1) {
-                var useracc = {}
-                useracc._id  = userId
-                Comment.deleteData(useracc, function (err, created) {
-                    if (err) {
-                        callback1(err, null);
-                    } else if (_.isEmpty(created)) {
-                        callback1(null, "noDataound");
-                    } else {
-                        data1 = {}
-                        data1.newsId = newsId;
-                        data1.commentId = created._id
-                        callback1(null, data1);
-                    }
-                });
-            },
-            function (Ids, callback2) {
-                NewsInfo.findOne({
-                    _id: Ids.newsId
-                }).exec(function (err, found) {
-                    if (err) {
-                        callback2(err, null);
-                    } else if (_.isEmpty(found)) {
-                        callback2("noDataound", null);
-                    } else {
-                        var data1 = {}
-                        data1._id = found._id;
-                        data1.commentTotal = found.commentTotal + 1
-                        NewsInfo.saveData(data1, function (err, created) {
-                            if (err) {
-                                callback2(err, null);
-                            } else if (_.isEmpty(created)) {
-                                callback2(null, "noDataound");
-                            } else {
-
-                                callback2(null, Ids);
-                            }
-                        });
-                    }
-
-                })
-
-            },
-            function (newsId, callback3) {
-                NewsInfo.update({
-                    _id: newsId.newsId
-                }, {
-                    $push: {
-                        'comments': {
-                            comment: newsId.commentId
-                        }
-                    }
-                }).exec(function (err, found) {
-                    if (err) {
-                        callback3(err, null);
-                    } else if (_.isEmpty(found)) {
-                        callback3("noDataound", null);
-                    } else {
-                        callback3(null, found);
-                    }
-
-                });
-
-
-            }
-        ], function (err, data) {
-
-            if (err || _.isEmpty(data)) {
-                callback(err, [])
-            } else {
-                callback(null, data)
-            }
-        });
-    },
+   
 };
 module.exports = _.assign(module.exports, exports, model);

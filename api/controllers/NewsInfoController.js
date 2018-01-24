@@ -100,6 +100,21 @@ var controller = {
             })
         }
     },
+        /**
+     * for Get
+     */
+    getAllNewsJustNow: function (req, res) {
+        if (req.body) {
+            NewsInfo.getAllNewsJustNow(req.body, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
     /**
      * for Get Nes By Interest
      */

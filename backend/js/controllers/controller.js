@@ -193,7 +193,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             });
         $scope.dataForm = {}
         $scope.dataForm.userId = $stateParams.userId
-        NavigationService.apiCall("UserFollow/getAllFollowerName",
+        NavigationService.apiCall("UserFollow/getAllFollowingName",
             $scope.dataForm,
             function (data) {
 
@@ -202,7 +202,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                     console.log("*******^^^^^^^^^^^^^^^^^^^^*******", $scope.usreFollowinfData)
                 }
             });
-        NavigationService.apiCall("UserFollow/getAllFollowingName",
+        NavigationService.apiCall("UserFollow/getAllFollowerName",
             $scope.dataForm,
             function (data) {
 

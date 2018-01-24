@@ -1,5 +1,20 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+                   /**
+     * for get poll for Particular  user
+     */
+ getPollForOneUser: function (req, res) {
+        if (req.body) {
+            PollAnswer.getPollForOneUser(req.body.userId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
               /**
      * for get all PollAnswer
      */
