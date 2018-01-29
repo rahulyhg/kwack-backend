@@ -153,7 +153,6 @@ var model = {
      */
 
     removeFollowerCount: function (userFollowed, userFollwing, callback) {
-
         async.waterfall([
             function (callback1) {
                 UserFollow.findOne({

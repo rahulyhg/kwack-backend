@@ -182,138 +182,167 @@ var model = {
      * *  * * * * @param {kwacks} input kwacks
      * @param {callback} callback function with err and response
      */
-    IsPollKwackIf: function (startDate, endDate, interest, userId, polls, kwacks, callback) {
-        console.log("$$$$$$$$$$$$$$$$$$$$$$4444", startDate, endDate, polls, userId, kwacks)
+    IsPollKwackIf: function (startDate, endDate, interest, userId, polls, kwacks, data, callback) {
+        console.log("$$$$$$$$$$$$$$$$$$$$$$4444", interest, startDate, endDate, polls, userId, kwacks)
         var filter = {};
 
         async.waterfall([
-            function (callback1) {
-                var pollArr = [];
-                if (polls) {
-                    PollAnswer.find({
-                        user: userId,
-                    }, {
-                        news: 1
-                    }).exec(function (err, found) {
-                        console.log("inside api found POLLLLLLLLLLLL", found)
-                        // _.forEach(found, function (poll) {
-                        //     pollArr.push(poll.news)
-                        // })
-                        if (err) {
-                            callback1(err, null);
-                        } else if (_.isEmpty(found)) {
-                            pollArr = found;
-                            if (kwacks) {
-                                callKwack();
-                            } else {
-                                callback1("noDataound poll", null);
-                            }
-
-                        } else {
-                            pollArr = found;
-                            var dataToSend = {}
-                            dataToSend.startDate = startDate;
-                            dataToSend.endDate = endDate;
-                            if (kwacks) {
-                                callKwack();
-                            } else {
-                                console.log("Call back is going fromm hereEEEEEEEEEEEEEEEEEEE", dataToSend)
-                                callback1(null, pollArr, dataToSend, interest);
-                            }
-                        }
-                    })
-                } else {
-                    callKwack();
-                }
-
-                function callKwack() {
-                    console.log("inside kwack")
-                    if (kwacks) {
-                        Comment.find({
+                function (callback1) {
+                    var pollArr = [];
+                    if (polls) {
+                        PollAnswer.find({
                             user: userId,
                         }, {
                             news: 1
                         }).exec(function (err, found) {
-                            var dataToSend = {}
-                            dataToSend.startDate = startDate;
-                            dataToSend.endDate = endDate;
-                            console.log("inside api found", found)
+                            console.log("inside api found POLLLLLLLLLLLL", found)
+                            // _.forEach(found, function (poll) {
+                            //     pollArr.push(poll.news)
+                            // })
                             if (err) {
                                 callback1(err, null);
                             } else if (_.isEmpty(found)) {
-                                callback1(null, pollArr, dataToSend, interest);
-                            } else {
-                                if (!_.isEmpty(pollArr)) {
-                                    pollArr = _.compact(_.concat(pollArr, found));
+                                pollArr = found;
+                                if (kwacks) {
+                                    callKwack();
                                 } else {
-                                    pollArr = found;
+                                    callback1("noDataound poll", null);
                                 }
-                                console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^", dataToSend)
-                                callback1(null, pollArr, dataToSend, interest);
+
+                            } else {
+                                pollArr = found;
+                                var dataToSend = {}
+                                dataToSend.startDate = startDate;
+                                dataToSend.endDate = endDate;
+                                if (kwacks) {
+                                    callKwack();
+                                } else {
+                                    console.log("Call back is going fromm hereEEEEEEEEEEEEEEEEEEE", dataToSend)
+                                    callback1(null, pollArr, dataToSend, interest);
+                                }
                             }
-
                         })
-                    }
-                }
-            },
-            function (pollArr, dataToSend, interest, callback2) {
-
-                console.log("2nd function************", pollArr, interest, dataToSend)
-                var pollArrs = [];
-                _.each(pollArr, function (n) {
-                    pollArrs.push(n.news);
-                });
-                console.log("  ============================ pollArrs =====================", pollArrs);
-                filter._id = {}
-                filter._id.$in = pollArrs;
-                if (dataToSend.startDate != undefined) {
-                    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-                    filter.createdAt = {
-                        $gte: moment(startDate).startOf('day'),
-                        $lte: moment(endDate).endOf('day')
-                    }
-                }
-
-                console.log("interestArrinterestArrinterestArrinterestArr", interestArr)
-                // filter.interest.$in = interest;
-                if (!_.isEmpty(interest)) {
-                    var interestArr = [];
-                    _.each(interest, function (n) {
-                        interestArr.push(n.name);
-                    });
-                    filter.interest = {
-                        $in: interestArr
-                    }
-                }
-
-                NewsInfo.find(filter, {
-                    title: 1,
-                    createdAt: 1,
-                    interest: 1
-                }).lean().exec(function (err, found) {
-                    console.log("inside api found*************", found)
-                    if (err) {
-                        callback2(err, null);
-                    } else if (_.isEmpty(found)) {
-                        callback2("noDataound", null);
                     } else {
-                        callback2(null, found);
+                        callKwack();
                     }
 
-                })
+                    function callKwack() {
+                        console.log("inside kwack")
+                        if (kwacks) {
+                            Comment.find({
+                                user: userId,
+                            }, {
+                                news: 1
+                            }).exec(function (err, found) {
+                                var dataToSend = {}
+                                dataToSend.startDate = startDate;
+                                dataToSend.endDate = endDate;
+                                console.log("inside api found", found)
+                                if (err) {
+                                    callback1(err, null);
+                                } else if (_.isEmpty(found)) {
+                                    callback1(null, pollArr, dataToSend, interest);
+                                } else {
+                                    if (!_.isEmpty(pollArr)) {
+                                        pollArr = _.compact(_.concat(pollArr, found));
+                                    } else {
+                                        pollArr = found;
+                                    }
+                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^", dataToSend)
+                                    callback1(null, pollArr, dataToSend, interest);
+                                }
 
-            },
-        ], function (err, data) {
-            // console.log("exe final:", data);
+                            })
+                        }
+                    }
+                },
+                function (pollArr, dataToSend, interest, callback2) {
 
-            if (err || _.isEmpty(data)) {
-                // console.log("exe final is empty:");
-                callback(err, [])
-            } else {
-                console.log("exe final callback:");
-                callback(null, data)
-            }
-        });
+                    console.log("2nd function************", pollArr, interest, dataToSend)
+                    var pollArrs = [];
+                    _.each(pollArr, function (n) {
+                        pollArrs.push(n.news);
+                    });
+                    console.log("  ============================ pollArrs =====================", pollArrs);
+                    filter._id = {}
+                    filter._id.$in = pollArrs;
+                    if (dataToSend.startDate != undefined) {
+                        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+                        filter.createdAt = {
+                            $gte: moment(startDate).startOf('day'),
+                            $lte: moment(endDate).endOf('day')
+                        }
+                    }
+
+                    console.log("interestArrinterestArrinterestArrinterestArr", interestArr)
+                    // filter.interest.$in = interest;
+                    if (!_.isEmpty(interest)) {
+                        var interestArr = [];
+                        _.each(interest, function (n) {
+                            interestArr.push(n.name);
+                        });
+                        filter.interest = {
+                            $in: interestArr
+                        }
+                    }
+
+                    if (data.count) {
+                        var maxCount = data.count;
+                    } else {
+                        var maxCount = Config.maxRow;
+                    }
+                    var maxRow = maxCount
+                    var page = 1;
+                    if (data.page) {
+                        page = data.page;
+                    }
+                    var field = data.field;
+                    var options = {
+                        field: data.field,
+                        filters: {
+                            keyword: {
+                                fields: ['name'],
+                                term: data.keyword
+                            }
+                        },
+                        sort: {
+                            createdAt: -1
+                        },
+                        start: (page - 1) * maxRow,
+                        count: maxRow
+                    };
+                      NewsInfo.find(filter, {
+                                    title: 1,
+                                    createdAt: 1,
+                                    interest: 1
+                                })
+                        .deepPopulate("polls.poll comments.comment")
+                        .order(options)
+                        .keyword(options)
+                        .page(options,
+                            function (err, found) {
+                                if (err) {
+                                    callback(err, null);
+                                } else if (found) {
+                                    callback(null, found);
+                                } else {
+                                    callback("Invalid data", null);
+                                }
+                            });
+
+                },
+            ],
+            function (err, data) {
+                // console.log("exe final:", data);
+
+                if (err || _.isEmpty(data)) {
+                    // console.log("exe final is empty:");
+                    callback(err, [])
+                } else {
+                    console.log("exe final callback:");
+                    callback(null, data)
+                }
+            });
     },
 
 
@@ -704,7 +733,7 @@ var model = {
                                 dataToSave.title = value.title,
                                     dataToSave.description = value.description
                                 dataToSave.url = value.url
-                                dataToSave.imageUrl = value.imageUrl
+                                dataToSave.imageUrl = value.urlToImage
                                 NewsInfo.saveData(dataToSave, function (err, created) {
                                     if (err) {
                                         console.log("Error occurred while storing news: ", err);

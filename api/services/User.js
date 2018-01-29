@@ -5,6 +5,11 @@ var schema = new Schema({
     userName: {
         type: String,
     },
+    status:{
+        type: String,
+        default: "Active"
+
+    },
     age: {
         type: String,
     },
@@ -22,8 +27,6 @@ var schema = new Schema({
     },
     email: {
         type: String,
-        validate: validators.isEmail(),
-        excel: "User Email",
     },
 
     userPollTotal: {
@@ -95,8 +98,7 @@ var schema = new Schema({
         default: ""
     },
     mobile: {
-        type: String,
-        unique: true,
+        type: String
     },
     otp: {
         type: String,
@@ -145,7 +147,7 @@ var model = {
      * @param {callback} callback function with err and response
      */
     saveNewPassword: function (password, mobile, callback) {
-           User.findOneAndUpdate({
+        User.findOneAndUpdate({
             mobile: mobile
         }, {
             password: password
@@ -165,7 +167,7 @@ var model = {
 
 
 
-  /**
+    /**
      * this function for Get All user expect log in user
      * @param {userId} input password
      * @param {callback} callback function with err and response
@@ -427,6 +429,7 @@ var model = {
             "oauthLogin.socialId": user.id,
             "oauthLogin.socialProvider": user.provider,
         }).exec(function (err, data) {
+            console.log("***********************************************",data,"***************88")
             if (err) {
                 callback(err, data);
             } else if (_.isEmpty(data)) {
@@ -435,7 +438,7 @@ var model = {
 
                 }
                 Model.findOne({
-                    'emailId': userEmail
+                    'email': userEmail
                 }, function (err, userData) {
                     if (err) {
                         console.log(err);
@@ -457,6 +460,10 @@ var model = {
                         if (user.image && user.image.url) {
                             modelUser.photo = user.image.url;
                         }
+                        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+                        console.log("modelUsermodelUser",modelUser)
+                        console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+                        
                         Model.saveData(modelUser, function (err, data2) {
                             if (err) {
                                 callback(err, data2);
@@ -537,6 +544,30 @@ var model = {
     getAllMedia: function (data, callback) {
 
     },
-   
+    /**
+     * this function provides Kwack for particular CommentId
+     * @param {userId} input userId
+     * @param {callback} callback function with err and response
+     */
+    setDeactiveUser: function (userId, callback) {
+        User.findOneAndUpdate({
+            _id: userId
+        }, {
+            status: "Deactive"
+        }, {
+            new: true
+        }).exec(function (err, found) {
+            console.log("inside api found gwt kwack", found)
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        })
+    },
+
 };
 module.exports = _.assign(module.exports, exports, model);

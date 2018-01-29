@@ -1,6 +1,22 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
         /**
+     * for users to add interests 
+     */
+    setDeactiveUser: function (req, res) {
+        if (req.body) {
+            console.log("is ide ctrl")
+            User.setDeactiveUser(req.body.userId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+        /**
      * for users to save New Password
      */
     saveNewPassword: function (req, res) {

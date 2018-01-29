@@ -21,7 +21,7 @@ var controller = {
 
     IsPollKwackIf: function (req, res) {
         if (req.body) {
-            NewsInfo.IsPollKwackIf(req.body.startDate, req.body.endDate, req.body.interest, req.body.userId, req.body.polls, req.body.kwacks, res.callback);
+            NewsInfo.IsPollKwackIf(req.body.startDate, req.body.endDate, req.body.interest, req.body.userId, req.body.polls, req.body.kwacks,req.body,res.callback);
         } else {
             res.json({
                 value: false,
