@@ -27,7 +27,7 @@ var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user use
 var model = {
     getAllFollowingName: function (userId, callback) {
         UserFollow.find({
-            user:userId
+            user: userId
         }).deepPopulate("user userBeenFollowed").exec(function (err, found) {
             if (err) {
                 callback(err, null);
@@ -41,7 +41,7 @@ var model = {
     },
     getAllFollowerName: function (userId, callback) {
         UserFollow.find({
-              userBeenFollowed:userId
+            userBeenFollowed: userId
         }).deepPopulate("user userBeenFollowed").exec(function (err, found) {
             if (err) {
                 callback(err, null);
@@ -142,6 +142,17 @@ var model = {
                 callback(null, data)
             }
         });
+    },
+
+
+
+
+    areBothFollowing: function (user, userBeenFollowed, callback) {
+        var Model = this;
+        Model.count({
+            user: user,
+            userBeenFollowed: userBeenFollowed
+        }).exec(callback);
     },
 
 

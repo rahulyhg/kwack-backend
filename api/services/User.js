@@ -257,7 +257,6 @@ var model = {
             } else {
                 callback(null, found);
             }
-
         });
     },
 
