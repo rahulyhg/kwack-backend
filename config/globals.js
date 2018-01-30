@@ -144,16 +144,16 @@ var cron = require('node-cron');
 
 if (process.env.NODE_ENV && process.env.NODE_ENV === "production") {
     global.env = require("./env/production.js");
-    cron.schedule('*/10 * * * * *', function () {
-        // NewsInfo.storeNews(function(err,data) {
-        //     console.log(err,data);
-        // });
-    });
+    // cron.schedule('*/10 * * * * *', function () {
+    //     NewsInfo.storeNews(function(err,data) {
+    //         console.log(err,data);
+    //     });
+    // });
 } else {
     global.env = require("./env/development.js");
-    cron.schedule('*/10 * * * * *', function () {
-        // NewsInfo.storeNews(function(err,data) {
-        //     console.log(err,data);
-        // });
-    });
+    // cron.schedule('*/10 * * * * *', function () {
+    //     NewsInfo.storeNews(function(err,data) {
+    //         console.log(err,data);
+    //     });
+    // });
 }

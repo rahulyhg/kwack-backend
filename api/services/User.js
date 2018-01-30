@@ -5,7 +5,7 @@ var schema = new Schema({
     userName: {
         type: String,
     },
-    status:{
+    status: {
         type: String,
         default: "Active"
 
@@ -267,22 +267,71 @@ var model = {
      * * @param {password} input password
      * @param {callback} callback function with err and response
      */
+
     VerifyUser: function (userEmail, password, callback) {
+        async.waterfall([
+            function (callback1) {
+                console.log("inside 1st waterfall model")
+                User.findOne({
+                    email: userEmail,
+                    password: password,
+                }).exec(function (err, found) {
+                    if (err) {
+                        callback1(err, null);
+                    } else if (_.isEmpty(found)) {
+                        callback1("noDataound", null);
+                    } else {
 
-        User.findOne({
-            email: userEmail,
-            password: password
-        }).exec(function (err, found) {
-            if (err) {
-                callback(err, null);
-            } else if (_.isEmpty(found)) {
-                callback("noDataound", null);
+                        callback1(null, found);
+                    }
+
+                });
+            },
+            function (data, callback2) {
+                console.log("inside 2nd waterfall model")
+
+                User.findOne({
+                    email: data.email,
+                    password: data.password,
+                    status: "Active"
+                }).exec(function (err, found) {
+                    if (err) {
+                        callback2(err, null);
+                    } else if (_.isEmpty(found)) {
+                        callback2("DeactiveAcc", null);
+                    } else {
+
+                        callback2(null, found);
+
+                    }
+
+                })
+
+            },
+
+        ], function (err, data) {
+            console.log("final data for callback is", data)
+            if (err || _.isEmpty(data)) {
+                callback(err, [])
             } else {
-                callback(null, found);
+                callback(null, data)
             }
-
         });
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //This is api for add intrest
     demo: function (id, interest, callback) {
         console.log("id and intrest is", id, interest)
@@ -429,7 +478,7 @@ var model = {
             "oauthLogin.socialId": user.id,
             "oauthLogin.socialProvider": user.provider,
         }).exec(function (err, data) {
-            console.log("***********************************************",data,"***************88")
+            console.log("***********************************************", data, "***************88")
             if (err) {
                 callback(err, data);
             } else if (_.isEmpty(data)) {
@@ -461,9 +510,9 @@ var model = {
                             modelUser.photo = user.image.url;
                         }
                         console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                        console.log("modelUsermodelUser",modelUser)
+                        console.log("modelUsermodelUser", modelUser)
                         console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
-                        
+
                         Model.saveData(modelUser, function (err, data2) {
                             if (err) {
                                 callback(err, data2);
