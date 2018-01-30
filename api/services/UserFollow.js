@@ -131,15 +131,15 @@ var model = {
                         });
                     }
 
-                })
+                });
 
             },
         ], function (err, data) {
 
             if (err || _.isEmpty(data)) {
-                callback(err, [])
+                callback(err, []);
             } else {
-                callback(null, data)
+                callback(null, data);
             }
         });
     },
