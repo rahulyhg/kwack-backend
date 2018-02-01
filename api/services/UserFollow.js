@@ -7,6 +7,10 @@ var schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    flag: {
+        type: String,
+        default: false
+    },
 });
 
 schema.plugin(deepPopulate, {
@@ -25,6 +29,112 @@ module.exports = mongoose.model('UserFollow', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user userBeenFollowed", "news user userBeenFollowed", "order", "asc"));
 var model = {
+    /**
+     * this function for Get All user expect log in user
+     * @param {userId} input password
+     * @param {callback} callback function with err and response
+     */
+    getAllUser: function (userId, data, callback) {
+        // console.log("Insde api get all user", userId, data.page)
+        dataTosendToAPi = {}
+        dataTosendToAPi.userId = userId
+        dataTosendToAPi.data = data
+        async.waterfall([
+            function (callback1) {
+                UserFollow.find({
+                    user: userId
+                }).deepPopulate(" ").exec(function (err, found) {
+                    // console.log("found inside api 1st",found)
+                    if (err) {
+                        callback1(err, null);
+                    } else if (_.isEmpty(found)) {
+                        callback1(null, found);
+                    } else {
+                        callback1(null, found);
+                    }
+
+                });
+            },
+            function (datain, callback2) {
+                console.log("Data is,datain************************************", dataTosendToAPi.userId)
+                if (data.count) {
+                    var maxCount = data.count;
+                } else {
+                    var maxCount = Config.maxRow;
+                }
+                var maxRow = maxCount
+                var page = 1;
+                if (data.page) {
+                    page = data.page;
+                }
+                var field = data.field;
+                var options = {
+                    field: data.field,
+                    filters: {
+                        keyword: {
+                            fields: ['name'],
+                            term: data.keyword
+                        }
+                    },
+                    sort: {
+                        name: 1
+                    },
+                    start: (page - 1) * maxRow,
+                    count: maxRow
+                };
+                User.find({
+                        _id: {
+                            $ne: dataTosendToAPi.userId
+                        }
+                    })
+                    .deepPopulate()
+                    .order(options)
+                    .keyword(options)
+                    .page(options,
+                        function (err, found) {
+                            if (err) {
+                                callback2(err, null);
+                            } else if (found) {
+
+                                callback2(null, found, datain);
+                            } else {
+
+                                callback2("Invalid data", null);
+                            }
+                        });
+
+            },
+        ], function (err, data, data1) {
+            if (err || _.isEmpty(data)) {
+                callback(err, []);
+            } else {
+                if (_.isEmpty(data1)) {
+                    console.log("inside if")
+                } else {
+                    async.each(data.results, function (userInfo, callback) {
+                        async.each(data1, function (follow, callback) {
+
+                            if (_.isEqual(userInfo._id, follow.userBeenFollowed)) {
+
+                                userInfo.flag = true
+                            } else {
+
+                            }
+                        }, function (err) {
+
+                            callback(null, data);
+                        })
+                    }, function (err) {
+                        callback(null, data);
+                    })
+                }
+
+                callback(null, data);
+            }
+
+        });
+
+    },
     getAllFollowingName: function (userId, callback) {
         UserFollow.find({
             user: userId
@@ -152,7 +262,7 @@ var model = {
         Model.find({
             user: user,
             userBeenFollowed: userBeenFollowed
-          }).exec(function (err, found) {
+        }).exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {

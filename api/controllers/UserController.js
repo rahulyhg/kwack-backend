@@ -31,21 +31,7 @@ var controller = {
             })
         }
     },
-    /**
-     * for get all User
-     */
-    getAllUser: function (req, res) {
-        if (req.body) {
-            User.getAllUser(req.body.userId, res.callback);
-        } else {
-            res.json({
-                value: false,
-                data: {
-                    message: "Invalid Request"
-                }
-            })
-        }
-    },
+ 
     /**
      * for users to add interests 
      */
@@ -112,6 +98,21 @@ var controller = {
     VerifyUser: function (req, res) {
         if (req.body) {
             User.VerifyUser(req.body.email, req.body.password, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+        /**
+     * for save user
+     */
+    saveUser: function (req, res) {
+        if (req.body) {
+            User.saveUser(req.body.name, req.body.email,req.body.userName,req.body.mobile,req.body.password, res.callback);
         } else {
             res.json({
                 value: false,

@@ -16,6 +16,10 @@ var schema = new Schema({
     bio: {
         type: String,
     },
+    flag: {
+        type: String,
+        default: false
+    },
     country: {
         type: String
     },
@@ -167,98 +171,7 @@ var model = {
 
 
 
-    /**
-     * this function for Get All user expect log in user
-     * @param {userId} input password
-     * @param {callback} callback function with err and response
-     */
-    getAllUser: function (userId,data, callback) {
-          if (data.count) {
-            var maxCount = data.count;
-        } else {
-            var maxCount = Config.maxRow;
-        }
-        var maxRow = maxCount
-        var page = 1;
-        if (data.page) {
-            page = data.page;
-        }
-        var field = data.field;
-        var options = {
-            field: data.field,
-            filters: {
-                keyword: {
-                    fields: ['name'],
-                    term: data.keyword
-                }
-            },
-            sort: {
-                name: 1
-            },
-            start: (page - 1) * maxRow,
-            count: maxRow
-        };
-        User.find({
-                _id: {
-                    $ne: userId
-                }
-            })
-            .deepPopulate("polls.poll comments.comment")
-            .order(options)
-            .keyword(options)
-            .page(options,
-                function (err, found) {
-                    if (err) {
-                        callback(err, null);
-                    } else if (found) {
-                        _.each(found.results, function (pp) {
-                            _.each(pp.polls, function (pp1) {
-                                var temp = _.find(pp.polls, function (o) {
-                                    if (o.poll.user.status == "Deactive") {
-                                        return o;
-                                    }
-
-                                });
-                                if (temp === undefined) {} else {
-                                    _.pull(pp.polls, temp)
-                                }
-                            })
-
-                            _.each(pp.comments, function (pp2) {
-                                var temp1 = _.find(pp.comments, function (r) {
-                                    if (r.comment.user.status == "Deactive") {
-                                        return r;
-                                    }
-
-                                });
-                                if (temp1 === undefined) {} else {
-                                    _.pull(pp.comments, temp1)
-                                }
-                            })
-                        })
-                        callback(null, found);
-                    } else {
-                        callback("Invalid data", null);
-                    }
-                });
-        // User.find({
-        //         _id: {
-        //             $ne: userId
-        //         }
-        //     }).sort({
-        //     name: -1
-        // })
-        //     .exec(function (err, found) {
-        //         if (err) {
-        //             callback(err, null);
-        //         } else if (_.isEmpty(found)) {
-        //             callback("noDataound", null);
-        //         } else {
-        //             callback(null, found);
-        //         }
-
-        //     });
-    },
+   
 
     /**
      * this function for send otp
