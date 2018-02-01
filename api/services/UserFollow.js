@@ -12,7 +12,7 @@ var schema = new Schema({
 schema.plugin(deepPopulate, {
     Populate: {
         'news': {
-            select: '_id title'
+            select: '_id name'
         },
         'user': {
             select: '_id name'
@@ -149,10 +149,19 @@ var model = {
 
     areBothFollowing: function (user, userBeenFollowed, callback) {
         var Model = this;
-        Model.count({
+        Model.find({
             user: user,
             userBeenFollowed: userBeenFollowed
-        }).exec(callback);
+          }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+
+        });
     },
 
 

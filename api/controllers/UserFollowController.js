@@ -1,5 +1,17 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+       areBothFollowing: function (req, res) {
+        if (req.body) {
+            UserFollow.areBothFollowing(req.body.user,req.body.userBeenFollowed, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
      getAllFollowerName: function (req, res) {
         if (req.body) {
             UserFollow.getAllFollowerName(req.body.userId, res.callback);
