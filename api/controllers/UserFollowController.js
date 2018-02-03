@@ -53,6 +53,21 @@ var controller = {
             })
         }
     },
+
+
+        getAllFollowingNameWithoutPaggination: function (req, res) {
+        if (req.body) {
+            UserFollow.getAllFollowingNameWithoutPaggination(req.body.userId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+
     getAllFollowerName: function (req, res) {
         if (req.body) {
             UserFollow.getAllFollowerName(req.body.userId, res.callback);
