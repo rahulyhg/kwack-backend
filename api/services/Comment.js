@@ -49,7 +49,7 @@ schema.plugin(deepPopulate, {
     Populate: {
         'news': {
 
-            select: '_id title'
+            select: '_id name'
         },
         'user': {
             select: '_id name'
@@ -75,7 +75,7 @@ var model = {
         Comment.find({
             user: userId,
         }).deepPopulate().exec(function (err, found) {
-            console.log("inside api found gwt kwack", found)
+            // console.log("inside api found gwt kwack", found)
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
@@ -95,7 +95,7 @@ var model = {
         Comment.findOne({
             _id: commentId,
         }).deepPopulate('user news repliesTo.user').exec(function (err, found) {
-            console.log("inside api found gwt kwack", found)
+            // console.log("inside api found gwt kwack", found)
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
@@ -115,11 +115,12 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getKwack: function (newsId, userId, callback) {
+        console.log("***********",newsId,userId)
         Comment.findOne({
             news: newsId,
             user: userId
         }).exec(function (err, found) {
-            console.log("inside api found gwt kwack", found)
+            // console.log("inside api found gwt kwack", found)
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {

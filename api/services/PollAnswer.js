@@ -16,7 +16,7 @@ var schema = new Schema({
 schema.plugin(deepPopulate, {
     Populate: {
         'news': {
-            select: '_id title'
+            select: '_id name'
         },
          'user': {
             select: '_id name'

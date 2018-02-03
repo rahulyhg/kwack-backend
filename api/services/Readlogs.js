@@ -17,28 +17,28 @@ module.exports = mongoose.model('Readlogs', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
 var model = {
-          /**
+    /**
      * this function provides details about the poll
      * @param {newsId} input newsId
-      * * @param {userId} input userId
+     * * @param {userId} input userId
      * @param {callback} callback function with err and response
      */
-    checkingNewsReadOrNot: function (newsId,userId, callback) {
-        console.log("newsId,userId,newsId,userId,",newsId,userId)
-         Readlogs.findOne({
-                    news: newsId,
-                    user:userId
-                }).exec(function (err, found) {
-                    // console.log("inside api found",found)
-                    if (err) {
-                        callback(err, null);
-                    } else if (_.isEmpty(found)) {
-                        callback("noDataound", null);
-                    } else {
-                        callback(null, found);
-                    }
+    checkingNewsReadOrNot: function (newsId, userId, callback) {
+        console.log("newsId,userId,newsId,userId,", newsId, userId)
+        Readlogs.findOne({
+            news: newsId,
+            user: userId
+        }).exec(function (err, found) {
+            // console.log("inside api found",found)
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
 
-                })
+        })
     },
     /**
      * this function add readLogs for news and count total readlogs
@@ -48,6 +48,7 @@ var model = {
      */
 
     readLogsCount: function (userId, newsId, callback) {
+        console.log("inside api", userId, newsId)
 
         async.waterfall([
             function (callback1) {
@@ -62,37 +63,33 @@ var model = {
                     } else {
                         data1 = {}
                         data1.newsId = newsId
+                        data1.readId = created._id
                         callback1(null, data1);
                     }
                 });
             },
             function (Ids, callback2) {
                 console.log("2nd function", Ids)
-                NewsInfo.findOne({
+                NewsInfo.update({
                     _id: Ids.newsId
+                }, {
+                    $push: {
+                        'realTotalCount': {
+                            readcount: Ids.readId
+                        }
+                    }
+                }, {
+                    new: true
                 }).exec(function (err, found) {
-                    console.log("found data is", found)
                     if (err) {
                         callback2(err, null);
                     } else if (_.isEmpty(found)) {
                         callback2("noDataound", null);
                     } else {
-                        var data2 = {}
-                        data2._id = found._id;
-                        data2.realTotalCount = found.realTotalCount + 1
-                        NewsInfo.saveData(data2, function (err, created) {
-                            if (err) {
-                                callback2(err, null);
-                            } else if (_.isEmpty(created)) {
-                                callback2(null, "noDataound");
-                            } else {
-
-                                callback2(null, Ids);
-                            }
-                        });
+                        callback2(null, Ids);
                     }
 
-                })
+                });
 
             },
             function (Ids, callback3) {
@@ -112,7 +109,7 @@ var model = {
                 })
             }
         ], function (err, data) {
-            console.log("exe final:",data);
+            console.log("exe final:", data);
 
             if (err || _.isEmpty(data)) {
                 console.log("exe final is empty:");
