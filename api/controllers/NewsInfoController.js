@@ -115,6 +115,22 @@ var controller = {
             })
         }
     },
+
+        /**
+     * for Get Nes By Interest
+     */
+    getNewsByInterestWithoutOneNews: function (req, res) {
+        if (req.body) {
+            NewsInfo.getNewsByInterestWithoutOneNews(req.body,req.body.newsId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
     /**
      * for Get Nes By Interest
      */

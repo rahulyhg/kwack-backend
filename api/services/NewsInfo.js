@@ -1,5 +1,5 @@
 var schema = new Schema({
-    title: {
+    name: {
         type: String,
 
     },
@@ -30,7 +30,7 @@ var schema = new Schema({
 
 
     pollOptions: [{
-        title: {
+        name: {
             type: String
         },
         percentage: {
@@ -48,10 +48,12 @@ var schema = new Schema({
         type: String,
 
     },
-    realTotalCount: {
-        type: Number,
-        default: 0
-    },
+    realTotalCount: [{
+        readcount: {
+            type: Schema.Types.ObjectId,
+            ref: 'Readlogs'
+        }
+    }],
     commentTotal: {
         type: Number,
         default: 0
@@ -312,7 +314,7 @@ var model = {
                         count: maxRow
                     };
                     NewsInfo.find(filter, {})
-                        .deepPopulate("polls.poll comments.comment")
+                        .deepPopulate("polls.poll.user comments.comment.user")
                         .order(options)
                         .keyword(options)
                         .page(options,
@@ -323,9 +325,12 @@ var model = {
                                     _.each(found.results, function (pp) {
                                         _.each(pp.polls, function (pp1) {
                                             var temp = _.find(pp.polls, function (o) {
-                                                if (o.poll.user.status == "Deactive") {
-                                                    return o;
+                                                if (o.poll.user) {
+                                                    if (o.poll.user.status == "Deactive") {
+                                                        return o;
+                                                    }
                                                 }
+
 
                                             });
                                             if (temp === undefined) {} else {
@@ -335,9 +340,12 @@ var model = {
 
                                         _.each(pp.comments, function (pp2) {
                                             var temp1 = _.find(pp.comments, function (r) {
-                                                if (r.comment.user.status == "Deactive") {
-                                                    return r;
+                                                if (r.comment.user) {
+                                                    if (r.comment.user.status == "Deactive") {
+                                                        return r;
+                                                    }
                                                 }
+
 
                                             });
                                             if (temp1 === undefined) {} else {
@@ -406,7 +414,7 @@ var model = {
         var search = new RegExp('' + trimText);
 
         var queryString = {
-            title: {
+            name: {
                 $regex: search,
                 $options: "i"
             }
@@ -439,32 +447,38 @@ var model = {
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
             } else {
-                _.each(found, function (pp) {
-                    _.each(pp.polls, function (pp1) {
-                        console.log("**************88ij", pp1)
-                        var temp = _.find(pp.polls, function (o) {
-                            if (o.poll.user.status == "Deactive") {
-                                return o;
-                            }
+                console.log("********************************", found)
+                // _.each(found.results, function (pp) {
+                // _.each(pp.polls, function (pp1) {
+                //     var temp = _.find(pp.polls, function (o) {
+                //         if (o.poll.user) {
+                //             if (o.poll.user.status == "Deactive") {
+                //                 return o;
+                //             }
+                //         }
 
-                        });
-                        if (temp === undefined) {} else {
-                            _.pull(pp.polls, temp)
-                        }
-                    })
 
-                    _.each(pp.comments, function (pp2) {
-                        var temp1 = _.find(pp.comments, function (r) {
-                            if (r.comment.user.status == "Deactive") {
-                                return r;
-                            }
+                //     });
+                //     if (temp === undefined) {} else {
+                //         _.pull(pp.polls, temp)
+                //     }
+                // })
 
-                        });
-                        if (temp1 === undefined) {} else {
-                            _.pull(pp.comments, temp1)
-                        }
-                    })
-                })
+                //     _.each(pp.comments, function (pp2) {
+                //         var temp1 = _.find(pp.comments, function (r) {
+                //             if (r.comment.user) {
+                //                 if (r.comment.user.status == "Deactive") {
+                //                     return r;
+                //                 }
+                //             }
+
+
+                //         });
+                //         if (temp1 === undefined) {} else {
+                //             _.pull(pp.comments, temp1)
+                //         }
+                //     })
+                // })
                 callback(null, found);
             }
 
@@ -498,13 +512,13 @@ var model = {
                 }
             },
             sort: {
-                createdAt: 1
+                createdAt: -1
             },
             start: (page - 1) * maxRow,
             count: maxRow
         };
-        NewsInfo.find({})
-            .deepPopulate("polls.poll.user comments.comment.user")
+        NewsInfo.find({}).skip(5)
+            .deepPopulate("polls.poll.user comments.comment.user realTotalCount.readcount.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -512,12 +526,27 @@ var model = {
                     if (err) {
                         callback(err, null);
                     } else if (found) {
-                        // console.log("***************111111111111*", found.results)
                         _.each(found.results, function (pp) {
+                            _.each(pp.realTotalCount, function (pp1) {
+                                var temp = _.find(pp.realTotalCount, function (o) {
+                                    if (o.readcount.user) {
+                                        if (o.readcount.user.status == "Deactive") {
+                                            return o;
+                                        }
+
+                                    }
+
+                                });
+                                if (temp === undefined) {} else {
+                                    _.pull(pp.realTotalCount, temp)
+                                }
+                            })
                             _.each(pp.polls, function (pp1) {
                                 var temp = _.find(pp.polls, function (o) {
-                                    if (o.poll.user.status == "Deactive") {
-                                        return o;
+                                    if (o.poll.user) {
+                                        if (o.poll.user.status == "Deactive") {
+                                            return o;
+                                        }
                                     }
 
                                 });
@@ -528,8 +557,10 @@ var model = {
 
                             _.each(pp.comments, function (pp2) {
                                 var temp1 = _.find(pp.comments, function (r) {
-                                    if (r.comment.user.status == "Deactive") {
-                                        return r;
+                                    if (r.comment.user) {
+                                        if (r.comment.user.status == "Deactive") {
+                                            return r;
+                                        }
                                     }
 
                                 });
@@ -577,8 +608,8 @@ var model = {
             start: (page - 1) * maxRow,
             count: maxRow
         };
-        NewsInfo.find({})
-            .deepPopulate("polls.poll comments.comment")
+        NewsInfo.find({}).limit(2)
+            .deepPopulate("polls.poll.user comments.comment.user  realTotalCount.readcount.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -587,6 +618,18 @@ var model = {
                         callback(err, null);
                     } else if (found) {
                         _.each(found.results, function (pp) {
+                            _.each(pp.realTotalCount, function (pp3) {
+                                console.log("PP####3333333", pp3.readcount)
+                                var temp = _.find(pp.realTotalCount, function (o) {
+                                    if (o.readcount.user.status == "Deactive") {
+                                        return o;
+                                    }
+
+                                });
+                                if (temp === undefined) {} else {
+                                    _.pull(pp.realTotalCount, temp)
+                                }
+                            })
                             _.each(pp.polls, function (pp1) {
                                 var temp = _.find(pp.polls, function (o) {
                                     if (o.poll.user.status == "Deactive") {
@@ -693,6 +736,85 @@ var model = {
                 });
     },
 
+
+    /**
+     * this function for search News by interest with paggination
+     * @param {page} input page
+     * * @param {userInterest} input userInterest
+     * @param {callback} callback function with err and response
+     */
+    getNewsByInterestWithoutOneNews: function (data, newsId, callback) {
+        if (data.count) {
+            var maxCount = data.count;
+        } else {
+            var maxCount = Config.maxRow;
+        }
+        var maxRow = maxCount
+        var page = 1;
+        if (data.page) {
+            page = data.page;
+        }
+        var field = data.field;
+        var options = {
+            field: data.field,
+            filters: {
+                keyword: {
+                    fields: ['name'],
+                    term: data.keyword
+                }
+            },
+            sort: {
+                createdAt: -1
+            },
+            start: (page - 1) * maxRow,
+            count: maxRow
+        };
+        NewsInfo.find({
+                interest: data.userInterest,
+                _id: {
+                    $ne: newsId
+                }
+            })
+            .deepPopulate("polls.poll comments.comment")
+            .order(options)
+            .keyword(options)
+            .page(options,
+                function (err, found) {
+                    if (err) {
+                        callback(err, null);
+                    } else if (found) {
+                        _.each(found.results, function (pp) {
+                            _.each(pp.polls, function (pp1) {
+                                var temp = _.find(pp.polls, function (o) {
+                                    if (o.poll.user.status == "Deactive") {
+                                        return o;
+                                    }
+
+                                });
+                                if (temp === undefined) {} else {
+                                    _.pull(pp.polls, temp)
+                                }
+                            })
+
+                            _.each(pp.comments, function (pp2) {
+                                var temp1 = _.find(pp.comments, function (r) {
+                                    if (r.comment.user.status == "Deactive") {
+                                        return r;
+                                    }
+
+                                });
+                                if (temp1 === undefined) {} else {
+                                    _.pull(pp.comments, temp1)
+                                }
+                            })
+                        })
+                        callback(null, found);
+                    } else {
+                        callback("Invalid data", null);
+                    }
+                });
+    },
+
     /**
      * this function for search Explore News  with paggination
      *  @param {page} input page 
@@ -727,7 +849,7 @@ var model = {
         NewsInfo.find({
                 isExplore: "YES"
             })
-            .deepPopulate("polls.poll comments.comment")
+            .deepPopulate("polls.poll.user comments.comment.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -738,9 +860,12 @@ var model = {
                         _.each(found.results, function (pp) {
                             _.each(pp.polls, function (pp1) {
                                 var temp = _.find(pp.polls, function (o) {
-                                    if (o.poll.user.status == "Deactive") {
-                                        return o;
+                                    if (o.poll.user) {
+                                        if (o.poll.user.status == "Deactive") {
+                                            return o;
+                                        }
                                     }
+
 
                                 });
                                 if (temp === undefined) {} else {
@@ -750,9 +875,12 @@ var model = {
 
                             _.each(pp.comments, function (pp2) {
                                 var temp1 = _.find(pp.comments, function (r) {
-                                    if (r.comment.user.status == "Deactive") {
-                                        return r;
+                                    if (r.comment.user) {
+                                        if (r.comment.user.status == "Deactive") {
+                                            return r;
+                                        }
                                     }
+
 
                                 });
                                 if (temp1 === undefined) {} else {
@@ -859,9 +987,12 @@ var model = {
             } else {
                 _.each(found.polls, function (pp) {
                     var temp = _.find(found.polls, function (o) {
-                        if (o.poll.user.status == "Deactive") {
-                            return o;
+                        if (o.poll.user) {
+                            if (o.poll.user.status == "Deactive") {
+                                return o;
+                            }
                         }
+
 
                     });
                     if (temp === undefined) {} else {
@@ -872,8 +1003,10 @@ var model = {
 
                 _.each(found.comments, function (ppp) {
                     var temp1 = _.find(found.comments, function (oo) {
-                        if (oo.comment.user.status == "Deactive") {
-                            return oo;
+                        if (oo.comment.user) {
+                            if (oo.comment.user.status == "Deactive") {
+                                return oo;
+                            }
                         }
 
                     });
@@ -885,10 +1018,12 @@ var model = {
                 _.each(found.comments, function (pppp) {
                     _.each(pppp.comment.repliesTo, function (reply) {
                         var temp2 = _.find(pppp.comment.repliesTo, function (ooo) {
-                            console.log("&&&&&&&&&&",ooo.user.status)
-                            if ( ooo.user.status == "Deactive") {
-                                return ooo;
+                            if (ooo.user) {
+                                if (ooo.user.status == "Deactive") {
+                                    return ooo;
+                                }
                             }
+
 
                         });
                         if (temp2 === undefined) {} else {
@@ -898,12 +1033,13 @@ var model = {
                     })
 
                 })
-                  _.each(found.comments, function (pppp) {
+                _.each(found.comments, function (pppp) {
                     _.each(pppp.comment.likes, function (reply) {
                         var temp3 = _.find(pppp.comment.likes, function (oooo) {
-                            console.log("&&&&&&userIduserIduserIduserId&&&&",oooo.userId.status)
-                            if (oooo.userId.status == "Deactive") {
-                                return oooo;
+                            if (oooo.user) {
+                                if (oooo.userId.status == "Deactive") {
+                                    return oooo;
+                                }
                             }
 
                         });
@@ -958,17 +1094,21 @@ var model = {
 
                     }, {
                         url: 1
+                    }).sort({
+                        "createdAt": -1
                     }).deepPopulate().exec(function (err, found) {
+                        // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%",found)
                         if (err) {
                             console.log("inside err condition", err)
                         } else if (_.isEmpty(found)) {
                             console.log("inside is empaty condition")
                             _.each(body.articles, function (value, index) {
                                 var dataToSave = {}
-                                dataToSave.title = value.title,
+                                dataToSave.name = value.title,
                                     dataToSave.description = value.description
                                 dataToSave.url = value.url
                                 dataToSave.imageUrl = value.urlToImage
+                                dataToSave.source = value.source.id
                                 NewsInfo.saveData(dataToSave, function (err, created) {
                                     if (err) {
                                         console.log("Error occurred while storing news: ", err);
@@ -994,7 +1134,7 @@ var model = {
                             _.each(body.articles, function (value, index) {
                                 if (!value.newsFound) {
                                     var dataToSave = {}
-                                    dataToSave.title = value.title,
+                                    dataToSave.name = value.title,
                                         dataToSave.description = value.description
                                     dataToSave.url = value.url
                                     dataToSave.imageUrl = value.urlToImage
