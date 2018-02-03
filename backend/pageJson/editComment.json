@@ -5,7 +5,7 @@
     "desciption": "",
     "pageType": "edit",
     "urlFields": ["_id"],
-      "fields": [{
+    "fields": [{
             "name": "User",
             "type": "tags",
             "tableRef": "user",
@@ -18,56 +18,57 @@
             "url": "User/search"
         },
         {
-            "name": "news",
+            "name": "NewsInfo",
             "type": "tags",
             "tableRef": "news",
             "dropDownType": "single",
-            "dropDownField": "title",
+            "dropDownField": "name",
             "searchApi": "searchCall",
-            "placeholder": "Enter news Name",
+            "placeholder": "Enter NewsInfo Name",
             "id": "news",
             "validation": ["", "trim", ""],
             "url": "NewsInfo/search"
         },
-           {
-        "name": "Comment",
-        "type": "text",
-        "tableRef": "comment",
-        "placeholder": "Enter comment",
-        "id": "comment",
-        "validation": ["", "trim", "unique"],
-        "url": ""
-    },
-     {
-        "name": "repliesTo",
-        "type": "box",
-        "tableRef": "repliesTo",
-        "validation": ["", "trim", ""],
-        "fields": [{
-                "name": "reply",
-                "type": "text",
-                "tableRef": "reply",
-                "placeholder": "reply",
-                "id": "reply",
-                "validation": ["", "trim", ""],
-                "onView": true,
-                "view": true,
-                "url": ""
-            },
-            {
-            "name": "User",
-            "type": "tags",
-            "tableRef": "user",
-            "dropDownType": "single",
-            "dropDownField": "name",
-            "searchApi": "searchCall",
-            "placeholder": "Enter user Name",
-            "id": "user",
+        {
+            "name": "Comment",
+            "type": "text",
+            "tableRef": "comment",
+            "placeholder": "Enter comment",
+            "id": "comment",
+            "validation": ["", "trim", "unique"],
+            "url": ""
+        },
+        {
+            "name": "repliesTo",
+            "type": "box",
+            "tableRef": "repliesTo",
             "validation": ["", "trim", ""],
-            "url": "User/search"
+            "fields": [{
+                    "name": "reply",
+                    "type": "text",
+                    "tableRef": "reply",
+                    "placeholder": "reply",
+                    "id": "reply",
+                    "validation": ["", "trim", ""],
+                    "onView": true,
+                    "view": true,
+                    "url": ""
+                },
+                {
+                    "name": "User",
+                    "type": "tags",
+                    "tableRef": "user",
+                    "dropDownType": "single",
+                    "dropDownField": "name",
+                    "searchApi": "searchCall",
+                    "placeholder": "Enter user Name",
+                    "id": "user",
+                    "validation": ["", "trim", ""],
+                    "url": "User/search"
+                }
+            ]
         }
-        ]
-    }],
+    ],
     "action": [{
         "name": "submit",
         "action": "submitComment",

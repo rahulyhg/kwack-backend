@@ -186,20 +186,20 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         NavigationService.apiCall("User/getOne",
             $scope.dataTosend,
             function (data) {
-                console.log("*************", data)
+                // console.log("*************", data)
                 if (data.value === true) {
                     $scope.formdata = data.data
                 }
             });
         $scope.dataForm = {}
         $scope.dataForm.userId = $stateParams.userId
-        NavigationService.apiCall("UserFollow/getAllFollowingName",
+        NavigationService.apiCall("UserFollow/getAllFollowingNameWithoutPaggination",
             $scope.dataForm,
             function (data) {
 
                 if (data.value === true) {
                     $scope.usreFollowinfData = data.data
-                    console.log("*******^^^^^^^^^^^^^^^^^^^^*******", $scope.usreFollowinfData)
+                    // console.log("*******^^^^^^^^^^^^^^^^^^^^*******", $scope.usreFollowinfData)
                 }
             });
         NavigationService.apiCall("UserFollow/getAllFollowerName",
@@ -208,7 +208,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
                 if (data.value === true) {
                     $scope.usreFollowedfData = data.data
-                    console.log("*******^^^^^^^^^^^^^^^^^^^^*******", $scope.usreFollowedfData)
+                    // console.log("getAllFloowers", $scope.usreFollowedfData)
                 }
             });
 

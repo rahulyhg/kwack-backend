@@ -5,7 +5,7 @@
     "sendIdWithCreate": true,
     "urlFields": ["_id"],
     "fields": [{
-        "name": "news",
+       "name": "news",
         "isSort": "",
         "tableRef": "news"
        
