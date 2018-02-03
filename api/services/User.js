@@ -229,7 +229,7 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getUser: function (userEmail, callback) {
-
+// console.log("***************",userEmail)
         User.findOne({
             email: userEmail,
         }).exec(function (err, found) {

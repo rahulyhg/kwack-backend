@@ -82,7 +82,7 @@ var controller = {
      */
     getUser: function (req, res) {
         if (req.body) {
-            User.getUser(req.body.email, res.callback);
+            User.getUser(req.body.userEmail, res.callback);
         } else {
             res.json({
                 value: false,
