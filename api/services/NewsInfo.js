@@ -7,6 +7,14 @@ var schema = new Schema({
         type: String,
 
     },
+    flagForPoll: {
+        type: Boolean,
+        default: false
+    },
+    flagForKwack: {
+        type: Boolean,
+        default: false
+    },
     url: {
         type: String,
 
@@ -197,7 +205,7 @@ var model = {
                         }, {
                             news: 1
                         }).exec(function (err, found) {
-                            console.log("inside api found POLLLLLLLLLLLL", found)
+                            // console.log("inside api found POLLLLLLLLLLLL", found)
                             // _.forEach(found, function (poll) {
                             //     pollArr.push(poll.news)
                             // })
@@ -219,7 +227,7 @@ var model = {
                                 if (kwacks) {
                                     callKwack();
                                 } else {
-                                    console.log("Call back is going fromm hereEEEEEEEEEEEEEEEEEEE", dataToSend)
+                                    // console.log("Call back is going fromm hereEEEEEEEEEEEEEEEEEEE", dataToSend)
                                     callback1(null, pollArr, dataToSend, interest);
                                 }
                             }
@@ -229,7 +237,7 @@ var model = {
                     }
 
                     function callKwack() {
-                        console.log("inside kwack")
+                        // console.log("inside kwack")
                         if (kwacks) {
                             Comment.find({
                                 user: userId,
@@ -239,7 +247,7 @@ var model = {
                                 var dataToSend = {}
                                 dataToSend.startDate = startDate;
                                 dataToSend.endDate = endDate;
-                                console.log("inside api found", found)
+                                // console.log("inside api found", found)
                                 if (err) {
                                     callback1(err, null);
                                 } else if (_.isEmpty(found)) {
@@ -250,7 +258,7 @@ var model = {
                                     } else {
                                         pollArr = found;
                                     }
-                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^", dataToSend)
+                                    // console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^", dataToSend)
                                     callback1(null, pollArr, dataToSend, interest);
                                 }
 
@@ -260,23 +268,23 @@ var model = {
                 },
                 function (pollArr, dataToSend, interest, callback2) {
 
-                    console.log("2nd function************", pollArr, interest, dataToSend)
+                    // console.log("2nd function************", pollArr, interest, dataToSend)
                     var pollArrs = [];
                     _.each(pollArr, function (n) {
                         pollArrs.push(n.news);
                     });
-                    console.log("  ============================ pollArrs =====================", pollArrs);
+                    // console.log("  ============================ pollArrs =====================", pollArrs);
                     filter._id = {}
                     filter._id.$in = pollArrs;
                     if (dataToSend.startDate != undefined) {
-                        console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+                        // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
                         filter.createdAt = {
                             $gte: moment(startDate).startOf('day'),
                             $lte: moment(endDate).endOf('day')
                         }
                     }
 
-                    console.log("interestArrinterestArrinterestArrinterestArr", interestArr)
+                    // console.log("interestArrinterestArrinterestArrinterestArr", interestArr)
                     // filter.interest.$in = interest;
                     if (!_.isEmpty(interest)) {
                         var interestArr = [];
@@ -325,6 +333,12 @@ var model = {
                                     _.each(found.results, function (pp) {
                                         _.each(pp.polls, function (pp1) {
                                             var temp = _.find(pp.polls, function (o) {
+                                                if ((o.poll.user._id.equals(userId))) {
+                                                    pp.flagForPoll = true
+                                                    // console.log("********************************inside if cond")
+                                                } else {
+                                                    // console.log("*************inside else cond")
+                                                }
                                                 if (o.poll.user) {
                                                     if (o.poll.user.status == "Deactive") {
                                                         return o;
@@ -340,6 +354,12 @@ var model = {
 
                                         _.each(pp.comments, function (pp2) {
                                             var temp1 = _.find(pp.comments, function (r) {
+                                                if ((r.comment.user._id.equals(userId))) {
+                                                    pp.flagForKwack = true
+                                                    // console.log("********************************inside if cond")
+                                                } else {
+                                                    // console.log("*************inside else cond")
+                                                }
                                                 if (r.comment.user) {
                                                     if (r.comment.user.status == "Deactive") {
                                                         return r;
@@ -438,7 +458,7 @@ var model = {
      * this function for get Trending News
      * @param {callback} callback function with err and response
      */
-    getTrendingNews: function (callback) {
+    getTrendingNews: function (userId, callback) {
         NewsInfo.find({
             trending: "YES"
         }).deepPopulate('polls.poll.user comments.comment.user').exec(function (err, found) {
@@ -447,38 +467,51 @@ var model = {
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
             } else {
-                console.log("********************************", found)
-                // _.each(found.results, function (pp) {
-                // _.each(pp.polls, function (pp1) {
-                //     var temp = _.find(pp.polls, function (o) {
-                //         if (o.poll.user) {
-                //             if (o.poll.user.status == "Deactive") {
-                //                 return o;
-                //             }
-                //         }
+                // console.log("***********************8inside getTrendingNews", found)
+                // console.log("********************************", found)
+                _.each(found, function (pp) {
+                    _.each(pp.polls, function (pp1) {
+                        var temp = _.find(pp.polls, function (o) {
+                            if ((o.poll.user._id.equals(userId))) {
+                                pp.flagForPoll = true
+                                // console.log("********************************inside if cond")
+                            } else {
+                                // console.log("*************inside else cond")
+                            }
+                            if (o.poll.user) {
+                                if (o.poll.user.status == "Deactive") {
+                                    return o;
+                                }
+                            }
 
 
-                //     });
-                //     if (temp === undefined) {} else {
-                //         _.pull(pp.polls, temp)
-                //     }
-                // })
+                        });
+                        if (temp === undefined) {} else {
+                            _.pull(pp.polls, temp)
+                        }
+                    })
 
-                //     _.each(pp.comments, function (pp2) {
-                //         var temp1 = _.find(pp.comments, function (r) {
-                //             if (r.comment.user) {
-                //                 if (r.comment.user.status == "Deactive") {
-                //                     return r;
-                //                 }
-                //             }
+                    _.each(pp.comments, function (pp2) {
+                        var temp1 = _.find(pp.comments, function (r) {
+                            if ((r.comment.user._id.equals(userId))) {
+                                pp.flagForKwack = true
+                                // console.log("********************************inside if cond")
+                            } else {
+                                // console.log("*************inside else cond")
+                            }
+                            if (r.comment.user) {
+                                if (r.comment.user.status == "Deactive") {
+                                    return r;
+                                }
+                            }
 
 
-                //         });
-                //         if (temp1 === undefined) {} else {
-                //             _.pull(pp.comments, temp1)
-                //         }
-                //     })
-                // })
+                        });
+                        if (temp1 === undefined) {} else {
+                            _.pull(pp.comments, temp1)
+                        }
+                    })
+                })
                 callback(null, found);
             }
 
@@ -490,8 +523,8 @@ var model = {
      * @param {page} input page
      * @param {callback} callback function with err and response
      */
-    getAllNews1: function (data, callback) {
-        console.log("inside get getAllNews1", data)
+    getAllNews1: function (data, userId, callback) {
+        // console.log("inside get getAllNews1", userId)
         if (data.count) {
             var maxCount = data.count;
         } else {
@@ -524,6 +557,7 @@ var model = {
             .page(options,
                 function (err, found) {
                     if (err) {
+                        // console.log("ERRRRRRRRRRRR", err)
                         callback(err, null);
                     } else if (found) {
                         _.each(found.results, function (pp) {
@@ -542,7 +576,15 @@ var model = {
                                 }
                             })
                             _.each(pp.polls, function (pp1) {
+                                // console.log("***************inside polls", pp1)
                                 var temp = _.find(pp.polls, function (o) {
+
+                                    if ((o.poll.user._id.equals(userId))) {
+                                        pp.flagForPoll = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
                                     if (o.poll.user) {
                                         if (o.poll.user.status == "Deactive") {
                                             return o;
@@ -553,10 +595,22 @@ var model = {
                                 if (temp === undefined) {} else {
                                     _.pull(pp.polls, temp)
                                 }
+                                //     if(o.poll.user)
+                                //    { 
+
+                                // }
+
+
                             })
 
                             _.each(pp.comments, function (pp2) {
                                 var temp1 = _.find(pp.comments, function (r) {
+                                    if ((r.comment.user._id.equals(userId))) {
+                                        pp.flagForKwack = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
                                     if (r.comment.user) {
                                         if (r.comment.user.status == "Deactive") {
                                             return r;
@@ -567,7 +621,19 @@ var model = {
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
                                 }
+                                //         if(o.poll.user)
+                                //    { 
+
+                                // }
+
                             })
+
+
+                            // async.each(data.results, function (userInfo, callback) {
+
+                            // }, function (err) {
+                            //     callback(null, "err");
+                            // })
                         })
 
                         callback(null, found);
@@ -581,7 +647,7 @@ var model = {
      * @param {page} input page
      * @param {callback} callback function with err and response
      */
-    getAllNewsJustNow: function (data, callback) {
+    getAllNewsJustNow: function (data, userId, callback) {
 
         if (data.count) {
             var maxCount = data.count;
@@ -619,7 +685,6 @@ var model = {
                     } else if (found) {
                         _.each(found.results, function (pp) {
                             _.each(pp.realTotalCount, function (pp3) {
-                                console.log("PP####3333333", pp3.readcount)
                                 var temp = _.find(pp.realTotalCount, function (o) {
                                     if (o.readcount.user.status == "Deactive") {
                                         return o;
@@ -632,6 +697,12 @@ var model = {
                             })
                             _.each(pp.polls, function (pp1) {
                                 var temp = _.find(pp.polls, function (o) {
+                                    if ((o.poll.user._id.equals(userId))) {
+                                        pp.flagForPoll = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
                                     if (o.poll.user.status == "Deactive") {
                                         return o;
                                     }
@@ -640,10 +711,17 @@ var model = {
                                 if (temp === undefined) {} else {
                                     _.pull(pp.polls, temp)
                                 }
+
                             })
 
                             _.each(pp.comments, function (pp2) {
                                 var temp1 = _.find(pp.comments, function (r) {
+                                    if ((r.comment.user._id.equals(userId))) {
+                                        pp.flagForKwack = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
                                     if (r.comment.user.status == "Deactive") {
                                         return r;
                                     }
@@ -652,6 +730,7 @@ var model = {
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
                                 }
+
                             })
                         })
                         callback(null, found);
@@ -667,7 +746,8 @@ var model = {
      * * @param {userInterest} input userInterest
      * @param {callback} callback function with err and response
      */
-    getNewsByInterest: function (data, callback) {
+    getNewsByInterest: function (data, userId, callback) {
+        console.log("inside api interest", userId)
         if (data.count) {
             var maxCount = data.count;
         } else {
@@ -696,7 +776,7 @@ var model = {
         NewsInfo.find({
                 interest: data.userInterest
             })
-            .deepPopulate("polls.poll comments.comment")
+            .deepPopulate("comments.comment.user polls.poll.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -704,9 +784,18 @@ var model = {
                     if (err) {
                         callback(err, null);
                     } else if (found) {
+                        console.log("FOund****", found)
                         _.each(found.results, function (pp) {
+                            // console.log("#######################################", pp)
                             _.each(pp.polls, function (pp1) {
+                                // console.log("Inside api%%%%%%%%%%%%%% Polls")
                                 var temp = _.find(pp.polls, function (o) {
+                                    if ((o.poll.user._id.equals(userId))) {
+                                        pp.flagForPoll = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
                                     if (o.poll.user.status == "Deactive") {
                                         return o;
                                     }
@@ -715,10 +804,17 @@ var model = {
                                 if (temp === undefined) {} else {
                                     _.pull(pp.polls, temp)
                                 }
+
                             })
 
                             _.each(pp.comments, function (pp2) {
                                 var temp1 = _.find(pp.comments, function (r) {
+                                    if ((r.comment.user._id.equals(userId))) {
+                                        pp.flagForKwack = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
                                     if (r.comment.user.status == "Deactive") {
                                         return r;
                                     }
@@ -727,6 +823,7 @@ var model = {
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
                                 }
+
                             })
                         })
                         callback(null, found);
@@ -820,7 +917,7 @@ var model = {
      *  @param {page} input page 
      * @param {callback} callback function with err and response
      */
-    getExploreNews: function (data, callback) {
+    getExploreNews: function (data, userId, callback) {
         if (data.count) {
             var maxCount = data.count;
         } else {
@@ -855,11 +952,20 @@ var model = {
             .page(options,
                 function (err, found) {
                     if (err) {
+                        console.log("errrrrrr", err)
                         callback(err, null);
                     } else if (found) {
                         _.each(found.results, function (pp) {
                             _.each(pp.polls, function (pp1) {
                                 var temp = _.find(pp.polls, function (o) {
+                                    // 
+                                    // console.log("**************",pp1)
+                                    if ((o.poll.user._id.equals(userId))) {
+                                        pp.flagForPoll = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
                                     if (o.poll.user) {
                                         if (o.poll.user.status == "Deactive") {
                                             return o;
@@ -871,10 +977,17 @@ var model = {
                                 if (temp === undefined) {} else {
                                     _.pull(pp.polls, temp)
                                 }
+
                             })
 
                             _.each(pp.comments, function (pp2) {
                                 var temp1 = _.find(pp.comments, function (r) {
+                                    if ((r.comment.user._id.equals(userId))) {
+                                        pp.flagForKwack = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
                                     if (r.comment.user) {
                                         if (r.comment.user.status == "Deactive") {
                                             return r;
@@ -886,6 +999,7 @@ var model = {
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
                                 }
+
                             })
                         })
                         callback(null, found);
@@ -900,7 +1014,7 @@ var model = {
      * @param {page} input page 
      * @param {callback} callback function with err and response
      */
-    getSocialNews: function (data, callback) {
+    getSocialNews: function (data, userId, callback) {
         if (data.count) {
             var maxCount = data.count;
         } else {
@@ -929,7 +1043,7 @@ var model = {
         NewsInfo.find({
                 isSocial: "YES"
             })
-            .deepPopulate("polls.poll comments.comment")
+            .deepPopulate("polls.poll.user comments.comment.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -940,6 +1054,12 @@ var model = {
                         _.each(found.results, function (pp) {
                             _.each(pp.polls, function (pp1) {
                                 var temp = _.find(pp.polls, function (o) {
+                                    if ((o.poll.user._id.equals(userId))) {
+                                        pp.flagForPoll = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
                                     if (o.poll.user.status == "Deactive") {
                                         return o;
                                     }
@@ -948,10 +1068,22 @@ var model = {
                                 if (temp === undefined) {} else {
                                     _.pull(pp.polls, temp)
                                 }
+                                // if ((pp1.poll.user._id.equals(userId))) {
+                                //     pp.flagForPoll = true
+                                //     console.log("********************************inside if cond")
+                                // } else {
+                                //     console.log("*************inside else cond")
+                                // }
                             })
 
                             _.each(pp.comments, function (pp2) {
                                 var temp1 = _.find(pp.comments, function (r) {
+                                    if ((r.comment.user._id.equals(userId))) {
+                                        pp.flagForKwack = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
                                     if (r.comment.user.status == "Deactive") {
                                         return r;
                                     }
@@ -960,6 +1092,12 @@ var model = {
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
                                 }
+                                // if ((pp2.comment.user._id.equals(userId))) {
+                                //     pp.flagForKwack = true
+                                //     console.log("********************************inside if cond")
+                                // } else {
+                                //     console.log("*************inside else cond")
+                                // }
                             })
                         })
                         callback(null, found);
@@ -975,8 +1113,8 @@ var model = {
      * @param {newsId} input newsId 
      * @param {callback} callback function with err and response
      */
-    getOneNews: function (newsId, callback) {
-        // console.log("newsId",newsId)
+    getOneNews: function (newsId, userId, callback) {
+        // console.log("newuserIduserIduserIduserIdsId",userId)
         NewsInfo.findOne({
             _id: newsId
         }).deepPopulate('polls.poll.user comments.comment.user comments.comment.repliesTo.user comments.comment.likes.userId').exec(function (err, found) {
@@ -985,8 +1123,17 @@ var model = {
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
             } else {
-                _.each(found.polls, function (pp) {
+                // console.log("***********************8inside getTrendingNews", found)
+                // console.log("********************************", found)
+                // _.each(found, function (pp) {
+                _.each(found.polls, function (pp1) {
                     var temp = _.find(found.polls, function (o) {
+                        if ((o.poll.user._id.equals(userId))) {
+                            found.flagForPoll = true
+                            console.log("********************************inside if cond")
+                        } else {
+                            console.log("*************inside else cond")
+                        }
                         if (o.poll.user) {
                             if (o.poll.user.status == "Deactive") {
                                 return o;
@@ -1000,79 +1147,33 @@ var model = {
                     }
                 })
 
-
-                _.each(found.comments, function (ppp) {
-                    var temp1 = _.find(found.comments, function (oo) {
-                        if (oo.comment.user) {
-                            if (oo.comment.user.status == "Deactive") {
-                                return oo;
+                _.each(found.comments, function (pp2) {
+                    var temp1 = _.find(found.comments, function (r) {
+                        if ((r.comment.user._id.equals(userId))) {
+                            found.flagForKwack = true
+                            // console.log("********************************inside if cond")
+                        } else {
+                            // console.log("*************inside else cond")
+                        }
+                        if (r.comment.user) {
+                            if (r.comment.user.status == "Deactive") {
+                                return r;
                             }
                         }
+
 
                     });
                     if (temp1 === undefined) {} else {
                         _.pull(found.comments, temp1)
                     }
                 })
-
-                _.each(found.comments, function (pppp) {
-                    _.each(pppp.comment.repliesTo, function (reply) {
-                        var temp2 = _.find(pppp.comment.repliesTo, function (ooo) {
-                            if (ooo.user) {
-                                if (ooo.user.status == "Deactive") {
-                                    return ooo;
-                                }
-                            }
-
-
-                        });
-                        if (temp2 === undefined) {} else {
-                            _.pull(pppp.comment.repliesTo, temp2)
-                        }
-
-                    })
-
-                })
-                _.each(found.comments, function (pppp) {
-                    _.each(pppp.comment.likes, function (reply) {
-                        var temp3 = _.find(pppp.comment.likes, function (oooo) {
-                            if (oooo.user) {
-                                if (oooo.userId.status == "Deactive") {
-                                    return oooo;
-                                }
-                            }
-
-                        });
-                        if (temp3 === undefined) {} else {
-                            _.pull(pppp.comment.likes, temp3)
-                        }
-
-                    })
-
-                })
-
-
+                // })
                 callback(null, found);
-
             }
 
         });
     },
-    //    getAllNews: function ( callback) {
-    //     // console.log("newsId",newsId)
-    //     NewsInfo.find({
 
-    //     }).deepPopulate().exec(function (err, found) {
-    //         if (err) {
-    //             callback(err, null);
-    //         } else if (_.isEmpty(found)) {
-    //             callback("noDataound", null);
-    //         } else {
-    //             callback(null, found);
-    //         }
-
-    //     });
-    // },
     storeNews: function (callback) {
         request.get({
             url: "https://newsapi.org/v2/top-headlines?sources=google-news-in&apiKey=1e3a77df57424c7e9ae1b65a2a0b696f",

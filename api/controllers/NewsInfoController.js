@@ -75,7 +75,7 @@ var controller = {
      */
     getTrendingNews: function (req, res) {
         if (req.body) {
-            NewsInfo.getTrendingNews(res.callback);
+            NewsInfo.getTrendingNews(req.body.userId,res.callback);
         } else {
             res.json({
                 value: false,
@@ -105,7 +105,7 @@ var controller = {
      */
     getAllNewsJustNow: function (req, res) {
         if (req.body) {
-            NewsInfo.getAllNewsJustNow(req.body, res.callback);
+            NewsInfo.getAllNewsJustNow(req.body,req.body.userId, res.callback);
         } else {
             res.json({
                 value: false,
@@ -136,7 +136,7 @@ var controller = {
      */
     getNewsByInterest: function (req, res) {
         if (req.body) {
-            NewsInfo.getNewsByInterest(req.body, res.callback);
+            NewsInfo.getNewsByInterest(req.body,req.body.userId, res.callback);
         } else {
             res.json({
                 value: false,
@@ -151,7 +151,7 @@ var controller = {
      */
     getExploreNews: function (req, res) {
         if (req.body) {
-            NewsInfo.getExploreNews(req.body, res.callback);
+            NewsInfo.getExploreNews(req.body,req.body.userId, res.callback);
         } else {
             res.json({
                 value: false,
@@ -166,7 +166,7 @@ var controller = {
      */
     getSocialNews: function (req, res) {
         if (req.body) {
-            NewsInfo.getSocialNews(req.body, res.callback);
+            NewsInfo.getSocialNews(req.body,req.body.userId, res.callback);
         } else {
             res.json({
                 value: false,
@@ -182,7 +182,7 @@ var controller = {
      */
     getAllNews1: function (req, res) {
         if (req.body) {
-            NewsInfo.getAllNews1(req.body, res.callback);
+            NewsInfo.getAllNews1(req.body,req.body.userId, res.callback);
         } else {
             res.json({
                 value: false,
@@ -197,7 +197,7 @@ var controller = {
      */
     getOneNews: function (req, res) {
         if (req.body) {
-            NewsInfo.getOneNews(req.body.newsId, res.callback);
+            NewsInfo.getOneNews(req.body.newsId,req.body.userId,res.callback);
         } else {
             res.json({
                 value: false,
