@@ -68,23 +68,6 @@
         "validation": ["required", "trim", "unique"],
         "url": ""
     }, {
-        "name": "Password",
-        "type": "password",
-        "tableRef": "password",
-        "placeholder": "Enter password",
-        "id": "password",
-        "validation": ["", "trim", "unique"],
-        "url": ""
-    }, {
-        "name": "OTP",
-        "type": "text",
-        "tableRef": "otp",
-        "placeholder": "Enter Otp",
-        "id": "otp",
-        "disabled": false,
-        "validation": ["required", "trim", "unique"],
-        "url": ""
-    }, {
         "name": "AccessLevel",
         "type": "tags",
         "tableRef": "accessLevel",

@@ -76,7 +76,17 @@
         "id": "mobile",
         "validation": ["required", "trim", "unique"],
         "url": ""
-    }, {
+    }, 
+    {
+        "name": "OTP",
+        "type": "text",
+        "tableRef": "otp",
+        "placeholder": "Enter Otp",
+        "id": "otp",
+        "disabled": false,
+        "validation": ["required", "trim", "unique"],
+        "url": ""
+    },{
         "name": "AccessLevel",
         "type": "tags",
         "tableRef": "accessLevel",
