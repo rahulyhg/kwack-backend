@@ -3,6 +3,11 @@ var schema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    flagForLike: {
+        type: Boolean,
+        default: false
+    },
+
     news: {
         type: Schema.Types.ObjectId,
         ref: 'NewsInfo'
@@ -25,9 +30,13 @@ var schema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'User'
         }],
-          kwack: {
-        type: String
-    },
+        kwack: {
+            type: String
+        },
+        flagForLikeReply: {
+            type: Boolean,
+            default: false
+        },
     }],
     likes: [{
         userId: {
@@ -65,8 +74,8 @@ module.exports = mongoose.model('Comment', schema);
 
 var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "news user UserId", "news user UserId", "order", "asc"));
 var model = {
-  
-      /**
+
+    /**
      * this function provides Kwack for particular userId
      * @param {userId} input userId
      * @param {callback} callback function with err and response
@@ -115,7 +124,7 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getKwack: function (newsId, userId, callback) {
-        console.log("***********",newsId,userId)
+        console.log("***********", newsId, userId)
         Comment.findOne({
             news: newsId,
             user: userId
@@ -341,23 +350,23 @@ var model = {
      *   *  *  * @param {anonymous} input anonymous
      * @param {callback} callback function with err and response
      */
-    addReply: function (commentId, reply, user,anonymous,kwack, callback) {
-        console.log("anonymousanonymous",commentId,reply,user,anonymous)
+    addReply: function (commentId, reply, user, anonymous, kwack, callback) {
+        console.log("anonymousanonymous", commentId, reply, user, anonymous)
         Comment.update({
-            _id: commentId,
-        }, {
-            $push: {
-                'repliesTo': {
-                    user: user,
-                    reply: reply,
-                    anonymous:anonymous,
-                    kwack:kwack
+                _id: commentId,
+            }, {
+                $push: {
+                    'repliesTo': {
+                        user: user,
+                        reply: reply,
+                        anonymous: anonymous,
+                        kwack: kwack
+                    }
                 }
+
             }
-            
-        }
-             
-            ).exec(function (err, found) {
+
+        ).exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
@@ -481,7 +490,7 @@ var model = {
         });
     },
 
-  /**
+    /**
      * this function add like for particular Reply
      * @param {comm} input comm
      *  * @param {replyId} input replyId
@@ -518,7 +527,7 @@ var model = {
         });
     },
 
-      /**
+    /**
      * this function remove like for particular Reply
      * @param {comm} input comm
      *  * @param {replyId} input replyId

@@ -120,7 +120,7 @@ schema.plugin(uniqueValidator);
 schema.plugin(timestamps);
 module.exports = mongoose.model('NewsInfo', schema);
 
-var exports = _.cloneDeep(require("sails-wohlig-service")(schema));
+var exports = _.cloneDeep(require("sails-wohlig-service")(schema, "", "", "createdAt", "desc"));
 var model = {
 
     //************INPUT FOR API */
@@ -492,6 +492,7 @@ var model = {
                     })
 
                     _.each(pp.comments, function (pp2) {
+
                         var temp1 = _.find(pp.comments, function (r) {
                             if ((r.comment.user._id.equals(userId))) {
                                 pp.flagForKwack = true
@@ -1114,10 +1115,10 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getOneNews: function (newsId, userId, callback) {
-        // console.log("newuserIduserIduserIduserIdsId",userId)
+        console.log("newuserIduserIduserIduserIdsId", userId)
         NewsInfo.findOne({
             _id: newsId
-        }).deepPopulate('polls.poll.user comments.comment.user comments.comment.repliesTo.user comments.comment.likes.userId').exec(function (err, found) {
+        }).deepPopulate('polls.poll.user comments.comment.user comments.comment.repliesTo.user comments.comment.likes.userId comments.comment.likes.userId').exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
@@ -1127,12 +1128,13 @@ var model = {
                 // console.log("********************************", found)
                 // _.each(found, function (pp) {
                 _.each(found.polls, function (pp1) {
+
                     var temp = _.find(found.polls, function (o) {
                         if ((o.poll.user._id.equals(userId))) {
                             found.flagForPoll = true
-                            console.log("********************************inside if cond")
+                            // console.log("********************************inside if cond")
                         } else {
-                            console.log("*************inside else cond")
+                            // console.log("*************inside else cond")
                         }
                         if (o.poll.user) {
                             if (o.poll.user.status == "Deactive") {
@@ -1148,6 +1150,15 @@ var model = {
                 })
 
                 _.each(found.comments, function (pp2) {
+                    _.each(pp2.comment.likes, function (like) {
+                        // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%", like.userId._id)
+                        if ((like.userId._id.equals(userId))) {
+                            // console.log("Inide if cond")
+                            pp2.comment.flagForLike = true
+                        }
+
+                    })
+
                     var temp1 = _.find(found.comments, function (r) {
                         if ((r.comment.user._id.equals(userId))) {
                             found.flagForKwack = true
