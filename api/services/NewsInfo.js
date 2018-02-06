@@ -56,6 +56,12 @@ var schema = new Schema({
         type: String,
 
     },
+    shareNewsCount: [{
+        sharenews: {
+            type: Schema.Types.ObjectId,
+            ref: 'ShareNews'
+        }
+    }],
     realTotalCount: [{
         readcount: {
             type: Schema.Types.ObjectId,
@@ -1127,46 +1133,48 @@ var model = {
                 _.each(found.polls, function (pp1) {
 
                     var temp = _.find(found.polls, function (o) {
-                        if ((o.poll.user._id.equals(userId))) {
-                            found.flagForPoll = true
-                            // console.log("********************************inside if cond")
-                        } else {
-                            // console.log("*************inside else cond")
-                        }
-                        if (o.poll.user) {
-                            if (o.poll.user.status == "Deactive") {
-                                return o;
+                        _.each(found.comments, function (pp2) {
+                            _.each(pp2.comment.likes, function (like) {
+                                // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%", like.userId._id)
+                                if ((like.userId._id.equals(userId))) {
+                                    // console.log("Inide if cond")
+                                    pp2.comment.flagForLike = true
+                                }
+
+                            })
+                            _.each(pp2.comment.repliesTo, function (reply) {
+                                // console.log("&&&&&&&&&&&&&&&&&&&", reply)
+                                _.each(reply.likes, function (like) {
+                                    // console.log("&&&&&&&&&&&&&&&&&&&", like._id)
+                                    if ((like._id.equals(userId))) {
+                                        // console.log("Inide if cond")
+                                        reply.flagForLikeReply = true
+                                    }
+
+                                })
+                            })
+                            if ((o.poll.user._id.equals(userId))) {
+                                found.flagForPoll = true
+                                // console.log("********************************inside if cond")
+                            } else {
+                                // console.log("*************inside else cond")
                             }
-                        }
-
-
-                    });
-                    if (temp === undefined) {} else {
-                        _.pull(found.polls, temp)
-                    }
-                })
-
-                _.each(found.comments, function (pp2) {
-                    _.each(pp2.comment.likes, function (like) {
-                        // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%", like.userId._id)
-                        if ((like.userId._id.equals(userId))) {
-                            // console.log("Inide if cond")
-                            pp2.comment.flagForLike = true
-                        }
-
-                    })
-
-                    _.each(pp2.comment.repliesTo, function (reply) {
-                        // console.log("&&&&&&&&&&&&&&&&&&&", reply)
-                        _.each(reply.likes, function (like) {
-                            // console.log("&&&&&&&&&&&&&&&&&&&", like._id)
-                            if (( like._id.equals(userId))) {
-                                // console.log("Inide if cond")
-                               reply.flagForLikeReply = true
+                            if (o.poll.user) {
+                                if (o.poll.user.status == "Deactive") {
+                                    return o;
+                                }
                             }
 
-                        })
+
+                        });
+                        if (temp === undefined) {} else {
+                            _.pull(found.polls, temp)
+                        }
                     })
+
+
+
+
 
                     var temp1 = _.find(found.comments, function (r) {
                         if ((r.comment.user._id.equals(userId))) {

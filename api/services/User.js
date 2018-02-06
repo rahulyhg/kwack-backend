@@ -171,7 +171,7 @@ var model = {
 
 
 
-   
+
 
     /**
      * this function for send otp
@@ -206,9 +206,11 @@ var model = {
      * @param {callback} callback function with err and response
      */
     verifyOTPForResetPass: function (otp, callback) {
-        User.findOne({
+        User.findOneAndUpdate({
             otp: otp
-        }).exec(function (error, found) {
+        }, {
+            'otp': ""
+        }).exec(function (err, found) {
             if (error || found == undefined) {
                 callback(error, null);
             } else {
@@ -229,7 +231,7 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getUser: function (userEmail, callback) {
-// console.log("***************",userEmail)
+        // console.log("***************",userEmail)
         User.findOne({
             email: userEmail,
         }).exec(function (err, found) {
@@ -311,7 +313,7 @@ var model = {
      */
 
     saveUser: function (name, email, userName, mobile, password, callback) {
-        console.log("***1111",name,email,userName,mobile,password)
+        console.log("***1111", name, email, userName, mobile, password)
         var dataToSave = {}
         dataToSave.name = name
         dataToSave.email = email
@@ -340,7 +342,7 @@ var model = {
 
                 });
             },
-          
+
             function (data, callback3) {
                 console.log("inside 3rd waterfall model", dataToSave)
 
