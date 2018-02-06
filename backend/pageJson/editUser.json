@@ -32,15 +32,7 @@
         "validation": ["", "trim", "unique"],
         "url": ""
     },
-     {
-        "name": "User Age",
-        "type": "text",
-        "tableRef": "age",
-        "placeholder": "Enter age",
-        "id": "age",
-        "validation": ["", "trim", "unique"],
-        "url": ""
-    },
+     
       {
         "name": "User State",
         "type": "text",
@@ -65,14 +57,6 @@
         "placeholder": "Enter Email",
         "id": "email",
         "url": ""
-    },{
-        "name": "DOB",
-        "type": "date",
-        "tableRef": "dob",
-        "placeholder": "Enter DOB",
-        "id": "dob",
-        "validation": ["required", "trim", "unique"],
-        "url": ""
     }, {
         "name": "Photo",
         "type": "image",
@@ -85,22 +69,6 @@
         "validation": ["required", "trim", "unique"],
         "url": ""
     }, {
-        "name": "Password",
-        "type": "password",
-        "tableRef": "password",
-        "placeholder": "Enter password",
-        "id": "password",
-        "validation": ["", "trim", "unique"],
-        "url": ""
-    }, {
-        "name": "Forgot Password",
-        "type": "password",
-        "tableRef": "forgotPassword",
-        "placeholder": "Enter forgot password",
-        "id": "forgotPassword",
-        "validation": ["", "trim", "unique"],
-        "url": ""
-    }, {
         "name": "Mobile",
         "type": "text",
         "tableRef": "mobile",
@@ -109,15 +77,6 @@
         "validation": ["required", "trim", "unique"],
         "url": ""
     }, {
-        "name": "OTP",
-        "type": "text",
-        "tableRef": "otp",
-        "placeholder": "Enter Otp",
-        "id": "otp",
-        "disabled": false,
-        "validation": ["required", "trim", "unique"],
-        "url": ""
-    },{
         "name": "AccessLevel",
         "type": "tags",
         "tableRef": "accessLevel",

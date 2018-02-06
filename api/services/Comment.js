@@ -490,6 +490,41 @@ var model = {
         });
     },
 
+
+    /**
+     * this function add like for particular Reply
+     * @param {comm} input comm
+     *  * @param {replyId} input replyId
+     *   *  * @param {userId} input userId
+     * @param {callback} callback function with err and response
+     */
+
+
+    addOrRemoveLikeTOReply: function (comm,replyId,userId, callback) {
+
+        console.log("replyId", userId)
+        Comment.find({
+            repliesTo: {
+                $elemMatch: {
+                    _id: replyId,
+                    likes:userId
+                }
+            }
+        }).deepPopulate('').exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+               Comment.addLikeToReply(comm, replyId, userId, callback);
+            } else {
+               Comment.removeLikeToReply (comm, replyId, userId, callback) 
+
+            }
+
+        });
+    },
+
+
+
     /**
      * this function add like for particular Reply
      * @param {comm} input comm

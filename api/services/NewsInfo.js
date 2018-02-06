@@ -1118,15 +1118,12 @@ var model = {
         console.log("newuserIduserIduserIduserIdsId", userId)
         NewsInfo.findOne({
             _id: newsId
-        }).deepPopulate('polls.poll.user comments.comment.user comments.comment.repliesTo.user comments.comment.likes.userId comments.comment.likes.userId').exec(function (err, found) {
+        }).deepPopulate('polls.poll.user comments.comment.user comments.comment.repliesTo.user comments.comment.likes.userId comments.comment.likes.userId comments.comment.repliesTo.likes').exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
             } else {
-                // console.log("***********************8inside getTrendingNews", found)
-                // console.log("********************************", found)
-                // _.each(found, function (pp) {
                 _.each(found.polls, function (pp1) {
 
                     var temp = _.find(found.polls, function (o) {
@@ -1157,6 +1154,18 @@ var model = {
                             pp2.comment.flagForLike = true
                         }
 
+                    })
+
+                    _.each(pp2.comment.repliesTo, function (reply) {
+                        // console.log("&&&&&&&&&&&&&&&&&&&", reply)
+                        _.each(reply.likes, function (like) {
+                            // console.log("&&&&&&&&&&&&&&&&&&&", like._id)
+                            if (( like._id.equals(userId))) {
+                                // console.log("Inide if cond")
+                               reply.flagForLikeReply = true
+                            }
+
+                        })
                     })
 
                     var temp1 = _.find(found.comments, function (r) {

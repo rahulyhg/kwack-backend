@@ -18,18 +18,6 @@
         "fieldsToSend": {
             "_id": "_id"
         }
-    }, {
-        "name": "delete",
-        "icon": "fa-trash",
-        "buttonClass": "btn-danger",
-        "type": "apiCallConfirm",
-        "title": "Delete PollAnswer",
-        "content": "Are you sure you want to delete PollAnswer?",
-        "api": "PollAnswer/delete",
-        "fieldsToSend": {
-            "name": "_id",
-            "value": "_id"
-        }
     }],
     "button": [],
     "apiCall": {
