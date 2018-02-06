@@ -206,23 +206,18 @@ var model = {
      * @param {callback} callback function with err and response
      */
     verifyOTPForResetPass: function (otp, callback) {
-        User.findOneAndUpdate({
+        console.log("*********************", otp)
+        User.find({
             otp: otp
-        }, {
-            'otp': ""
         }).exec(function (err, found) {
-            if (error || found == undefined) {
-                callback(error, null);
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
             } else {
-                if (_.isEmpty(found)) {
-                    callback(null, {
-                        message: "No data found"
-                    });
-                } else {
-                    callback(null, found);
-                }
+                callback(null, found);
             }
-        })
+        });
     },
 
     /**
