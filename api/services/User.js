@@ -178,11 +178,12 @@ var model = {
      * @param {email} input email
      * @param {callback} callback function with err and response
      */
-    sendOtp: function (mobile, callback) {
-        console.log("inside send otp", mobile)
+    sendOtp: function (mobile,userId, callback) {
+        console.log("inside send otp", mobile,userId)
         var emailOtp = (Math.random() + "").substring(2, 6);
         var foundData = {};
         User.findOneAndUpdate({
+            _id:userId,
             mobile: mobile
         }, {
             otp: emailOtp
