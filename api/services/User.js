@@ -178,12 +178,12 @@ var model = {
      * @param {email} input email
      * @param {callback} callback function with err and response
      */
-    sendOtp: function (mobile,userId, callback) {
-        console.log("inside send otp", mobile,userId)
+    sendOtp: function (mobile, userId, callback) {
+        console.log("inside send otp", mobile, userId)
         var emailOtp = (Math.random() + "").substring(2, 6);
         var foundData = {};
         User.findOneAndUpdate({
-            _id:userId,
+            _id: userId,
             mobile: mobile
         }, {
             otp: emailOtp
@@ -321,17 +321,15 @@ var model = {
                 console.log("inside 1st waterfall model")
                 User.findOne({
                     email: email,
+                    state: ''
                 }).exec(function (err, found) {
 
                     if (err) {
-                        console.log("err occure")
                         callback1(err, null);
                     } else if (_.isEmpty(found)) {
-                        console.log("is no found condition", found)
                         callback1(null, found);
                     } else {
                         console,
-                        log("inside fund condt", found)
                         callback1("emailExist", null);
 
                     }
@@ -340,17 +338,51 @@ var model = {
             },
 
             function (data, callback3) {
-                console.log("inside 3rd waterfall model", dataToSave)
 
-                User.saveData(dataToSave, function (err, created) {
+                User.findOne({
+                    email: email,
+                }).exec(function (err, found) {
+
                     if (err) {
                         callback3(err, null);
-                    } else if (_.isEmpty(created)) {
-                        callback3(null, "noDataound");
-                    } else {
-                        callback3(null, created);
+                    } else if (_.isEmpty(found)) {
+
+                        User.saveData(dataToSave, function (err, created) {
+                            if (err) {
+                                callback3(err, null);
+                            } else if (_.isEmpty(created)) {
+                                callback3(null, "noDataound");
+                            } else {
+                                callback3(null, created);
+                            }
+                        });
+                    } else if (found) {
+                        User.findOneAndUpdate({
+                            email: email
+                        }, {
+                            'name': name,
+                            'email': email,
+                            'userName': userName,
+                            'mobile': mobile,
+                            'password': password
+
+                        }, {
+                            new: true
+                        }).exec(function (err, update) {
+                            if (err) {
+
+                                callback3(err, null);
+                            } else if (_.isEmpty(update)) {
+                                callback3("noDataound", null);
+                            } else {
+                                callback3(null, update);
+                            }
+
+                        });
                     }
+
                 });
+
             },
         ], function (err, data) {
             console.log("final data for callback is", data)
