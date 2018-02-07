@@ -531,7 +531,10 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getAllNews1: function (data, userId, callback) {
-        // console.log("inside get getAllNews1", userId)
+        console.log("inside get getAllNews1", data.page)
+        if(data.page==1){
+            data.page=2
+        }
         if (data.count) {
             var maxCount = data.count;
         } else {
