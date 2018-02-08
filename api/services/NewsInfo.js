@@ -623,6 +623,12 @@ var model = {
                         _.each(found.results, function (pp) {
                             _.each(pp.realTotalCount, function (pp1) {
                                 var temp = _.find(pp.realTotalCount, function (o) {
+                                    if (o.readcount == null) {
+                                        return o;
+                                    }
+                                    if (o.readcount.user == null) {
+                                        return o;
+                                    }
                                     if (o.readcount.user) {
                                         if (o.readcount.user.status == "Deactive") {
                                             return o;
@@ -777,33 +783,34 @@ var model = {
                                 }
                             })
                             _.each(pp.polls, function (pp1) {
-                               
-                                    var temp = _.find(pp.polls, function (o) {
-                                        if(o.poll)
-                                     {   if (o.poll.user) {
+
+                                var temp = _.find(pp.polls, function (o) {
+                                    if (o.poll) {
+                                        if (o.poll.user) {
                                             if ((o.poll.user._id.equals(userId))) {
                                                 pp.flagForPoll = true
-                                            } else {
-                                            }
-                                        }}
-                                            if (o.poll == null) {
+                                            } else {}
+                                        }
+                                    }
+                                    if (o.poll == null) {
                                         return o;
                                     }
                                     if (o.poll.user == null) {
                                         return o;
                                     }
-                                        if(o.poll)
-                                      {  if (o.poll.user) {
+                                    if (o.poll) {
+                                        if (o.poll.user) {
                                             if (o.poll.user.status == "Deactive") {
                                                 return o;
                                             }
-                                        }}
-
-                                    });
-                                    if (temp === undefined) {} else {
-                                        _.pull(pp.polls, temp)
+                                        }
                                     }
-                                
+
+                                });
+                                if (temp === undefined) {} else {
+                                    _.pull(pp.polls, temp)
+                                }
+
 
                             })
 
@@ -978,7 +985,8 @@ var model = {
      * * @param {userInterest} input userInterest
      * @param {callback} callback function with err and response
      */
-    getNewsByInterestWithoutOneNews: function (data, newsId, callback) {
+    getNewsByInterestWithoutOneNews: function (data, newsId, userId, callback) {
+        console.log("$$$$$$$$$$$$$$$$$$44", data.page, userId)
         if (data.count) {
             var maxCount = data.count;
         } else {
@@ -1016,41 +1024,78 @@ var model = {
             .page(options,
                 function (err, found) {
                     if (err) {
+                        console.log("ERRRRRRR", err)
                         callback(err, null);
                     } else if (found) {
-                        _.each(found.results, function (pp) {
-                            _.each(pp.polls, function (pp1) {
-                                if (pp1.poll) {
-                                    var temp = _.find(pp.polls, function (o) {
-                                        if (o.poll.user) {
-                                            if (o.poll.user.status == "Deactive") {
-                                                return o;
-                                            }
-                                        }
+                        //    console.log("FOund****", found)
+                        // _.each(found.results, function (pp) {
+                        //     _.each(pp.polls, function (pp1) {
 
-                                    });
-                                    if (temp === undefined) {} else {
-                                        _.pull(pp.polls, temp)
-                                    }
-                                }
-                            })
+                        //         var temp = _.find(pp.polls, function (o) {
+                        //             if (o.poll) {
+                        //                 if (o.poll.user) {
+                        //                     if ((o.poll.user._id.equals(userId))) {
+                        //                         pp.flagForPoll = true
+                        //                     } else {}
+                        //                 }
+                        //             }
+                        //             if (o.poll == null) {
+                        //                 return o;
+                        //             }
+                        //             if (o.poll.user == null) {
+                        //                 return o;
+                        //             }
+                        //             if (o.poll) {
+                        //                 if (o.poll.user) {
+                        //                     if (o.poll.user.status == "Deactive") {
+                        //                         return o;
+                        //                     }
+                        //                 }
+                        //             }
 
-                            _.each(pp.comments, function (pp2) {
-                                if (pp2.comment) {
-                                    var temp1 = _.find(pp.comments, function (r) {
-                                        if (r.comment.user) {
-                                            if (r.comment.user.status == "Deactive") {
-                                                return r;
-                                            }
-                                        }
+                        //         });
+                        //         if (temp === undefined) {} else {
+                        //             _.pull(pp.polls, temp)
+                        //         }
 
-                                    });
-                                    if (temp1 === undefined) {} else {
-                                        _.pull(pp.comments, temp1)
-                                    }
-                                }
-                            })
-                        })
+
+                        //     })
+
+                        //     _.each(pp.comments, function (pp2) {
+
+                        //         var temp1 = _.find(pp.comments, function (r) {
+                        //             if (r.comment) {
+                        //                 if (r.comment.user) {
+                        //                     if ((r.comment.user._id.equals(userId))) {
+                        //                         pp.flagForKwack = true
+                        //                         // console.log("********************************inside if cond")
+                        //                     } else {
+                        //                         // console.log("*************inside else cond")
+                        //                     }
+                        //                 }
+                        //             }
+                        //             if (r.comment == null) {
+                        //                 return r;
+                        //             }
+                        //             if (r.comment.user == null) {
+                        //                 return r;
+                        //             }
+                        //             if (r.comment) {
+                        //                 if (r.comment.user) {
+                        //                     if (r.comment.user.status == "Deactive") {
+                        //                         return r;
+                        //                     }
+                        //                 }
+                        //             }
+
+                        //         });
+                        //         if (temp1 === undefined) {} else {
+                        //             _.pull(pp.comments, temp1)
+                        //         }
+
+
+                        //     })
+                        // })
                         callback(null, found);
                     } else {
                         callback("Invalid data", null);
@@ -1312,7 +1357,7 @@ var model = {
      * @param {callback} callback function with err and response
      */
     getOneNews: function (newsId, userId, callback) {
-        console.log("newuserIduserIduserIduserIdsId", userId)
+        // console.log("newuserIduserIduserIduserIdsId", userId)
         NewsInfo.findOne({
             _id: newsId
         }).deepPopulate('polls.poll.user comments.comment.user comments.comment.repliesTo.user comments.comment.likes.userId comments.comment.likes.userId comments.comment.repliesTo.likes').exec(function (err, found) {
@@ -1321,41 +1366,7 @@ var model = {
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
             } else {
-                _.each(found.polls, function (pp1) {
 
-                    var temp = _.find(found.polls, function (o) {
-
-                        if (o.poll) {
-                            if (o.poll.user) {
-                                if ((o.poll.user._id.equals(userId))) {
-                                    found.flagForPoll = true
-                                    // console.log("********************************inside if cond")
-                                } else {
-                                    // console.log("*************inside else cond")
-                                }
-                            }
-                            if (o.poll == null) {
-                                return o;
-                            }
-                            if (o.poll.user == null) {
-                                return o;
-                            }
-                            if (o.poll) {
-                                if (o.poll.user) {
-                                    if (o.poll.user.status == "Deactive") {
-                                        return o;
-                                    }
-                                }
-                            }
-                        }
-
-
-
-                        if (temp === undefined) {} else {
-                            _.pull(found.polls, temp)
-                        }
-                    })
-                })
 
                 _.each(found.comments, function (pp2) {
 
@@ -1438,7 +1449,7 @@ var model = {
                     _.each(pp2.comment.likes, function (like) {
                         var temp3 = _.find(pp2.comment.likes, function (le) {
                             //   console.log("reeeeeeeeeeeeee",le.userId.status)
-                             if (le.userId == null) {
+                            if (le.userId == null) {
                                 return le;
                             }
                             if (le.userId) {
@@ -1454,6 +1465,45 @@ var model = {
                         }
 
                     })
+                })
+
+
+                _.each(found.polls, function (pp1) {
+
+
+                    var temp4 = _.find(found.polls, function (o) {
+                        if (o.poll) {
+                            if (o.poll.user) {
+                                if ((o.poll.user._id.equals(userId))) {
+                                    found.flagForPoll = true
+                                } else {}
+                            }
+                        }
+
+                        if (o.poll == null) {
+                            return o;
+                        }
+                        if (o.poll.user == null) {
+                            return o;
+                        }
+
+
+
+
+                        if (o.poll.user) {
+                            if (o.poll.user.status == "Deactive") {
+                                return o;
+                            }
+                        }
+
+
+
+                    });
+                    if (temp4 === undefined) {} else {
+                        _.pull(found.polls, temp4)
+                    }
+
+
                 })
 
 

@@ -121,7 +121,7 @@ var controller = {
      */
     getNewsByInterestWithoutOneNews: function (req, res) {
         if (req.body) {
-            NewsInfo.getNewsByInterestWithoutOneNews(req.body,req.body.newsId, res.callback);
+            NewsInfo.getNewsByInterestWithoutOneNews(req.body,req.body.newsId,req.body.userId, res.callback);
         } else {
             res.json({
                 value: false,

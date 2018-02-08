@@ -82,7 +82,7 @@ var controller = {
      */
  addComment: function (req, res) {
         if (req.body) {
-            console.log("req.body",req.body)
+            // console.log("req.body",req.body)
             Comment.addComment(req.body.userId,req.body.newsId,req.body.comment,req.body.kwack,req.body.anonymous, res.callback);
         } else {
             res.json({

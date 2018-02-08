@@ -351,7 +351,10 @@ var model = {
      * @param {callback} callback function with err and response
      */
     addReply: function (commentId, reply, user, anonymous, kwack, callback) {
+        console.log("**************************************************************************************")
         console.log("anonymousanonymous", commentId, reply, user, anonymous)
+        console.log("**************************************************************************************")
+        
         Comment.update({
                 _id: commentId,
             }, {
