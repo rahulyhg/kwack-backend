@@ -338,16 +338,26 @@ var model = {
                                 } else if (found) {
                                     _.each(found.results, function (pp) {
                                         _.each(pp.polls, function (pp1) {
+
                                             var temp = _.find(pp.polls, function (o) {
-                                                if ((o.poll.user._id.equals(userId))) {
-                                                    pp.flagForPoll = true
-                                                    // console.log("********************************inside if cond")
-                                                } else {
-                                                    // console.log("*************inside else cond")
+                                                if (o.poll) {
+                                                    if (o.poll.user) {
+                                                        if ((o.poll.user._id.equals(userId))) {
+                                                            pp.flagForPoll = true
+                                                        } else {}
+                                                    }
                                                 }
-                                                if (o.poll.user) {
-                                                    if (o.poll.user.status == "Deactive") {
-                                                        return o;
+                                                if (o.poll == null) {
+                                                    return o;
+                                                }
+                                                if (o.poll.user == null) {
+                                                    return o;
+                                                }
+                                                if (o.poll) {
+                                                    if (o.poll.user) {
+                                                        if (o.poll.user.status == "Deactive") {
+                                                            return o;
+                                                        }
                                                     }
                                                 }
 
@@ -356,19 +366,33 @@ var model = {
                                             if (temp === undefined) {} else {
                                                 _.pull(pp.polls, temp)
                                             }
+
                                         })
 
                                         _.each(pp.comments, function (pp2) {
+
                                             var temp1 = _.find(pp.comments, function (r) {
-                                                if ((r.comment.user._id.equals(userId))) {
-                                                    pp.flagForKwack = true
-                                                    // console.log("********************************inside if cond")
-                                                } else {
-                                                    // console.log("*************inside else cond")
+                                                if (r.comment) {
+                                                    if (r.comment.user) {
+                                                        if ((r.comment.user._id.equals(userId))) {
+                                                            pp.flagForKwack = true
+                                                            // console.log("********************************inside if cond")
+                                                        } else {
+                                                            // console.log("*************inside else cond")
+                                                        }
+                                                    }
                                                 }
-                                                if (r.comment.user) {
-                                                    if (r.comment.user.status == "Deactive") {
-                                                        return r;
+                                                if (r.comment == null) {
+                                                    return r;
+                                                }
+                                                if (r.comment.user == null) {
+                                                    return r;
+                                                }
+                                                if (r.comment) {
+                                                    if (r.comment.user) {
+                                                        if (r.comment.user.status == "Deactive") {
+                                                            return r;
+                                                        }
                                                     }
                                                 }
 
@@ -377,6 +401,7 @@ var model = {
                                             if (temp1 === undefined) {} else {
                                                 _.pull(pp.comments, temp1)
                                             }
+
                                         })
                                     })
                                     callback(null, found);
@@ -469,6 +494,7 @@ var model = {
             trending: "YES"
         }).deepPopulate('polls.poll.user comments.comment.user').exec(function (err, found) {
             if (err) {
+                console.log("ERRRRRRRRRRRR", err)
                 callback(err, null);
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
@@ -477,16 +503,26 @@ var model = {
                 // console.log("********************************", found)
                 _.each(found, function (pp) {
                     _.each(pp.polls, function (pp1) {
+
                         var temp = _.find(pp.polls, function (o) {
-                            if ((o.poll.user._id.equals(userId))) {
-                                pp.flagForPoll = true
-                                // console.log("********************************inside if cond")
-                            } else {
-                                // console.log("*************inside else cond")
+                            if (o.poll) {
+                                if (o.poll.user) {
+                                    if ((o.poll.user._id.equals(userId))) {
+                                        pp.flagForPoll = true
+                                    } else {}
+                                }
                             }
-                            if (o.poll.user) {
-                                if (o.poll.user.status == "Deactive") {
-                                    return o;
+                            if (o.poll == null) {
+                                return o;
+                            }
+                            if (o.poll.user == null) {
+                                return o;
+                            }
+                            if (o.poll) {
+                                if (o.poll.user) {
+                                    if (o.poll.user.status == "Deactive") {
+                                        return o;
+                                    }
                                 }
                             }
 
@@ -495,20 +531,33 @@ var model = {
                         if (temp === undefined) {} else {
                             _.pull(pp.polls, temp)
                         }
+
                     })
 
                     _.each(pp.comments, function (pp2) {
 
                         var temp1 = _.find(pp.comments, function (r) {
-                            if ((r.comment.user._id.equals(userId))) {
-                                pp.flagForKwack = true
-                                // console.log("********************************inside if cond")
-                            } else {
-                                // console.log("*************inside else cond")
+                            if (r.comment) {
+                                if (r.comment.user) {
+                                    if ((r.comment.user._id.equals(userId))) {
+                                        pp.flagForKwack = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
+                                }
                             }
-                            if (r.comment.user) {
-                                if (r.comment.user.status == "Deactive") {
-                                    return r;
+                            if (r.comment == null) {
+                                return r;
+                            }
+                            if (r.comment.user == null) {
+                                return r;
+                            }
+                            if (r.comment) {
+                                if (r.comment.user) {
+                                    if (r.comment.user.status == "Deactive") {
+                                        return r;
+                                    }
                                 }
                             }
 
@@ -517,6 +566,7 @@ var model = {
                         if (temp1 === undefined) {} else {
                             _.pull(pp.comments, temp1)
                         }
+
                     })
                 })
                 callback(null, found);
@@ -532,8 +582,8 @@ var model = {
      */
     getAllNews1: function (data, userId, callback) {
         console.log("inside get getAllNews1", data.page)
-        if(data.page==1){
-            data.page=2
+        if (data.page == 1) {
+            data.page = 2
         }
         if (data.count) {
             var maxCount = data.count;
@@ -567,7 +617,7 @@ var model = {
             .page(options,
                 function (err, found) {
                     if (err) {
-                        // console.log("ERRRRRRRRRRRR", err)
+                        console.log("ERRRRRRRRRRRR", err)
                         callback(err, null);
                     } else if (found) {
                         _.each(found.results, function (pp) {
@@ -586,18 +636,26 @@ var model = {
                                 }
                             })
                             _.each(pp.polls, function (pp1) {
-                                // console.log("***************inside polls", pp1)
-                                var temp = _.find(pp.polls, function (o) {
 
-                                    if ((o.poll.user._id.equals(userId))) {
-                                        pp.flagForPoll = true
-                                        // console.log("********************************inside if cond")
-                                    } else {
-                                        // console.log("*************inside else cond")
+                                var temp = _.find(pp.polls, function (o) {
+                                    if (o.poll) {
+                                        if (o.poll.user) {
+                                            if ((o.poll.user._id.equals(userId))) {
+                                                pp.flagForPoll = true
+                                            } else {}
+                                        }
                                     }
-                                    if (o.poll.user) {
-                                        if (o.poll.user.status == "Deactive") {
-                                            return o;
+                                    if (o.poll == null) {
+                                        return o;
+                                    }
+                                    if (o.poll.user == null) {
+                                        return o;
+                                    }
+                                    if (o.poll) {
+                                        if (o.poll.user) {
+                                            if (o.poll.user.status == "Deactive") {
+                                                return o;
+                                            }
                                         }
                                     }
 
@@ -605,25 +663,36 @@ var model = {
                                 if (temp === undefined) {} else {
                                     _.pull(pp.polls, temp)
                                 }
-                                //     if(o.poll.user)
-                                //    { 
 
-                                // }
+
 
 
                             })
 
                             _.each(pp.comments, function (pp2) {
+
                                 var temp1 = _.find(pp.comments, function (r) {
-                                    if ((r.comment.user._id.equals(userId))) {
-                                        pp.flagForKwack = true
-                                        // console.log("********************************inside if cond")
-                                    } else {
-                                        // console.log("*************inside else cond")
+                                    if (r.comment) {
+                                        if (r.comment.user) {
+                                            if ((r.comment.user._id.equals(userId))) {
+                                                pp.flagForKwack = true
+                                                // console.log("********************************inside if cond")
+                                            } else {
+                                                // console.log("*************inside else cond")
+                                            }
+                                        }
                                     }
-                                    if (r.comment.user) {
-                                        if (r.comment.user.status == "Deactive") {
-                                            return r;
+                                    if (r.comment == null) {
+                                        return r;
+                                    }
+                                    if (r.comment.user == null) {
+                                        return r;
+                                    }
+                                    if (r.comment) {
+                                        if (r.comment.user) {
+                                            if (r.comment.user.status == "Deactive") {
+                                                return r;
+                                            }
                                         }
                                     }
 
@@ -631,10 +700,7 @@ var model = {
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
                                 }
-                                //         if(o.poll.user)
-                                //    { 
 
-                                // }
 
                             })
 
@@ -691,55 +757,89 @@ var model = {
             .page(options,
                 function (err, found) {
                     if (err) {
+                        console.log("EEEEEERRRRRRRRRR", err)
                         callback(err, null);
                     } else if (found) {
                         _.each(found.results, function (pp) {
                             _.each(pp.realTotalCount, function (pp3) {
-                                var temp = _.find(pp.realTotalCount, function (o) {
-                                    if (o.readcount.user.status == "Deactive") {
-                                        return o;
-                                    }
+                                if (pp3.readcount) {
+                                    var temp = _.find(pp.realTotalCount, function (o) {
+                                        if (o.readcount.user) {
+                                            if (o.readcount.user.status == "Deactive") {
+                                                return o;
+                                            }
+                                        }
 
-                                });
-                                if (temp === undefined) {} else {
-                                    _.pull(pp.realTotalCount, temp)
+                                    });
+                                    if (temp === undefined) {} else {
+                                        _.pull(pp.realTotalCount, temp)
+                                    }
                                 }
                             })
                             _.each(pp.polls, function (pp1) {
-                                var temp = _.find(pp.polls, function (o) {
-                                    if ((o.poll.user._id.equals(userId))) {
-                                        pp.flagForPoll = true
-                                        // console.log("********************************inside if cond")
-                                    } else {
-                                        // console.log("*************inside else cond")
-                                    }
-                                    if (o.poll.user.status == "Deactive") {
+                               
+                                    var temp = _.find(pp.polls, function (o) {
+                                        if(o.poll)
+                                     {   if (o.poll.user) {
+                                            if ((o.poll.user._id.equals(userId))) {
+                                                pp.flagForPoll = true
+                                            } else {
+                                            }
+                                        }}
+                                            if (o.poll == null) {
                                         return o;
                                     }
+                                    if (o.poll.user == null) {
+                                        return o;
+                                    }
+                                        if(o.poll)
+                                      {  if (o.poll.user) {
+                                            if (o.poll.user.status == "Deactive") {
+                                                return o;
+                                            }
+                                        }}
 
-                                });
-                                if (temp === undefined) {} else {
-                                    _.pull(pp.polls, temp)
-                                }
+                                    });
+                                    if (temp === undefined) {} else {
+                                        _.pull(pp.polls, temp)
+                                    }
+                                
 
                             })
 
                             _.each(pp.comments, function (pp2) {
+
                                 var temp1 = _.find(pp.comments, function (r) {
-                                    if ((r.comment.user._id.equals(userId))) {
-                                        pp.flagForKwack = true
-                                        // console.log("********************************inside if cond")
-                                    } else {
-                                        // console.log("*************inside else cond")
+                                    if (r.comment) {
+                                        if (r.comment.user) {
+                                            if ((r.comment.user._id.equals(userId))) {
+                                                pp.flagForKwack = true
+                                                // console.log("********************************inside if cond")
+                                            } else {
+                                                // console.log("*************inside else cond")
+                                            }
+                                        }
                                     }
-                                    if (r.comment.user.status == "Deactive") {
+                                    if (r.comment == null) {
                                         return r;
                                     }
+                                    if (r.comment.user == null) {
+                                        return r;
+                                    }
+                                    if (r.comment) {
+                                        if (r.comment.user) {
+                                            if (r.comment.user.status == "Deactive") {
+                                                return r;
+                                            }
+                                        }
+                                    }
+
 
                                 });
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
                                 }
+
 
                             })
                         })
@@ -792,22 +892,33 @@ var model = {
             .page(options,
                 function (err, found) {
                     if (err) {
+                        console.log("ERRRRRR", err)
                         callback(err, null);
                     } else if (found) {
                         console.log("FOund****", found)
                         _.each(found.results, function (pp) {
-                            // console.log("#######################################", pp)
                             _.each(pp.polls, function (pp1) {
-                                // console.log("Inside api%%%%%%%%%%%%%% Polls")
+
                                 var temp = _.find(pp.polls, function (o) {
-                                    if ((o.poll.user._id.equals(userId))) {
-                                        pp.flagForPoll = true
-                                        // console.log("********************************inside if cond")
-                                    } else {
-                                        // console.log("*************inside else cond")
+                                    if (o.poll) {
+                                        if (o.poll.user) {
+                                            if ((o.poll.user._id.equals(userId))) {
+                                                pp.flagForPoll = true
+                                            } else {}
+                                        }
                                     }
-                                    if (o.poll.user.status == "Deactive") {
+                                    if (o.poll == null) {
                                         return o;
+                                    }
+                                    if (o.poll.user == null) {
+                                        return o;
+                                    }
+                                    if (o.poll) {
+                                        if (o.poll.user) {
+                                            if (o.poll.user.status == "Deactive") {
+                                                return o;
+                                            }
+                                        }
                                     }
 
                                 });
@@ -815,24 +926,41 @@ var model = {
                                     _.pull(pp.polls, temp)
                                 }
 
+
                             })
 
                             _.each(pp.comments, function (pp2) {
+
                                 var temp1 = _.find(pp.comments, function (r) {
-                                    if ((r.comment.user._id.equals(userId))) {
-                                        pp.flagForKwack = true
-                                        // console.log("********************************inside if cond")
-                                    } else {
-                                        // console.log("*************inside else cond")
+                                    if (r.comment) {
+                                        if (r.comment.user) {
+                                            if ((r.comment.user._id.equals(userId))) {
+                                                pp.flagForKwack = true
+                                                // console.log("********************************inside if cond")
+                                            } else {
+                                                // console.log("*************inside else cond")
+                                            }
+                                        }
                                     }
-                                    if (r.comment.user.status == "Deactive") {
+                                    if (r.comment == null) {
                                         return r;
+                                    }
+                                    if (r.comment.user == null) {
+                                        return r;
+                                    }
+                                    if (r.comment) {
+                                        if (r.comment.user) {
+                                            if (r.comment.user.status == "Deactive") {
+                                                return r;
+                                            }
+                                        }
                                     }
 
                                 });
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
                                 }
+
 
                             })
                         })
@@ -892,26 +1020,34 @@ var model = {
                     } else if (found) {
                         _.each(found.results, function (pp) {
                             _.each(pp.polls, function (pp1) {
-                                var temp = _.find(pp.polls, function (o) {
-                                    if (o.poll.user.status == "Deactive") {
-                                        return o;
-                                    }
+                                if (pp1.poll) {
+                                    var temp = _.find(pp.polls, function (o) {
+                                        if (o.poll.user) {
+                                            if (o.poll.user.status == "Deactive") {
+                                                return o;
+                                            }
+                                        }
 
-                                });
-                                if (temp === undefined) {} else {
-                                    _.pull(pp.polls, temp)
+                                    });
+                                    if (temp === undefined) {} else {
+                                        _.pull(pp.polls, temp)
+                                    }
                                 }
                             })
 
                             _.each(pp.comments, function (pp2) {
-                                var temp1 = _.find(pp.comments, function (r) {
-                                    if (r.comment.user.status == "Deactive") {
-                                        return r;
-                                    }
+                                if (pp2.comment) {
+                                    var temp1 = _.find(pp.comments, function (r) {
+                                        if (r.comment.user) {
+                                            if (r.comment.user.status == "Deactive") {
+                                                return r;
+                                            }
+                                        }
 
-                                });
-                                if (temp1 === undefined) {} else {
-                                    _.pull(pp.comments, temp1)
+                                    });
+                                    if (temp1 === undefined) {} else {
+                                        _.pull(pp.comments, temp1)
+                                    }
                                 }
                             })
                         })
@@ -967,18 +1103,29 @@ var model = {
                     } else if (found) {
                         _.each(found.results, function (pp) {
                             _.each(pp.polls, function (pp1) {
+
                                 var temp = _.find(pp.polls, function (o) {
-                                    // 
-                                    // console.log("**************",pp1)
-                                    if ((o.poll.user._id.equals(userId))) {
-                                        pp.flagForPoll = true
-                                        // console.log("********************************inside if cond")
-                                    } else {
-                                        // console.log("*************inside else cond")
+                                    if (o.poll) {
+                                        if (o.poll.user) {
+                                            if ((o.poll.user._id.equals(userId))) {
+                                                pp.flagForPoll = true
+                                                // console.log("********************************inside if cond")
+                                            } else {
+                                                // console.log("*************inside else cond")
+                                            }
+                                        }
                                     }
-                                    if (o.poll.user) {
-                                        if (o.poll.user.status == "Deactive") {
-                                            return o;
+                                    if (o.poll == null) {
+                                        return o;
+                                    }
+                                    if (o.poll.user == null) {
+                                        return o;
+                                    }
+                                    if (o.poll) {
+                                        if (o.poll.user) {
+                                            if (o.poll.user.status == "Deactive") {
+                                                return o;
+                                            }
                                         }
                                     }
 
@@ -988,19 +1135,36 @@ var model = {
                                     _.pull(pp.polls, temp)
                                 }
 
+
                             })
 
                             _.each(pp.comments, function (pp2) {
+
                                 var temp1 = _.find(pp.comments, function (r) {
-                                    if ((r.comment.user._id.equals(userId))) {
-                                        pp.flagForKwack = true
-                                        // console.log("********************************inside if cond")
-                                    } else {
-                                        // console.log("*************inside else cond")
+                                    if (r.comment) {
+                                        if (r.comment.user) {
+                                            if ((r.comment.user._id.equals(userId))) {
+                                                pp.flagForKwack = true
+                                                // console.log("********************************inside if cond")
+                                            } else {
+                                                // console.log("*************inside else cond")
+                                            }
+                                        }
                                     }
-                                    if (r.comment.user) {
-                                        if (r.comment.user.status == "Deactive") {
-                                            return r;
+
+                                    if (r.comment == null) {
+                                        return r;
+                                    }
+                                    if (r.comment.user == null) {
+                                        return r;
+                                    }
+                                    if (r.comment)
+
+                                    {
+                                        if (r.comment.user) {
+                                            if (r.comment.user.status == "Deactive") {
+                                                return r;
+                                            }
                                         }
                                     }
 
@@ -1009,6 +1173,7 @@ var model = {
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
                                 }
+
 
                             })
                         })
@@ -1059,55 +1224,78 @@ var model = {
             .page(options,
                 function (err, found) {
                     if (err) {
+                        console.log("ERRRRRRRR", err)
                         callback(err, null);
                     } else if (found) {
                         _.each(found.results, function (pp) {
                             _.each(pp.polls, function (pp1) {
+
                                 var temp = _.find(pp.polls, function (o) {
-                                    if ((o.poll.user._id.equals(userId))) {
-                                        pp.flagForPoll = true
-                                        // console.log("********************************inside if cond")
-                                    } else {
-                                        // console.log("*************inside else cond")
+                                    if (o.poll) {
+                                        if (o.poll.user) {
+                                            if ((o.poll.user._id.equals(userId))) {
+                                                pp.flagForPoll = true
+                                                // console.log("********************************inside if cond")
+                                            } else {
+                                                // console.log("*************inside else cond")
+                                            }
+                                        }
                                     }
-                                    if (o.poll.user.status == "Deactive") {
+                                    if (o.poll == null) {
                                         return o;
+                                    }
+                                    if (o.poll.user == null) {
+                                        return o;
+                                    }
+                                    if (o.poll) {
+                                        if (o.poll.user) {
+                                            if (o.poll.user.status == "Deactive") {
+                                                return o;
+                                            }
+                                        }
                                     }
 
                                 });
                                 if (temp === undefined) {} else {
                                     _.pull(pp.polls, temp)
                                 }
-                                // if ((pp1.poll.user._id.equals(userId))) {
-                                //     pp.flagForPoll = true
-                                //     console.log("********************************inside if cond")
-                                // } else {
-                                //     console.log("*************inside else cond")
-                                // }
+
+
                             })
 
                             _.each(pp.comments, function (pp2) {
+
                                 var temp1 = _.find(pp.comments, function (r) {
-                                    if ((r.comment.user._id.equals(userId))) {
-                                        pp.flagForKwack = true
-                                        // console.log("********************************inside if cond")
-                                    } else {
-                                        // console.log("*************inside else cond")
+                                    if (r.comment) {
+                                        if (r.comment.user) {
+                                            if ((r.comment.user._id.equals(userId))) {
+                                                pp.flagForKwack = true
+                                                // console.log("********************************inside if cond")
+                                            } else {
+                                                // console.log("*************inside else cond")
+                                            }
+                                        }
                                     }
-                                    if (r.comment.user.status == "Deactive") {
+                                    if (r.comment == null) {
                                         return r;
+                                    }
+                                    if (r.comment.user == null) {
+                                        return r;
+                                    }
+                                    if (r.comment) {
+                                        if (r.comment.user) {
+                                            if (r.comment.user.status == "Deactive") {
+                                                return r;
+                                            }
+                                        }
                                     }
 
                                 });
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
                                 }
-                                // if ((pp2.comment.user._id.equals(userId))) {
-                                //     pp.flagForKwack = true
-                                //     console.log("********************************inside if cond")
-                                // } else {
-                                //     console.log("*************inside else cond")
-                                // }
+
+
                             })
                         })
                         callback(null, found);
@@ -1136,56 +1324,80 @@ var model = {
                 _.each(found.polls, function (pp1) {
 
                     var temp = _.find(found.polls, function (o) {
-                        _.each(found.comments, function (pp2) {
-                            _.each(pp2.comment.likes, function (like) {
-                                // console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%", like.userId._id)
-                                if ((like.userId._id.equals(userId))) {
-                                    // console.log("Inide if cond")
-                                    pp2.comment.flagForLike = true
+
+                        if (o.poll) {
+                            if (o.poll.user) {
+                                if ((o.poll.user._id.equals(userId))) {
+                                    found.flagForPoll = true
+                                    // console.log("********************************inside if cond")
+                                } else {
+                                    // console.log("*************inside else cond")
+                                }
+                            }
+                            if (o.poll == null) {
+                                return o;
+                            }
+                            if (o.poll.user == null) {
+                                return o;
+                            }
+                            if (o.poll) {
+                                if (o.poll.user) {
+                                    if (o.poll.user.status == "Deactive") {
+                                        return o;
+                                    }
+                                }
+                            }
+                        }
+
+
+
+                        if (temp === undefined) {} else {
+                            _.pull(found.polls, temp)
+                        }
+                    })
+                })
+
+                _.each(found.comments, function (pp2) {
+
+
+                    var temp1 = _.find(found.comments, function (r) {
+                        if (r.comment) {
+                            _.each(r.comment.likes, function (like) {
+
+                                if (like.userId) {
+                                    if ((like.userId._id.equals(userId))) {
+                                        r.comment.flagForLike = true
+                                    }
                                 }
 
+
                             })
-                            _.each(pp2.comment.repliesTo, function (reply) {
-                                // console.log("&&&&&&&&&&&&&&&&&&&", reply)
+                        }
+                        if (r.comment) {
+                            _.each(r.comment.repliesTo, function (reply) {
                                 _.each(reply.likes, function (like) {
-                                    // console.log("&&&&&&&&&&&&&&&&&&&", like._id)
                                     if ((like._id.equals(userId))) {
-                                        // console.log("Inide if cond")
                                         reply.flagForLikeReply = true
                                     }
 
                                 })
                             })
-                            if ((o.poll.user._id.equals(userId))) {
-                                found.flagForPoll = true
-                                // console.log("********************************inside if cond")
-                            } else {
-                                // console.log("*************inside else cond")
-                            }
-                            if (o.poll.user) {
-                                if (o.poll.user.status == "Deactive") {
-                                    return o;
-                                }
-                            }
-
-
-                        });
-                        if (temp === undefined) {} else {
-                            _.pull(found.polls, temp)
                         }
-                    })
-
-
-
-
-
-                    var temp1 = _.find(found.comments, function (r) {
-                        if ((r.comment.user._id.equals(userId))) {
-                            found.flagForKwack = true
-                            // console.log("********************************inside if cond")
-                        } else {
-                            // console.log("*************inside else cond")
+                        if (r.comment == null) {
+                            return r;
                         }
+                        if (r.comment.user == null) {
+                            return r;
+                        }
+                        if (r.comment.user) {
+                            if ((r.comment.user._id.equals(userId))) {
+                                found.flagForKwack = true
+                            } else {}
+                        }
+
+
+
+
                         if (r.comment.user) {
                             if (r.comment.user.status == "Deactive") {
                                 return r;
@@ -1193,12 +1405,58 @@ var model = {
                         }
 
 
+
                     });
                     if (temp1 === undefined) {} else {
                         _.pull(found.comments, temp1)
                     }
+
+
                 })
-                // })
+
+                _.each(found.comments, function (pp2) {
+                    _.each(pp2.comment.repliesTo, function (reply) {
+                        var temp2 = _.find(pp2.comment.repliesTo, function (re) {
+                            //   console.log("reeeeeeeeeeeeee",re.user.status)
+                            if (re.user == null) {
+                                return re;
+                            }
+                            if (re.user) {
+                                if (re.user.status == "Deactive") {
+                                    return re;
+                                }
+
+                            }
+
+                        });
+                        if (temp2 === undefined) {} else {
+                            _.pull(pp2.comment.repliesTo, temp2)
+                        }
+
+                    })
+
+                    _.each(pp2.comment.likes, function (like) {
+                        var temp3 = _.find(pp2.comment.likes, function (le) {
+                            //   console.log("reeeeeeeeeeeeee",le.userId.status)
+                             if (le.userId == null) {
+                                return le;
+                            }
+                            if (le.userId) {
+                                if (le.userId.status == "Deactive") {
+                                    return le;
+                                }
+
+                            }
+
+                        });
+                        if (temp3 === undefined) {} else {
+                            _.pull(pp2.comment.likes, temp3)
+                        }
+
+                    })
+                })
+
+
                 callback(null, found);
             }
 
@@ -1235,22 +1493,27 @@ var model = {
                         } else if (_.isEmpty(found)) {
                             console.log("inside is empaty condition")
                             _.each(body.articles, function (value, index) {
-                                var dataToSave = {}
-                                dataToSave.name = value.title,
-                                    dataToSave.description = value.description
-                                dataToSave.url = value.url
-                                dataToSave.imageUrl = value.urlToImage
-                                dataToSave.source = value.source.id
-                                NewsInfo.saveData(dataToSave, function (err, created) {
-                                    if (err) {
-                                        console.log("Error occurred while storing news: ", err);
-                                    } else if (_.isEmpty(created)) {
-                                        console.log("no data created for article no: ", index);
-                                    } else {
-                                        console.log("article " + index + " saved successfully");
-                                    }
+                                if (value.title == "{{pageTitle}}") {
+                                    console.log("news is not proper")
+                                } else {
+                                    var dataToSave = {}
+                                    dataToSave.name = value.title,
+                                        dataToSave.description = value.description
+                                    dataToSave.url = value.url
+                                    dataToSave.imageUrl = value.urlToImage
+                                    dataToSave.source = value.source.id
+                                    NewsInfo.saveData(dataToSave, function (err, created) {
+                                        if (err) {
+                                            console.log("Error occurred while storing news: ", err);
+                                        } else if (_.isEmpty(created)) {
+                                            console.log("no data created for article no: ", index);
+                                        } else {
+                                            console.log("article " + index + " saved successfully");
+                                        }
 
-                                });
+                                    });
+                                }
+
                             });
 
                         } else {
@@ -1265,20 +1528,25 @@ var model = {
                             })
                             _.each(body.articles, function (value, index) {
                                 if (!value.newsFound) {
-                                    var dataToSave = {}
-                                    dataToSave.name = value.title,
-                                        dataToSave.description = value.description
-                                    dataToSave.url = value.url
-                                    dataToSave.imageUrl = value.urlToImage
-                                    NewsInfo.saveData(dataToSave, function (err, created) {
-                                        if (err) {
-                                            console.log("Error occurred while storing news: ", err);
-                                        } else if (_.isEmpty(created)) {
-                                            console.log("no data created for article no: ", index);
-                                        } else {
-                                            console.log("article " + index + " saved successfully");
-                                        }
-                                    });
+                                    if (value.title == "{{pageTitle}}") {
+                                        console.log("news is not ptroper")
+                                    } else {
+                                        var dataToSave = {}
+                                        dataToSave.name = value.title,
+                                            dataToSave.description = value.description
+                                        dataToSave.url = value.url
+                                        dataToSave.imageUrl = value.urlToImage
+                                        NewsInfo.saveData(dataToSave, function (err, created) {
+                                            if (err) {
+                                                console.log("Error occurred while storing news: ", err);
+                                            } else if (_.isEmpty(created)) {
+                                                console.log("no data created for article no: ", index);
+                                            } else {
+                                                console.log("article " + index + " saved successfully");
+                                            }
+                                        });
+                                    }
+
                                 }
                             });
                         }
