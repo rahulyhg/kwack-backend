@@ -112,7 +112,7 @@ var controller = {
      */
     saveUser: function (req, res) {
         if (req.body) {
-            User.saveUser(req.body.name, req.body.email,req.body.userName,req.body.mobile,req.body.password, res.callback);
+            User.saveUser(req.body.name, req.body.email,req.body.userName,req.body.mobile,req.body.password,req.body._id, res.callback);
         } else {
             res.json({
                 value: false,

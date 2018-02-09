@@ -160,10 +160,20 @@ var model = {
         }).exec(function (err, found) {
             if (err) {
                 callback(err, null);
-            } else if (_.isEmpty(created)) {
+            } else if (_.isEmpty(found)) {
                 callback(null, "noDataound");
             } else {
-                callback(null, created)
+                  User.find({
+                      mobile: mobile
+                }).exec(function (err, created) {
+                    if (err) {
+                        callback(err, null);
+                    } else if (_.isEmpty(created)) {
+                        callback("noDataound", null);
+                    } else {
+                        callback(null, created);
+                    }
+                });
             }
 
         })
@@ -183,7 +193,7 @@ var model = {
         var emailOtp = (Math.random() + "").substring(2, 6);
         var foundData = {};
         User.findOneAndUpdate({
-            _id: userId,
+            // _id: userId,
             mobile: mobile
         }, {
             otp: emailOtp
@@ -208,7 +218,7 @@ var model = {
      */
     verifyOTPForResetPass: function (otp, callback) {
         console.log("*********************", otp)
-        User.find({
+        User.findOne({
             otp: otp
         }).exec(function (err, found) {
             if (err) {
@@ -299,16 +309,8 @@ var model = {
         });
     },
 
-    /**
-     * this function for save user
-     * @param {name} input name
-     * * @param {email} input email
-     *   * * @param {userName} input userName
-     * *   * * @param {mobile} input mobile
-     * @param {callback} callback function with err and response
-     */
 
-    saveUser: function (name, email, userName, mobile, password, callback) {
+    saveUser: function (name, email, userName, mobile, password, _id, callback) {
         console.log("***1111", name, email, userName, mobile, password)
         var dataToSave = {}
         dataToSave.name = name
@@ -316,73 +318,96 @@ var model = {
         dataToSave.userName = userName
         dataToSave.mobile = mobile
         dataToSave.password = password
+        if (_id) {
+            dataToSave._id = _id;
+        }
+
         async.waterfall([
             function (callback1) {
-                console.log("inside 1st waterfall model")
-                User.findOne({
+                User.find({
                     email: email,
-                    state: ''
+                    _id: _id ? {
+                        $ne: ObjectId(_id)
+                    } : {
+                        $exists: true
+                    }
                 }).exec(function (err, found) {
-
                     if (err) {
+                        console.log("*******err", err)
                         callback1(err, null);
                     } else if (_.isEmpty(found)) {
-                        callback1(null, found);
+                        console.log("1111111111111111111111", dataToSave)
+                       callback1(null, dataToSave);
+                        // User.saveData(dataToSave, function (err, created) {
+                        //     if (err) {
+                        //         callback1(err, null);
+                        //     } else if (_.isEmpty(created)) {
+                        //         callback1(null, "noDataound");
+                        //     } else {
+                        //         if (!_id) {
+                        //             callback1(null, created);
+                        //         } else {
+                        //             callback1(null, dataToSave);
+                        //         }
+                        //     }
+                        // });
                     } else {
-                        console,
                         callback1("emailExist", null);
 
                     }
 
                 });
             },
-
-            function (data, callback3) {
-
-                User.findOne({
-                    email: email,
+            function (datain, callback2) {
+                User.find({
+                    mobile: mobile.toString(),
+                    _id: _id ? {
+                        $ne: ObjectId(_id)
+                    } : {
+                        $exists: true
+                    }
                 }).exec(function (err, found) {
-
                     if (err) {
-                        callback3(err, null);
+                        console.log("*******err", err)
+                        callback2(err, null);
                     } else if (_.isEmpty(found)) {
+                        console.log("222222222222222222222222", dataToSave)
+                       callback2(null, dataToSave);
+                        // User.saveData(dataToSave, function (err, created) {
+                        //     if (err) {
+                        //         callback2(err, null);
+                        //     } else if (_.isEmpty(created)) {
+                        //         callback2(null, "noDataound");
+                        //     } else {
+                        //         if (!_id) {
+                        //             callback2(null, created);
+                        //         } else {
+                        //             callback2(null, dataToSave);
+                        //         }
+                        //     }
+                        // });
+                    } else {
+                        callback2("mobileExist", null);
 
-                        User.saveData(dataToSave, function (err, created) {
+                    }
+
+                });
+            },
+            function (datain, callback3) {
+             console.log("Inside 3rd waterfall model33333333333333333333333333")
+             User.saveData(dataToSave, function (err, created) {
                             if (err) {
                                 callback3(err, null);
                             } else if (_.isEmpty(created)) {
                                 callback3(null, "noDataound");
                             } else {
-                                callback3(null, created);
+                                if (!_id) {
+                                    callback3(null, created);
+                                } else {
+                                    callback3(null, dataToSave);
+                                }
                             }
                         });
-                    } else if (found) {
-                        User.findOneAndUpdate({
-                            email: email
-                        }, {
-                            'name': name,
-                            'email': email,
-                            'userName': userName,
-                            'mobile': mobile,
-                            'password': password
-
-                        }, {
-                            new: true
-                        }).exec(function (err, update) {
-                            if (err) {
-
-                                callback3(err, null);
-                            } else if (_.isEmpty(update)) {
-                                callback3("noDataound", null);
-                            } else {
-                                callback3(null, update);
-                            }
-
-                        });
-                    }
-
-                });
-
             },
         ], function (err, data) {
             console.log("final data for callback is", data)
@@ -394,7 +419,115 @@ var model = {
         });
     },
 
+    /**
+     * this function for save user
+     * @param {name} input name
+     * * @param {email} input email
+     *   * * @param {userName} input userName
+     * *   * * @param {mobile} input mobile
+     * @param {callback} callback function with err and response
+     */
+    //  saveUser: function (name, email, userName, mobile, password, callback) {
+    //         console.log("***1111", name, email, userName, mobile, password)
+    //         var dataToSave = {}
+    //         dataToSave.name = name
+    //         dataToSave.email = email
+    //         dataToSave.userName = userName
+    //         dataToSave.mobile = mobile
+    //         dataToSave.password = password
+    //         async.waterfall([
+    //             function (callback1) {
+    //                 console.log("inside 1st waterfall model")
+    //                 User.findOne({
+    //                     email: email
+    //                 }).exec(function (err, found) {
 
+    //                     if (err) {
+    //                         callback1(err, null);
+    //                     } else if (_.isEmpty(found)) {
+    //                         callback1(null, found);
+    //                     } else {
+
+    //                         callback1("emailExist", null);
+
+    //                     }
+
+    //                 });
+    //             },
+    //             function (datain, callback2) {
+    //                 console.log("inside 2nd waterfall model")
+    //                 User.findOne({
+    //                     mobile: dataToSave.mobile
+    //                 }).exec(function (err, found) {
+
+    //                     if (err) {
+    //                         callback2(err, null);
+    //                     } else if (_.isEmpty(found)) {
+    //                         callback2(null, found);
+    //                     } else {
+    //                         callback2("mobileExist", null);
+
+    //                     }
+
+    //                 });
+    //             },
+    //             function (data, callback3) {
+    //                 console.log("***********inside 3rd waterfall********************")
+    //                 User.findOne({
+    //                     email:  dataToSave.email,
+    //                     state:''
+    //                 }).exec(function (err, found) {
+
+    //                     if (err) {
+    //                         callback3(err, null);
+    //                     } else if (_.isEmpty(found)) {
+
+    //                         User.saveData(dataToSave, function (err, created) {
+    //                             if (err) {
+    //                                 callback3(err, null);
+    //                             } else if (_.isEmpty(created)) {
+    //                                 callback3(null, "noDataound");
+    //                             } else {
+    //                                 callback3(null, created);
+    //                             }
+    //                         });
+    //                     } else if (found) {
+    //                         User.findOneAndUpdate({
+    //                             email: email
+    //                         }, {
+    //                             'name': name,
+    //                             'email': email,
+    //                             'userName': userName,
+    //                             'mobile': mobile,
+    //                             'password': password
+
+    //                         }, {
+    //                             new: true
+    //                         }).exec(function (err, update) {
+    //                             if (err) {
+
+    //                                 callback3(err, null);
+    //                             } else if (_.isEmpty(update)) {
+    //                                 callback3("noDataound", null);
+    //                             } else {
+    //                                 callback3(null, update);
+    //                             }
+
+    //                         });
+    //                     }
+
+    //                 });
+
+    //             },
+    //         ], function (err, data) {
+    //             console.log("final data for callback is", data)
+    //             if (err || _.isEmpty(data)) {
+    //                 callback(err, [])
+    //             } else {
+    //                 callback(null, data)
+    //             }
+    //         });
+    //     },
 
 
 
