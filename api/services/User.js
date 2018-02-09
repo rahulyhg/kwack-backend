@@ -26,6 +26,9 @@ var schema = new Schema({
     state: {
         type: String
     },
+     city: {
+        type: String
+    },
     location: {
         type: String,
     },
