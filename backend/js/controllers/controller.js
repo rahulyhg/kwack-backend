@@ -84,6 +84,29 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
     })
 
+    .controller('viewallnewsCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, $uibModal, toastr) {
+        //Used to name the .html file
+        $scope.template = TemplateService.changecontent("viewallnews");
+        $scope.menutitle = NavigationService.makeactive("viewallnews");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+        $scope.changeInput = function () {
+            if ($scope.formData.input != '') {
+                $scope.formData.input = '';
+            } else {
+                $scope.formData.input = $scope.formData.input;
+            }
+        };
+       
+
+
+    })
+
+
+
+
+
+
     .controller('UserViewCountrCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, $uibModal, toastr) {
         //Used to name the .html file
         $scope.template = TemplateService.changecontent("userViewCount");
@@ -242,10 +265,10 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                     $scope.formdata = data.data
                 }
             });
-        NavigationService.apiCall("Interests/search", {},
+        NavigationService.apiCall("Interests/getAllInterests", {},
             function (data) {
                 if (data.value === true) {
-                    $scope.Interests = data.data.results
+                    $scope.Interests = data.data
 
                 }
             });
