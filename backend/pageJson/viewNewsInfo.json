@@ -8,6 +8,11 @@
         "name": "title",
         "isSort": "",
         "tableRef": "name"
+    },
+     {
+        "name": "Interest",
+        "isSort": "",
+        "tableRef": "interest"
     }],
     "action": [{
         "name": "edit",
