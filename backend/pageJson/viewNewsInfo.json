@@ -43,7 +43,7 @@
         "action": "createNewsInfo"
     }],
     "apiCall": {
-        "url": "NewsInfo/search",
+        "url": "NewsInfo/search1",
         "params": "_id"
     }
 }

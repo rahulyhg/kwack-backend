@@ -1,6 +1,21 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
 
+       search1: function (req, res) {
+    console.log("inside newsinfo ctrl")
+        if (req.body) {
+            console.log("inside if")
+            NewsInfo.search1(req.body, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+
     //  demo: function (req, res) {
     //         if (req.body) {
     //             NewsInfo.demo(req.body.startDate,req.body.endDate,req.body.interest,req.body.kwack,req.body.poll,res.callback);
