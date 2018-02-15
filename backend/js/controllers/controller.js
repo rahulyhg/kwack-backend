@@ -97,7 +97,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 $scope.formData.input = $scope.formData.input;
             }
         };
-       
+
 
 
     })
@@ -273,19 +273,27 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 }
             });
         $scope.saveProduct = function (formdata) {
-            formdata._id = $scope.data._id
-            NavigationService.apiCall("NewsInfo/save",
-                formdata,
-                function (data) {
-                    if (data.value === true) {
-                        $scope.formdata = data.data
-                    }
+            if (formdata.pollQuestionOption) {
+                var array = _.map(formdata.pollQuestionOption.split(','), function (n) {
+                    return _.trim(n);
                 });
+                formdata.pollQuestionOption = [];
+                formdata.pollQuestionOption = array;
+            }
+            if ($scope.data) {
+                formdata._id = $scope.data._id
+            }
+            NavigationService.apiCall("NewsInfo/save", formdata, function (data) {
+                if (data.value === true) {
+                    $scope.formdata = data.data
+                }
+            });
             $state.go("page", {
                 id: "viewNewsInfo"
             });
 
         };
+
     })
     .controller('CommentdetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
         $scope.json = JsonService;

@@ -30,55 +30,71 @@
               <option value="{{intr.name}}" ng-repeat="intr in Interests">{{intr.name}}</option>
             </select>
                 </div>
+
+                <div class="form-group">
+                    <label>Is Poll</label>
+
+                    <select class="form-control" ng-model="formdata.IsPoll">
+                         <option value="YES">YES</option>
+                         <option value="NO">NO</option>
+                   </select>
+                </div>
+
                 <div class="form-group" fields>
                     <label>Poll Or Qwack Question</label>
                     <input type="text" name="name" placeholder="Question" ng-model="formdata.pollQuestion" class="form-control">
 
                 </div>
                 <div class="form-group" fields>
-                    <label>url</label>
-                    <input type="text" name="name" placeholder="url" ng-model="formdata.url" class="form-control">
+                    <label>options</label>
+                    <input type="text" name="name" ng-model="formdata.pollQuestionOption" class="form-control">
 
                 </div>
-                <div class="form-group" fields>
-                    <label>Image url</label>
-                    <input type="text" name="name" placeholder="imageUrl" ng-model="formdata.imageUrl" class="form-control">
+            </div>
+            <div class="form-group" fields>
+                <label>url</label>
+                <input type="text" name="name" placeholder="url" ng-model="formdata.url" class="form-control">
 
-                </div>
-                <div class="form-group" fields>
-                    <label>Source</label>
-                    <input type="text" name="name" placeholder="source" ng-model="formdata.source" class="form-control">
+            </div>
+            <div class="form-group" fields>
+                <label>Image url</label>
+                <input type="text" name="name" placeholder="imageUrl" ng-model="formdata.imageUrl" class="form-control">
 
-                </div>
-                <div class="form-group" fields>
-                    <label>Source Id</label>
-                    <input type="text" name="name" placeholder="sourceId" ng-model="formdata.sourceId" class="form-control">
+            </div>
+            <div class="form-group" fields>
+                <label>Source</label>
+                <input type="text" name="name" placeholder="source" ng-model="formdata.source" class="form-control">
 
-                </div>
+            </div>
+            <div class="form-group" fields>
+                <label>Source Id</label>
+                <input type="text" name="name" placeholder="sourceId" ng-model="formdata.sourceId" class="form-control">
+
+            </div>
 
 
-                <div class="form-group" fields>
-                    <label>Read Total Count</label>
-                    <input type="text" name="name" ng-model="formdata.realTotalCount.length" class="form-control" disabled>
+            <div class="form-group" fields>
+                <label>Read Total Count</label>
+                <input type="text" name="name" ng-model="formdata.realTotalCount.length" class="form-control" disabled>
 
-                </div>
-                 <div class="form-group">
-                    <label>Is Social</label>
+            </div>
+            <div class="form-group">
+                <label>Is Social</label>
 
-                    <select class="form-control" ng-model="formdata.isSocial">
+                <select class="form-control" ng-model="formdata.isSocial">
               <option value="YES">YES</option>
               <option value="NO">NO</option>
             </select>
-                </div>
-                <div class="form-group">
-                    <label>Is Explore</label>
+            </div>
+            <div class="form-group">
+                <label>Is Explore</label>
 
-                    <select class="form-control" ng-model="formdata.isExplore">
+                <select class="form-control" ng-model="formdata.isExplore">
               <option value="YES">YES</option>
               <option value="NO">NO</option>
             </select>
-                </div>
-                <!--<div class="form-group">
+            </div>
+            <!--<div class="form-group">
                     <label>Is Kwack</label>
 
                     <select class="form-control" ng-model="formdata.IsKwack">
@@ -87,33 +103,23 @@
               <option value="NO">NO</option>
             </select>
                 </div>-->
-                <div class="form-group" fields>
-                    <label>Total Kwacks</label>
-                    <input type="text" name="name" ng-model="formdata.comments.length" class="form-control" disabled>
+            <div class="form-group" fields>
+                <label>Total Kwacks</label>
+                <input type="text" name="name" ng-model="formdata.comments.length" class="form-control" disabled>
 
-                </div>
-<!--
-                <div class="form-group">
-                    <label>Is Poll</label>
+            </div>
+            <div class="form-group" fields>
+                <label>Total Poll</label>
+                <input type="text" name="name" ng-model="formdata.polls.length" class="form-control" disabled>
 
-                    <select class="form-control" ng-model="formdata.IsPoll">
+            </div>
+            <div class="form-group">
+                <label>Is Trending</label>
+
+                <select class="form-control" ng-model="formdata.trending">
               <option value="YES">YES</option>
               <option value="NO">NO</option>
             </select>
-                </div>-->
-                <div class="form-group" fields >
-                    <label>Total Poll</label>
-                    <input type="text" name="name" ng-model="formdata.polls.length" class="form-control" disabled>
-
-                </div>
-                <div class="form-group">
-                    <label>Is Trending</label>
-
-                    <select class="form-control" ng-model="formdata.trending">
-              <option value="YES">YES</option>
-              <option value="NO">NO</option>
-            </select>
-                </div>
             </div>
 
 

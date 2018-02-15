@@ -52,6 +52,7 @@ var schema = new Schema({
         type: String,
 
     },
+    pollQuestionOption: [String],
     interest: {
         type: String,
 
@@ -110,7 +111,7 @@ var schema = new Schema({
     },
     IsPoll: {
         type: String,
-        default: "YES",
+        default: "No",
         enum: ['YES', 'NO']
     },
     IsKwack: {
