@@ -111,7 +111,7 @@ var schema = new Schema({
     },
     IsPoll: {
         type: String,
-        default: "No",
+        default: "NO",
         enum: ['YES', 'NO']
     },
     IsKwack: {
