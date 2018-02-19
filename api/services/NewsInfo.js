@@ -119,6 +119,11 @@ var schema = new Schema({
         default: "NO",
         enum: ['YES', 'NO']
     },
+      isDisable: {
+        type: String,
+        default: "NO",
+        enum: ['YES', 'NO']
+    },
 
 });
 
@@ -492,7 +497,8 @@ var model = {
      */
     getTrendingNews: function (userId, callback) {
         NewsInfo.find({
-            trending: "YES"
+            trending: "YES",
+              isDisable:'NO'
         }).deepPopulate('polls.poll.user comments.comment.user').exec(function (err, found) {
             if (err) {
                 console.log("ERRRRRRRRRRRR", err)
@@ -611,7 +617,9 @@ var model = {
             start: (page - 1) * maxRow,
             count: maxRow
         };
-        NewsInfo.find({}).skip(5)
+        NewsInfo.find({
+            isDisable:'NO'
+        }).skip(5)
             .deepPopulate("polls.poll.user comments.comment.user realTotalCount.readcount.user")
             .order(options)
             .keyword(options)
@@ -757,7 +765,9 @@ var model = {
             start: (page - 1) * maxRow,
             count: maxRow
         };
-        NewsInfo.find({}).limit(2)
+        NewsInfo.find({
+              isDisable:'NO'
+        }).limit(2)
             .deepPopulate("polls.poll.user comments.comment.user  realTotalCount.readcount.user")
             .order(options)
             .keyword(options)
@@ -892,7 +902,8 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({
-                interest: data.userInterest
+                interest: data.userInterest,
+                  isDisable:'NO'
             })
             .deepPopulate("comments.comment.user polls.poll.user")
             .order(options)
@@ -1017,7 +1028,8 @@ var model = {
                 interest: data.userInterest,
                 _id: {
                     $ne: newsId
-                }
+                },
+                  isDisable:'NO'
             })
             .deepPopulate("polls.poll comments.comment")
             .order(options)
@@ -1028,75 +1040,7 @@ var model = {
                         console.log("ERRRRRRR", err)
                         callback(err, null);
                     } else if (found) {
-                        //    console.log("FOund****", found)
-                        // _.each(found.results, function (pp) {
-                        //     _.each(pp.polls, function (pp1) {
-
-                        //         var temp = _.find(pp.polls, function (o) {
-                        //             if (o.poll) {
-                        //                 if (o.poll.user) {
-                        //                     if ((o.poll.user._id.equals(userId))) {
-                        //                         pp.flagForPoll = true
-                        //                     } else {}
-                        //                 }
-                        //             }
-                        //             if (o.poll == null) {
-                        //                 return o;
-                        //             }
-                        //             if (o.poll.user == null) {
-                        //                 return o;
-                        //             }
-                        //             if (o.poll) {
-                        //                 if (o.poll.user) {
-                        //                     if (o.poll.user.status == "Deactive") {
-                        //                         return o;
-                        //                     }
-                        //                 }
-                        //             }
-
-                        //         });
-                        //         if (temp === undefined) {} else {
-                        //             _.pull(pp.polls, temp)
-                        //         }
-
-
-                        //     })
-
-                        //     _.each(pp.comments, function (pp2) {
-
-                        //         var temp1 = _.find(pp.comments, function (r) {
-                        //             if (r.comment) {
-                        //                 if (r.comment.user) {
-                        //                     if ((r.comment.user._id.equals(userId))) {
-                        //                         pp.flagForKwack = true
-                        //                         // console.log("********************************inside if cond")
-                        //                     } else {
-                        //                         // console.log("*************inside else cond")
-                        //                     }
-                        //                 }
-                        //             }
-                        //             if (r.comment == null) {
-                        //                 return r;
-                        //             }
-                        //             if (r.comment.user == null) {
-                        //                 return r;
-                        //             }
-                        //             if (r.comment) {
-                        //                 if (r.comment.user) {
-                        //                     if (r.comment.user.status == "Deactive") {
-                        //                         return r;
-                        //                     }
-                        //                 }
-                        //             }
-
-                        //         });
-                        //         if (temp1 === undefined) {} else {
-                        //             _.pull(pp.comments, temp1)
-                        //         }
-
-
-                        //     })
-                        // })
+                       
                         callback(null, found);
                     } else {
                         callback("Invalid data", null);
@@ -1136,7 +1080,8 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({
-                isExplore: "YES"
+                isExplore: "YES",
+                  isDisable:'NO'
             })
             .deepPopulate("polls.poll.user comments.comment.user")
             .order(options)
@@ -1262,7 +1207,8 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({
-                isSocial: "YES"
+                isSocial: "YES",
+                  isDisable:'NO'
             })
             .deepPopulate("polls.poll.user comments.comment.user")
             .order(options)
