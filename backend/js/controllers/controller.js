@@ -273,13 +273,15 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 }
             });
         $scope.saveProduct = function (formdata) {
-            if (formdata.pollQuestionOption) {
+            console.log("formdata.pollQuestionOptionformdata.pollQuestionOption",formdata.pollQuestionOption)
+            if(formdata.IsPoll=='YES')
+         {   if (formdata.pollQuestionOption) {
                 var array = _.map(formdata.pollQuestionOption.split(','), function (n) {
                     return _.trim(n);
                 });
                 formdata.pollQuestionOption = [];
                 formdata.pollQuestionOption = array;
-            }
+            }}
             if ($scope.data) {
                 formdata._id = $scope.data._id
             }
