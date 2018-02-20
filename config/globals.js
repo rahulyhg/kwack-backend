@@ -152,8 +152,8 @@ if (process.env.NODE_ENV && process.env.NODE_ENV === "production") {
 } else {
     global.env = require("./env/development.js");
     cron.schedule('*/10 * * * * *', function () {
-        NewsInfo.storeNews(function(err,data) {
-            console.log(err,data);
-        });
+        // NewsInfo.storeNews(function(err,data) {
+        //     console.log(err,data);
+        // });
     });
 }
