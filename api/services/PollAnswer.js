@@ -102,7 +102,7 @@ var model = {
      */
     addPollAnswer: function (newsId, pollname,userId, callback) {
         console.log("inside api",pollname,newsId,userId)
-        if (pollname == 'YES') {
+        
                 console.log("inside api YES",pollname)
             async.waterfall([
             function (callback1) {
@@ -156,60 +156,7 @@ var model = {
                 callback(null, data)
             }
         });
-        } else if (pollname == 'NO') {
-                 async.waterfall([
-            function (callback1) {
-                var poll = {}
-                poll.user = userId
-                poll.news = newsId
-                poll.pollOptions = pollname
-                PollAnswer.saveData(poll, function (err, created) {
-                    if (err) {
-                        callback1(err, null);
-                    } else if (_.isEmpty(created)) {
-                        callback1(null, "noDataound");
-                    } else {
-                        data1 = {}
-                        data1.newsId = newsId;
-                        data1.pollId = created._id
-                        callback1(null, data1);
-                    }
-                });
-            },
-            function (Ids, callback2) {
-                 NewsInfo.update({
-                    _id: Ids.newsId
-                }, {
-                    $push: {
-                        'polls': {
-                            poll: Ids.pollId
-                        }
-                    }
-                }).exec(function (err, found) {
-                    if (err) {
-                        callback2(err, null);
-                    } else if (_.isEmpty(found)) {
-                        callback2("noDataound", null);
-                    } else {
-                        callback2(null, found);
-                    }
-
-                });
-
-            },
-          
-        ], function (err, data) {
-            console.log("exe final:");
-
-            if (err || _.isEmpty(data)) {
-                console.log("exe final is empty:");
-                callback(err, [])
-            } else {
-                console.log("exe final callback:");
-                callback(null, data)
-            }
-        });
-        }
+        
 
     },
 };
