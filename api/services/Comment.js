@@ -152,12 +152,52 @@ var model = {
      */
 
     addComment: function (userId, newsId, comment, kwack, anonymous, callback) {
+        var arr = ['behenchod', 'madarchod', 'jhatu', 'chutiya', 'lund', 'mc', 'asshole', 'bc', 'chutiye']
+        // var str = comment.search(/demo2/i);
+        // console.log(str, "str********");
+        // _.each(arr, function (arr1) {
+        //     var demo=/demo1/i
+        //     var str = comment.search(demo);
+        //     console.log(str, "str********");
+        // })
+        // temp=comment.toLowerCase()
+        // console.log("%%%%%%%%%%%%%%%%%%%%%%%55",temp)
+        // _.each(arr, function (arr1) {
+        //     var str = comment.match(/arr1/i);
+        //     console.log(str,"str********");
+        //           if(str)
+        //           {
+        //               console.log(str,"str");
+        // // comment=  _.replace(comment, arr1, '#####');
+        //           }
+        //  var res = patt1.ignoreCase;
+        var setvarvalue
+        temp = comment.toLowerCase()
+        console.log("TEMPPPPPPPPPPPPP", temp)
+        async.each(arr, function (arr1, callback) {
+            if (temp.includes(arr1)) {
+                console.log("Inside if cond")
+                setvarvalue = true
+                temp = _.replace(temp, arr1, '#####');
+
+            }
+        }, function (err) {
+            console.log("Err while replacing gali")
+            // callback(null, "err");
+        })
+
+        console.log("setvarvalue", setvarvalue)
+        if (setvarvalue) {
+            temp = temp
+        } else {
+            temp = comment
+        }
         async.waterfall([
             function (callback1) {
                 var comment1 = {}
                 comment1.user = userId
                 comment1.news = newsId
-                comment1.comment = comment
+                comment1.comment = temp
                 comment1.kwack = kwack,
                     comment1.anonymous = anonymous
                 Comment.saveData(comment1, function (err, created) {
@@ -351,17 +391,33 @@ var model = {
      * @param {callback} callback function with err and response
      */
     addReply: function (commentId, reply, user, anonymous, kwack, callback) {
-        console.log("**************************************************************************************")
-        console.log("anonymousanonymous", commentId, reply, user, anonymous)
-        console.log("**************************************************************************************")
-        
+        var arr = ['behenchod', 'madarchod', 'jhatu', 'chutiya', 'lund', 'mc', 'asshole', 'bc', 'chutiye']
+        var setvarvalue
+            temp = reply.toLowerCase()
+        console.log("TEMPPPPPPPPPPPPP", temp)
+        async.each(arr, function (arr1, callback) {
+            if (temp.includes(arr1)) {
+                console.log("Inside if cond")
+                setvarvalue=true
+                temp = _.replace(temp, arr1, '#####');
+
+            }
+        }, function (err) {
+            console.log("Err while replacing gali")
+            // callback(null, "err");
+        })
+        if (setvarvalue) {
+            temp = temp
+        } else {
+            temp = reply
+        }
         Comment.update({
                 _id: commentId,
             }, {
                 $push: {
                     'repliesTo': {
                         user: user,
-                        reply: reply,
+                        reply: temp,
                         anonymous: anonymous,
                         kwack: kwack
                     }
@@ -503,23 +559,23 @@ var model = {
      */
 
 
-    addOrRemoveLikeTOReply: function (comm,replyId,userId, callback) {
+    addOrRemoveLikeTOReply: function (comm, replyId, userId, callback) {
 
         console.log("replyId", userId)
         Comment.find({
             repliesTo: {
                 $elemMatch: {
                     _id: replyId,
-                    likes:userId
+                    likes: userId
                 }
             }
         }).deepPopulate('').exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
-               Comment.addLikeToReply(comm, replyId, userId, callback);
+                Comment.addLikeToReply(comm, replyId, userId, callback);
             } else {
-               Comment.removeLikeToReply (comm, replyId, userId, callback) 
+                Comment.removeLikeToReply(comm, replyId, userId, callback)
 
             }
 

@@ -37,16 +37,6 @@ var schema = new Schema({
     },
 
 
-    pollOptions: [{
-        name: {
-            type: String
-        },
-        percentage: {
-            type: Number,
-            default: 0
-        }
-    }],
-
 
     pollQuestion: {
         type: String,
@@ -98,10 +88,12 @@ var schema = new Schema({
     }],
     isSocial: {
         type: String,
+         default: "NO",
         enum: ['YES', 'NO']
     },
     isExplore: {
         type: String,
+         default: "NO",
         enum: ['YES', 'NO']
     },
     trending: {
