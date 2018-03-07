@@ -152,7 +152,7 @@ var model = {
      */
 
     addComment: function (userId, newsId, comment, kwack, anonymous, callback) {
-        var arr = ['behenchod', 'madarchod', 'jhatu', 'chutiya', 'lund', 'mc', 'asshole', 'bc', 'chutiye']
+        var arr = ['behenchod', 'madarchod', 'jhatu', 'chutiya', 'lund', 'mc', 'asshole', 'bc', 'chutiye', 'bakland', 'bhandava', 'chinaal', 'chinal', 'bhadva', 'bhadve', 'chutia', 'choo-tia', 'chutan', 'haraami', 'harami', 'saale', 'gandu', 'hijda', 'hijdi','hijra', 'hijri', 'bhadvi','kutta','kutti','kuttiya','bahen chod','bahenchod','laude','chod','lavde','jhant','jhaat','maadher chod','raand','raandi','randi','randhwa','randwa','randvi','randhwi','rundi','booblay','bhonsRi','bhonsri', 'chut','bossadi','bossari','chodra','gaand','gand','lavda','lavander','muth', 'muthiya','bable','bhosad','chodela','lundtopi','lundoos','pucchi','puchi','arsehole','arse','bastard','bellend','berk','bint','blimey','gorblimey','blighter','bollocks','testicles','bugger','cack','cobblers','nonsense','cunt','vagina','dickhead','knob','bitch','cock','dick','penis','chutya','fuck','fuck off','fagutt','anal','boobs']
         // var str = comment.search(/demo2/i);
         // console.log(str, "str********");
         // _.each(arr, function (arr1) {
@@ -391,7 +391,7 @@ var model = {
      * @param {callback} callback function with err and response
      */
     addReply: function (commentId, reply, user, anonymous, kwack, callback) {
-        var arr = ['behenchod', 'madarchod', 'jhatu', 'chutiya', 'lund', 'mc', 'asshole', 'bc', 'chutiye']
+        var arr = ['behenchod', 'madarchod', 'jhatu', 'chutiya', 'lund', 'mc', 'asshole', 'bc', 'chutiye', 'bakland', 'bhandava', 'chinaal', 'chinal', 'bhadva', 'bhadve', 'chutia', 'choo-tia', 'chutan', 'haraami', 'harami', 'saale', 'gandu', 'hijda', 'hijdi','hijra', 'hijri', 'bhadvi','kutta','kutti','kuttiya','bahen chod','bahenchod','laude','chod','lavde','jhant','jhaat','maadher chod','raand','raandi','randi','randhwa','randwa','randvi','randhwi','rundi','booblay','bhonsRi','bhonsri', 'chut','bossadi','bossari','chodra','gaand','gand','lavda','lavander','muth', 'muthiya','bable','bhosad','chodela','lundtopi','lundoos','pucchi','puchi','arsehole','arse','bastard','bellend','berk','bint','blimey','gorblimey','blighter','bollocks','testicles','bugger','cack','cobblers','nonsense','cunt','vagina','dickhead','knob','bitch','cock','dick','penis','chutya','fuck','fuck off','fagutt','anal','boobs']
         var setvarvalue
             temp = reply.toLowerCase()
         console.log("TEMPPPPPPPPPPPPP", temp)
