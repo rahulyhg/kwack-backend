@@ -26,7 +26,7 @@ var schema = new Schema({
     state: {
         type: String
     },
-     city: {
+    city: {
         type: String
     },
     location: {
@@ -166,8 +166,8 @@ var model = {
             } else if (_.isEmpty(found)) {
                 callback(null, "noDataound");
             } else {
-                  User.find({
-                      mobile: mobile
+                User.find({
+                    mobile: mobile
                 }).exec(function (err, created) {
                     if (err) {
                         callback(err, null);
@@ -208,7 +208,35 @@ var model = {
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
             } else {
-                callback(null, found);
+                var smsMessage = "Welcome To The Kwack Family! Your OTP is " + emailOtp + "."
+                var smsObj = {
+                    "message": "kwack",
+                    "sender": "INFINI",
+                    "sms": [{
+                        "to": mobile,
+                        "message": smsMessage,
+                        "sender": "INFINI"
+                    }]
+                };
+                console.log("inside sendSMS");
+                // if (data.mobile) {
+                console.log("inside sendSMS if");
+                request.post({
+                    url: "https://alerts.solutionsinfini.com/api/v4/?&method=sms.json&api_key=Ac3bc9f7ca508506766e8e3c5e559ba4c&sender=INFINI", json: smsObj
+                }, function (err, http, body) {
+                    console.log("inside sendSMS after request", body);
+                    if (err) {
+                        console.log(err, null);
+                        callback(err, null);
+                    } else {
+                        callback(null, "Done");
+                    }
+                });
+                // } else {
+                //     console.log("inside sendSMS else");
+                //     callback(null, "Error");
+                // }
+
             }
 
         });
@@ -223,6 +251,27 @@ var model = {
         console.log("*********************", otp)
         User.findOne({
             otp: otp
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+        });
+    },
+
+
+    /**
+     * this function for get user by email
+     * @param {userEmail} input userEmail
+     * @param {callback} callback function with err and response
+     */
+    getUserforSocailLogin: function (name, callback) {
+        // console.log("***************",userEmail)
+        User.findOne({
+            name: name,
         }).exec(function (err, found) {
             if (err) {
                 callback(err, null);
@@ -340,7 +389,7 @@ var model = {
                         callback1(err, null);
                     } else if (_.isEmpty(found)) {
                         console.log("1111111111111111111111", dataToSave)
-                       callback1(null, dataToSave);
+                        callback1(null, dataToSave);
                         // User.saveData(dataToSave, function (err, created) {
                         //     if (err) {
                         //         callback1(err, null);
@@ -375,7 +424,7 @@ var model = {
                         callback2(err, null);
                     } else if (_.isEmpty(found)) {
                         console.log("222222222222222222222222", dataToSave)
-                       callback2(null, dataToSave);
+                        callback2(null, dataToSave);
                         // User.saveData(dataToSave, function (err, created) {
                         //     if (err) {
                         //         callback2(err, null);
@@ -397,20 +446,20 @@ var model = {
                 });
             },
             function (datain, callback3) {
-             console.log("Inside 3rd waterfall model33333333333333333333333333")
-             User.saveData(dataToSave, function (err, created) {
-                            if (err) {
-                                callback3(err, null);
-                            } else if (_.isEmpty(created)) {
-                                callback3(null, "noDataound");
-                            } else {
-                                if (!_id) {
-                                    callback3(null, created);
-                                } else {
-                                    callback3(null, dataToSave);
-                                }
-                            }
-                        });
+                console.log("Inside 3rd waterfall model33333333333333333333333333")
+                User.saveData(dataToSave, function (err, created) {
+                    if (err) {
+                        callback3(err, null);
+                    } else if (_.isEmpty(created)) {
+                        callback3(null, "noDataound");
+                    } else {
+                        if (!_id) {
+                            callback3(null, created);
+                        } else {
+                            callback3(null, dataToSave);
+                        }
+                    }
+                });
             },
         ], function (err, data) {
             console.log("final data for callback is", data)
