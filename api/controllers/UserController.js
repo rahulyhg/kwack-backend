@@ -1,5 +1,21 @@
 module.exports = _.cloneDeep(require("sails-wohlig-controller"));
 var controller = {
+            /**
+     * for users to add interests 
+     */
+    getUserforSocailLogin: function (req, res) {
+        if (req.body) {
+            console.log("is ide ctrl")
+            User.getUserforSocailLogin(req.body.name, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
         /**
      * for users to add interests 
      */
@@ -53,6 +69,21 @@ var controller = {
     sendOtp: function (req, res) {
         if (req.body) {
             User.sendOtp(req.body.mobile,req.body.userId, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
+       /**
+     * for users to verify otp 
+     */
+    sendWelcomeMsg: function (req, res) {
+        if (req.body) {
+            User.sendWelcomeMsg(req.body.mobile, res.callback);
         } else {
             res.json({
                 value: false,

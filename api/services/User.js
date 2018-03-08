@@ -200,46 +200,82 @@ var model = {
             mobile: mobile
         }, {
             otp: emailOtp
-        }, {
-            new: true
         }).exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
             } else {
-                var smsMessage = "Welcome To The Kwack Family! Your OTP is " + emailOtp + "."
+                //   callbac k(null, found);
+                var smsMessage = "Use " + emailOtp + " as your login OTP. OTP is confidential."
                 var smsObj = {
                     "message": "kwack",
-                    "sender": "INFINI",
+                    "sender": "Kwackk",
                     "sms": [{
                         "to": mobile,
                         "message": smsMessage,
-                        "sender": "INFINI"
+                        "sender": "Kwackk"
                     }]
                 };
                 console.log("inside sendSMS");
                 // if (data.mobile) {
                 console.log("inside sendSMS if");
                 request.post({
-                    url: "https://alerts.solutionsinfini.com/api/v4/?&method=sms.json&api_key=Ac3bc9f7ca508506766e8e3c5e559ba4c&sender=INFINI", json: smsObj
+                    url: "https://alerts.solutionsinfini.com/api/v4/?&method=sms.json&api_key=Ac05c9f28f01b456dadf45375c15d804e&sender=Kwackk",
+                    json: smsObj
                 }, function (err, http, body) {
                     console.log("inside sendSMS after request", body);
                     if (err) {
-                        console.log(err, null);
+                        
+                        console.log("errrrrrrrrrrrrr",err, null);
                         callback(err, null);
-                    } else {
-                        callback(null, "Done");
+                    } else if(body.data[0].status=='INV-NUMBER') {
+                        console.log("invalid number callback")
+                       callback(null,"INV-NUMBER");
+                    }else{
+                         callback(null,"sms-sent");
                     }
                 });
-                // } else {
-                //     console.log("inside sendSMS else");
-                //     callback(null, "Error");
-                // }
 
             }
 
         });
+    },
+       /**
+     * this function for verify otp
+     * @param {otp} input otp
+     * @param {callback} callback function with err and response
+     */
+    sendWelcomeMsg: function (mobile, callback) {
+               var smsMessage = "Thank You for Signing Up!"
+                var smsObj = {
+                    "message": "kwack",
+                    "sender": "Kwackk",
+                    "sms": [{
+                        "to": mobile,
+                        "message": smsMessage,
+                        "sender": "Kwackk"
+                    }]
+                };
+                console.log("inside sendSMS");
+                // if (data.mobile) {
+                console.log("inside sendSMS if");
+                request.post({
+                    url: "https://alerts.solutionsinfini.com/api/v4/?&method=sms.json&api_key=Ac05c9f28f01b456dadf45375c15d804e&sender=Kwackk",
+                    json: smsObj
+                }, function (err, http, body) {
+                    console.log("inside sendSMS after request", body);
+                    if (err) {
+                        
+                        console.log("errrrrrrrrrrrrr",err, null);
+                        callback(err, null);
+                    } else if(body.data[0].status=='INV-NUMBER') {
+                        console.log("invalid number callback")
+                       callback(null,"INV-NUMBER");
+                    }else{
+                         callback(null,"sms-sent");
+                    }
+                });
     },
 
     /**

@@ -15,6 +15,10 @@ var schema = new Schema({
         type: Boolean,
         default: false
     },
+     flagForShare: {
+        type: Boolean,
+        default: false
+    },
     url: {
         type: String,
 
@@ -326,7 +330,7 @@ var model = {
                         count: maxRow
                     };
                     NewsInfo.find(filter, {})
-                        .deepPopulate("polls.poll.user comments.comment.user")
+                        .deepPopulate("polls.poll.user comments.comment.user shareNewsCount.sharenews.user")
                         .order(options)
                         .keyword(options)
                         .page(options,
@@ -398,6 +402,41 @@ var model = {
                                             });
                                             if (temp1 === undefined) {} else {
                                                 _.pull(pp.comments, temp1)
+                                            }
+
+                                        })
+
+                                        _.each(pp.shareNewsCount, function (pp2) {
+
+                                            var temp1 = _.find(pp.shareNewsCount, function (r) {
+                                                if (r.sharenews) {
+                                                    if (r.sharenews.user) {
+                                                        if ((r.sharenews.user._id.equals(userId))) {
+                                                            pp.flagForShare = true
+                                                            // console.log("********************************inside if cond")
+                                                        } else {
+                                                            // console.log("*************inside else cond")
+                                                        }
+                                                    }
+                                                }
+                                                if (r.sharenews == null) {
+                                                    return r;
+                                                }
+                                                if (r.sharenews.user == null) {
+                                                    return r;
+                                                }
+                                                if (r.sharenews) {
+                                                    if (r.sharenews.user) {
+                                                        if (r.sharenews.user.status == "Deactive") {
+                                                            return r;
+                                                        }
+                                                    }
+                                                }
+
+
+                                            });
+                                            if (temp1 === undefined) {} else {
+                                                _.pull(pp.shareNewsCount, temp1)
                                             }
 
                                         })
@@ -491,7 +530,7 @@ var model = {
         NewsInfo.find({
             trending: "YES",
               isDisable:'NO'
-        }).deepPopulate('polls.poll.user comments.comment.user').exec(function (err, found) {
+        }).deepPopulate('polls.poll.user comments.comment.user shareNewsCount.sharenews.user').exec(function (err, found) {
             if (err) {
                 console.log("ERRRRRRRRRRRR", err)
                 callback(err, null);
@@ -567,6 +606,40 @@ var model = {
                         }
 
                     })
+                        _.each(pp.shareNewsCount, function (pp2) {
+
+                        var temp1 = _.find(pp.shareNewsCount, function (r) {
+                            if (r.sharenews) {
+                                if (r.sharenews.user) {
+                                    if ((r.sharenews.user._id.equals(userId))) {
+                                        pp.flagForShare = true
+                                        // console.log("********************************inside if cond")
+                                    } else {
+                                        // console.log("*************inside else cond")
+                                    }
+                                }
+                            }
+                            if (r.sharenews == null) {
+                                return r;
+                            }
+                            if (r.sharenews.user == null) {
+                                return r;
+                            }
+                            if (r.sharenews) {
+                                if (r.sharenews.user) {
+                                    if (r.sharenews.user.status == "Deactive") {
+                                        return r;
+                                    }
+                                }
+                            }
+
+
+                        });
+                        if (temp1 === undefined) {} else {
+                            _.pull(pp.shareNewsCount, temp1)
+                        }
+
+                    })
                 })
                 callback(null, found);
             }
@@ -612,7 +685,7 @@ var model = {
         NewsInfo.find({
             isDisable:'NO'
         }).skip(5)
-            .deepPopulate("polls.poll.user comments.comment.user realTotalCount.readcount.user")
+            .deepPopulate("polls.poll.user comments.comment.user shareNewsCount.sharenews.user realTotalCount.readcount.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -672,6 +745,37 @@ var model = {
                                 }
 
 
+
+
+                            })
+                                   _.each(pp.shareNewsCount, function (pp1) {
+
+                                var temp1 = _.find(pp.shareNewsCount, function (o) {
+                                    if (o.sharenews) {
+                                        if (o.sharenews.user) {
+                                            if ((o.sharenews.user._id.equals(userId))) {
+                                                pp.flagForShare = true
+                                            } else {}
+                                        }
+                                    }
+                                    if (o.sharenews == null) {
+                                        return o;
+                                    }
+                                    if (o.sharenews.user == null) {
+                                        return o;
+                                    }
+                                    if (o.sharenews) {
+                                        if (o.sharenews.user) {
+                                            if (o.sharenews.user.status == "Deactive") {
+                                                return o;
+                                            }
+                                        }
+                                    }
+
+                                });
+                                if (temp1 === undefined) {} else {
+                                    _.pull(pp.shareNewsCount, temp1)
+                                }
 
 
                             })
@@ -760,7 +864,7 @@ var model = {
         NewsInfo.find({
               isDisable:'NO'
         }).limit(2)
-            .deepPopulate("polls.poll.user comments.comment.user  realTotalCount.readcount.user")
+            .deepPopulate("polls.poll.user comments.comment.user shareNewsCount.sharenews.user  realTotalCount.readcount.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -812,6 +916,38 @@ var model = {
                                 });
                                 if (temp === undefined) {} else {
                                     _.pull(pp.polls, temp)
+                                }
+
+
+                            })
+
+                             _.each(pp.shareNewsCount, function (pp1) {
+
+                                var temp1 = _.find(pp.shareNewsCount, function (o) {
+                                    if (o.sharenews) {
+                                        if (o.sharenews.user) {
+                                            if ((o.sharenews.user._id.equals(userId))) {
+                                                pp.flagForShare = true
+                                            } else {}
+                                        }
+                                    }
+                                    if (o.sharenews == null) {
+                                        return o;
+                                    }
+                                    if (o.sharenews.user == null) {
+                                        return o;
+                                    }
+                                    if (o.sharenews) {
+                                        if (o.sharenews.user) {
+                                            if (o.sharenews.user.status == "Deactive") {
+                                                return o;
+                                            }
+                                        }
+                                    }
+
+                                });
+                                if (temp1 === undefined) {} else {
+                                    _.pull(pp.shareNewsCount, temp1)
                                 }
 
 
@@ -897,7 +1033,7 @@ var model = {
                 interest: data.userInterest,
                   isDisable:'NO'
             })
-            .deepPopulate("comments.comment.user polls.poll.user")
+            .deepPopulate("comments.comment.user polls.poll.user shareNewsCount.sharenews.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -970,6 +1106,40 @@ var model = {
                                 });
                                 if (temp1 === undefined) {} else {
                                     _.pull(pp.comments, temp1)
+                                }
+
+
+                            })
+                                _.each(pp.shareNewsCount, function (pp2) {
+
+                                var temp1 = _.find(pp.shareNewsCount, function (r) {
+                                    if (r.sharenews) {
+                                        if (r.sharenews.user) {
+                                            if ((r.sharenews.user._id.equals(userId))) {
+                                                pp.flagForShare = true
+                                                // console.log("********************************inside if cond")
+                                            } else {
+                                                // console.log("*************inside else cond")
+                                            }
+                                        }
+                                    }
+                                    if (r.sharenews == null) {
+                                        return r;
+                                    }
+                                    if (r.sharenews.user == null) {
+                                        return r;
+                                    }
+                                    if (r.sharenews) {
+                                        if (r.sharenews.user) {
+                                            if (r.sharenews.user.status == "Deactive") {
+                                                return r;
+                                            }
+                                        }
+                                    }
+
+                                });
+                                if (temp1 === undefined) {} else {
+                                    _.pull(pp.shareNewsCount, temp1)
                                 }
 
 
@@ -1202,7 +1372,7 @@ var model = {
                 isSocial: "YES",
                   isDisable:'NO'
             })
-            .deepPopulate("polls.poll.user comments.comment.user")
+            .deepPopulate("polls.poll.user comments.comment.user shareNewsCount.sharenews.user")
             .order(options)
             .keyword(options)
             .page(options,
@@ -1281,6 +1451,40 @@ var model = {
 
 
                             })
+                                      _.each(pp.shareNewsCount, function (pp2) {
+
+                                var temp1 = _.find(pp.shareNewsCount, function (r) {
+                                    if (r.sharenews) {
+                                        if (r.sharenews.user) {
+                                            if ((r.sharenews.user._id.equals(userId))) {
+                                                pp.flagForShare = true
+                                                // console.log("********************************inside if cond")
+                                            } else {
+                                                // console.log("*************inside else cond")
+                                            }
+                                        }
+                                    }
+                                    if (r.sharenews == null) {
+                                        return r;
+                                    }
+                                    if (r.sharenews.user == null) {
+                                        return r;
+                                    }
+                                    if (r.sharenews) {
+                                        if (r.sharenews.user) {
+                                            if (r.sharenews.user.status == "Deactive") {
+                                                return r;
+                                            }
+                                        }
+                                    }
+
+                                });
+                                if (temp1 === undefined) {} else {
+                                    _.pull(pp.shareNewsCount, temp1)
+                                }
+
+
+                            })
                         })
                         callback(null, found);
                     } else {
@@ -1299,8 +1503,9 @@ var model = {
         // console.log("newuserIduserIduserIduserIdsId", userId)
         NewsInfo.findOne({
             _id: newsId
-        }).deepPopulate('polls.poll.user comments.comment.user comments.comment.repliesTo.user comments.comment.likes.userId comments.comment.likes.userId comments.comment.repliesTo.likes').exec(function (err, found) {
+        }).deepPopulate('polls.poll.user comments.comment.user comments.comment.repliesTo.user comments.comment.likes.userId comments.comment.likes.userId comments.comment.repliesTo.likes shareNewsCount.sharenews.user').exec(function (err, found) {
             if (err) {
+                console.log("errrrrrrrrrrrrrrrr",err)
                 callback(err, null);
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
@@ -1440,6 +1645,45 @@ var model = {
                     });
                     if (temp4 === undefined) {} else {
                         _.pull(found.polls, temp4)
+                    }
+
+
+                })
+
+                  _.each(found.shareNewsCount, function (pp1) {
+console.log("*******************",pp1)
+
+                    var temp4 = _.find(found.shareNewsCount, function (o) {
+                        console.log("&&&&&&&&&&&&&&&",o)
+                        if (o.sharenews) {
+                            if (o.sharenews.user) {
+                                if ((o.sharenews.user._id.equals(userId))) {
+                                    found.flagForShare = true
+                                } else {}
+                            }
+                        }
+
+                        if (o.sharenews == null) {
+                            return o;
+                        }
+                        if (o.sharenews.user == null) {
+                            return o;
+                        }
+
+
+
+
+                        if (o.sharenews.user) {
+                            if (o.sharenews.user.status == "Deactive") {
+                                return o;
+                            }
+                        }
+
+
+
+                    });
+                    if (temp4 === undefined) {} else {
+                        _.pull(found.shareNewsCount, temp4)
                     }
 
 

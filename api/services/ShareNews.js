@@ -48,13 +48,13 @@ var model = {
      */
 
     addShareCount: function (newsId, userId, callback) {
-        dataToSend = {}
-        dataToSend.newsId = newsId
+        console.log("***********************", newsId, userId)
+        var dataToSave = {}
+        dataToSave.news = newsId
+        dataToSave.user = userId
         async.waterfall([
             function (callback1) {
-                var dataToSave = {}
-                dataToSave.news = newsId
-                dataToSave.user = userId
+
 
                 ShareNews.saveData(dataToSave, function (err, created) {
                     if (err) {
@@ -62,14 +62,17 @@ var model = {
                     } else if (_.isEmpty(created)) {
                         callback(null, "noDataound");
                     } else {
-
-                        callback1(null, created);
+                        data1 = {}
+                        data1._id = created._id,
+                            data1.newsId = newsId
+                        callback1(null, data1);
                     }
                 });
             },
             function (datain, callback2) {
+                console.log("&&&&&&&&&&&&&&&&", dataToSave.newsId, datain._id)
                 NewsInfo.update({
-                    _id: dataToSend.newsId
+                    _id: datain.newsId
                 }, {
                     $push: {
                         'shareNewsCount': {
