@@ -98,7 +98,7 @@ var controller = {
      */
     verifyOTPForResetPass: function (req, res) {
         if (req.body) {
-            User.verifyOTPForResetPass(req.body.otp, res.callback);
+            User.verifyOTPForResetPass(req.body.otp,req.body._id, res.callback);
         } else {
             res.json({
                 value: false,

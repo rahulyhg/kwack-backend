@@ -242,9 +242,10 @@ var model = {
      * @param {otp} input otp
      * @param {callback} callback function with err and response
      */
-    verifyOTPForResetPass: function (otp, callback) {
+    verifyOTPForResetPass: function (otp,_id, callback) {
         console.log("*********************", otp)
         User.findOne({
+            _id:_id,
             otp: otp
         }).exec(function (err, found) {
             if (err) {

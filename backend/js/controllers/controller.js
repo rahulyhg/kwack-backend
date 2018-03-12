@@ -272,24 +272,35 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
                 }
             });
+        // $scope.datavalue = 'YES'
+        $scope.disable = function (data) {
+            console.log("$$$$$$$$$$$$$$$$$$$$$",data)
+           
+             $scope.formdata.isDisable=data;
+            $scope.datavalue = data;
+         
+        }
         $scope.saveProduct = function (formdata) {
+            console.log("######### $scope.datavalue", $scope.datavalue)
             console.log("formdata.pollQuestionOptionformdata.pollQuestionOption", formdata.pollQuestionOption)
             if (formdata.IsPoll == 'YES') {
-                if(!_.isArray(formdata.pollQuestionOption)){
+                if (!_.isArray(formdata.pollQuestionOption)) {
                     if (formdata.pollQuestionOption) {
-                    console.log("Inside if comdition",formdata.pollQuestionOption)
-                    var array = _.map(formdata.pollQuestionOption.split(','), function (n) {
-                        return _.trim(n);
-                    });
-                    formdata.pollQuestionOption = [];
-                    formdata.pollQuestionOption = array;
-                } else {
-                    console.log("Inside if else condition")
-                }}
-                
+                        console.log("Inside if comdition", formdata.pollQuestionOption)
+                        var array = _.map(formdata.pollQuestionOption.split(','), function (n) {
+                            return _.trim(n);
+                        });
+                        formdata.pollQuestionOption = [];
+                        formdata.pollQuestionOption = array;
+                    } else {
+                        console.log("Inside if else condition")
+                    }
+                }
+
             }
             if ($scope.data) {
-                formdata._id = $scope.data._id
+                formdata._id = $scope.data._id,
+                 formdata.isDisable=$scope.datavalue
             }
             NavigationService.apiCall("NewsInfo/save", formdata, function (data) {
                 if (data.value === true) {
@@ -303,14 +314,11 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         };
         $scope.cancelEdit = function () {
             console.log("**********")
-               $state.go("page", {
+            $state.go("page", {
                 id: "viewNewsInfo"
             });
         }
-          $scope.disable = function () {
-            console.log("**********%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-            
-        }
+     
     })
     .controller('CommentdetailCtrl', function ($scope, TemplateService, NavigationService, JsonService, $timeout, $state, $stateParams, $uibModal) {
         $scope.json = JsonService;

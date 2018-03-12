@@ -15,7 +15,7 @@ var schema = new Schema({
         type: Boolean,
         default: false
     },
-     flagForShare: {
+    flagForShare: {
         type: Boolean,
         default: false
     },
@@ -92,12 +92,12 @@ var schema = new Schema({
     }],
     isSocial: {
         type: String,
-         default: "NO",
+        default: "NO",
         enum: ['YES', 'NO']
     },
     isExplore: {
         type: String,
-         default: "NO",
+        default: "NO",
         enum: ['YES', 'NO']
     },
     trending: {
@@ -115,7 +115,7 @@ var schema = new Schema({
         default: "NO",
         enum: ['YES', 'NO']
     },
-      isDisable: {
+    isDisable: {
         type: String,
         default: "NO",
         enum: ['YES', 'NO']
@@ -302,7 +302,9 @@ var model = {
                         filter.interest = {
                             $in: interestArr
                         }
+
                     }
+                    filter.isDisable = "NO"
 
                     if (data.count) {
                         var maxCount = data.count;
@@ -338,15 +340,21 @@ var model = {
                                 if (err) {
                                     callback(err, null);
                                 } else if (found) {
+                                    // console.log("&&&&&&&&&&&&&&&&&&&", found.results)
                                     _.each(found.results, function (pp) {
                                         _.each(pp.polls, function (pp1) {
-
+                                            console.log("%%%%%%%%%%%%%%%%%%%%%", pp.polls)
                                             var temp = _.find(pp.polls, function (o) {
+
                                                 if (o.poll) {
                                                     if (o.poll.user) {
+                                                        // console.log("**********",o.poll.user._id,'&&&&&&&&&&&&',userId)
                                                         if ((o.poll.user._id.equals(userId))) {
+                                                            // console.log("Inside if condition")
                                                             pp.flagForPoll = true
-                                                        } else {}
+                                                        } else {
+                                                            // console.log("Inside elsae condition")
+                                                        }
                                                     }
                                                 }
                                                 if (o.poll == null) {
@@ -529,7 +537,7 @@ var model = {
     getTrendingNews: function (userId, callback) {
         NewsInfo.find({
             trending: "YES",
-              isDisable:'NO'
+            isDisable: 'NO'
         }).deepPopulate('polls.poll.user comments.comment.user shareNewsCount.sharenews.user').exec(function (err, found) {
             if (err) {
                 console.log("ERRRRRRRRRRRR", err)
@@ -606,7 +614,7 @@ var model = {
                         }
 
                     })
-                        _.each(pp.shareNewsCount, function (pp2) {
+                    _.each(pp.shareNewsCount, function (pp2) {
 
                         var temp1 = _.find(pp.shareNewsCount, function (r) {
                             if (r.sharenews) {
@@ -683,8 +691,8 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({
-            isDisable:'NO'
-        }).skip(5)
+                isDisable: 'NO'
+            }).skip(5)
             .deepPopulate("polls.poll.user comments.comment.user shareNewsCount.sharenews.user realTotalCount.readcount.user")
             .order(options)
             .keyword(options)
@@ -748,7 +756,7 @@ var model = {
 
 
                             })
-                                   _.each(pp.shareNewsCount, function (pp1) {
+                            _.each(pp.shareNewsCount, function (pp1) {
 
                                 var temp1 = _.find(pp.shareNewsCount, function (o) {
                                     if (o.sharenews) {
@@ -862,8 +870,8 @@ var model = {
             count: maxRow
         };
         NewsInfo.find({
-              isDisable:'NO'
-        }).limit(2)
+                isDisable: 'NO'
+            }).limit(2)
             .deepPopulate("polls.poll.user comments.comment.user shareNewsCount.sharenews.user  realTotalCount.readcount.user")
             .order(options)
             .keyword(options)
@@ -921,7 +929,7 @@ var model = {
 
                             })
 
-                             _.each(pp.shareNewsCount, function (pp1) {
+                            _.each(pp.shareNewsCount, function (pp1) {
 
                                 var temp1 = _.find(pp.shareNewsCount, function (o) {
                                     if (o.sharenews) {
@@ -1031,7 +1039,7 @@ var model = {
         };
         NewsInfo.find({
                 interest: data.userInterest,
-                  isDisable:'NO'
+                isDisable: 'NO'
             })
             .deepPopulate("comments.comment.user polls.poll.user shareNewsCount.sharenews.user")
             .order(options)
@@ -1110,7 +1118,7 @@ var model = {
 
 
                             })
-                                _.each(pp.shareNewsCount, function (pp2) {
+                            _.each(pp.shareNewsCount, function (pp2) {
 
                                 var temp1 = _.find(pp.shareNewsCount, function (r) {
                                     if (r.sharenews) {
@@ -1191,7 +1199,7 @@ var model = {
                 _id: {
                     $ne: newsId
                 },
-                  isDisable:'NO'
+                isDisable: 'NO'
             })
             .deepPopulate("polls.poll comments.comment")
             .order(options)
@@ -1202,7 +1210,7 @@ var model = {
                         console.log("ERRRRRRR", err)
                         callback(err, null);
                     } else if (found) {
-                       
+
                         callback(null, found);
                     } else {
                         callback("Invalid data", null);
@@ -1243,7 +1251,7 @@ var model = {
         };
         NewsInfo.find({
                 isExplore: "YES",
-                  isDisable:'NO'
+                isDisable: 'NO'
             })
             .deepPopulate("polls.poll.user comments.comment.user")
             .order(options)
@@ -1370,7 +1378,7 @@ var model = {
         };
         NewsInfo.find({
                 isSocial: "YES",
-                  isDisable:'NO'
+                isDisable: 'NO'
             })
             .deepPopulate("polls.poll.user comments.comment.user shareNewsCount.sharenews.user")
             .order(options)
@@ -1451,7 +1459,7 @@ var model = {
 
 
                             })
-                                      _.each(pp.shareNewsCount, function (pp2) {
+                            _.each(pp.shareNewsCount, function (pp2) {
 
                                 var temp1 = _.find(pp.shareNewsCount, function (r) {
                                     if (r.sharenews) {
@@ -1505,7 +1513,7 @@ var model = {
             _id: newsId
         }).deepPopulate('polls.poll.user comments.comment.user comments.comment.repliesTo.user comments.comment.likes.userId comments.comment.likes.userId comments.comment.repliesTo.likes shareNewsCount.sharenews.user').exec(function (err, found) {
             if (err) {
-                console.log("errrrrrrrrrrrrrrrr",err)
+                console.log("errrrrrrrrrrrrrrrr", err)
                 callback(err, null);
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
@@ -1650,11 +1658,11 @@ var model = {
 
                 })
 
-                  _.each(found.shareNewsCount, function (pp1) {
-console.log("*******************",pp1)
+                _.each(found.shareNewsCount, function (pp1) {
+                    console.log("*******************", pp1)
 
                     var temp4 = _.find(found.shareNewsCount, function (o) {
-                        console.log("&&&&&&&&&&&&&&&",o)
+                        console.log("&&&&&&&&&&&&&&&", o)
                         if (o.sharenews) {
                             if (o.sharenews.user) {
                                 if ((o.sharenews.user._id.equals(userId))) {
@@ -1792,6 +1800,7 @@ console.log("*******************",pp1)
     },
 
     search1: function (data, callback) {
+        console.log("inside api serch")
         var maxCount = Config.maxRow;
         var maxRow = maxCount
         var page = 1;
