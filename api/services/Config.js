@@ -436,6 +436,26 @@ var models = {
 
 
 
+    },
+    sendSMS: function (data, callback) {
+        // if (data.mobile) {
+        console.log("inside sendSMS Config file",data);
+        request.post({
+            url: "https://alerts.solutionsinfini.com/api/v4/?&method=sms.json&api_key=Ac05c9f28f01b456dadf45375c15d804e&sender=Kwackk",
+            json: data
+        }, function (err, http, body) {
+            console.log("inside sendSMS after request", body);
+            if (err) {
+
+                console.log("errrrrrrrrrrrrr", err, null);
+                callback(err, null);
+            } else if (body.data[0].status == 'INV-NUMBER') {
+                callback(null, "INV-NUMBER");
+            } else {
+                callback(null, "sms-sent");
+            }
+        });
     }
+
 };
 module.exports = _.assign(module.exports, models);

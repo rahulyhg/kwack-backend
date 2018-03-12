@@ -188,7 +188,8 @@ var model = {
 
     /**
      * this function for send otp
-     * @param {email} input email
+     * @param {mobile} input mobile
+     *   * @param {userId} input userId
      * @param {callback} callback function with err and response
      */
     sendOtp: function (mobile, userId, callback) {
@@ -206,7 +207,7 @@ var model = {
             } else if (_.isEmpty(found)) {
                 callback("noDataound", null);
             } else {
-                //   callbac k(null, found);
+                // callback(null, found);
                 var smsMessage = "Use " + emailOtp + " as your login OTP. OTP is confidential."
                 var smsObj = {
                     "message": "kwack",
@@ -217,66 +218,24 @@ var model = {
                         "sender": "Kwackk"
                     }]
                 };
-                console.log("inside sendSMS");
-                // if (data.mobile) {
-                console.log("inside sendSMS if");
-                request.post({
-                    url: "https://alerts.solutionsinfini.com/api/v4/?&method=sms.json&api_key=Ac05c9f28f01b456dadf45375c15d804e&sender=Kwackk",
-                    json: smsObj
-                }, function (err, http, body) {
-                    console.log("inside sendSMS after request", body);
-                    if (err) {
-                        
-                        console.log("errrrrrrrrrrrrr",err, null);
-                        callback(err, null);
-                    } else if(body.data[0].status=='INV-NUMBER') {
-                        console.log("invalid number callback")
+                console.log("Data for sms send is---------------->>>>>>>>>",smsObj)
+                Config.sendSMS(smsObj, function (error, SMSResponse) {
+                    console.log(" SMS Response is----------------->>>>>>>>>>>",SMSResponse)
+                    if (error || SMSResponse == undefined) {
+                        console.log("User >>> generateOtp >>> User.findOne >>> Config.sendSMS >>> error >>>", error);
+                        callback(error, null);
+                    } else if(SMSResponse=="INV-NUMBER") {
                        callback(null,"INV-NUMBER");
-                    }else{
-                         callback(null,"sms-sent");
+                    }else if(SMSResponse=="sms-sent"){
+                        callback(null,"sms-sent");
                     }
-                });
+                })
 
             }
 
         });
     },
-       /**
-     * this function for verify otp
-     * @param {otp} input otp
-     * @param {callback} callback function with err and response
-     */
-    sendWelcomeMsg: function (mobile, callback) {
-               var smsMessage = "Thank You for Signing Up!"
-                var smsObj = {
-                    "message": "kwack",
-                    "sender": "Kwackk",
-                    "sms": [{
-                        "to": mobile,
-                        "message": smsMessage,
-                        "sender": "Kwackk"
-                    }]
-                };
-                console.log("inside sendSMS");
-                // if (data.mobile) {
-                console.log("inside sendSMS if");
-                request.post({
-                    url: "https://alerts.solutionsinfini.com/api/v4/?&method=sms.json&api_key=Ac05c9f28f01b456dadf45375c15d804e&sender=Kwackk",
-                    json: smsObj
-                }, function (err, http, body) {
-                    console.log("inside sendSMS after request", body);
-                    if (err) {
-                        
-                        console.log("errrrrrrrrrrrrr",err, null);
-                        callback(err, null);
-                    } else if(body.data[0].status=='INV-NUMBER') {
-                        console.log("invalid number callback")
-                       callback(null,"INV-NUMBER");
-                    }else{
-                         callback(null,"sms-sent");
-                    }
-                });
-    },
+
 
     /**
      * this function for verify otp
