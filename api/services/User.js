@@ -278,6 +278,20 @@ var model = {
             }
         });
     },
+       getUserforSocailLoginFacebook: function (email, callback) {
+        // console.log("***************",userEmail)
+        User.findOne({
+            email: email,
+        }).exec(function (err, found) {
+            if (err) {
+                callback(err, null);
+            } else if (_.isEmpty(found)) {
+                callback("noDataound", null);
+            } else {
+                callback(null, found);
+            }
+        });
+    },
 
     /**
      * this function for get user by email

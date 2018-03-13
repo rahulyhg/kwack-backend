@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Is Poll</label>
+                    <label>Is Custom Poll</label>
 
                     <select class="form-control" ng-model="formdata.IsPoll">
                          <option value="YES">YES</option>
@@ -40,16 +40,18 @@
                    </select>
                 </div>
 
-                <div class="form-group" fields ng-if="formdata.IsPoll=='YES'" >
-                    <label>Poll Or Qwack Question</label>*
-                    <input type="text" name="name3" placeholder="Question" ng-model="formdata.pollQuestion" class="form-control"  ng-if="formdata.IsPoll=='YES'" required >
-                    <input type="text" name="name3" placeholder="Question" ng-model="formdata.pollQuestion" class="form-control"  ng-if="formdata.IsPoll=='NO'" >
+                <div class="form-group" fields ng-if="formdata.IsPoll=='YES'">
+                    <label>Enter Poll  Question</label>*
+                    <input type="text" name="name3" placeholder="Question" ng-model="formdata.pollQuestion" class="form-control" ng-if="formdata.IsPoll=='YES'"
+                        required>
+                    <input type="text" name="name3" placeholder="Question" ng-model="formdata.pollQuestion" class="form-control" ng-if="formdata.IsPoll=='NO'">
 
                 </div>
                 <div class="form-group" fields ng-if="formdata.IsPoll=='YES'">
-                    <label>options</label>*
-                    <input type="text" name="option" ng-model="formdata.pollQuestionOption" class="form-control" ng-if="formdata.IsPoll=='YES'" required>
-                     <input type="text" name="option" ng-model="formdata.pollQuestionOption" class="form-control" ng-if="formdata.IsPoll=='NO'" >
+                    <label>Enter Options(For multiples option separate it  with a comma)</label>*
+                    <input type="text" name="option" ng-model="formdata.pollQuestionOption" class="form-control" ng-if="formdata.IsPoll=='YES'"
+                        required>
+                    <input type="text" name="option" ng-model="formdata.pollQuestionOption" class="form-control" ng-if="formdata.IsPoll=='NO'">
 
                 </div>
             </div>
@@ -63,8 +65,8 @@
                 <input type="text" name="name5" placeholder="imageUrl" ng-model="formdata.imageUrl" class="form-control">
 
             </div>
-           
-            
+
+
 
 
             <div class="form-group" fields>
@@ -80,7 +82,7 @@
               <option value="NO">NO</option>
             </select>
             </div>
-       
+
             <div class="form-group" fields>
                 <label>Total Kwacks</label>
                 <input type="text" name="name9" ng-model="formdata.comments.length" class="form-control" disabled>
@@ -99,19 +101,19 @@
               <option value="NO">NO</option>
             </select>
             </div>
-         
+            <label>Enable News OR Disable News</label>
             <div ng-if="formdata.isDisable=='YES'">
-              <a  class="btn btn-success" ng-click="disable('NO')">Enable News</a>
+                <a class="btn btn-success" ng-click="disable('NO')">Enable News</a>
             </div>
             <div ng-if="formdata.isDisable=='NO'">
-                <a  class="btn btn-danger" ng-click="disable('YES')">Disable  News</a>
-                </div>
+                <a class="btn btn-danger" ng-click="disable('YES')">Disable  News</a>
+            </div>
         </div>
-       
+
     </div>
 
     <div class="text-center mt20 odd-even-button">
-        <button class="btn btn-default"  ng-disabled="newsForm.$invalid"  type="submit">Save</button>
+        <button class="btn btn-default" ng-disabled="newsForm.$invalid" type="submit">Save</button>
         <a class="btn btn-danger" ng-click="cancelEdit()">Cancel</a>
 
     </div>

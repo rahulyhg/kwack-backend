@@ -444,7 +444,7 @@ var models = {
             url: "https://alerts.solutionsinfini.com/api/v4/?&method=sms.json&api_key=Ac05c9f28f01b456dadf45375c15d804e&sender=Kwackk",
             json: data
         }, function (err, http, body) {
-            console.log("inside sendSMS after request", body);
+            console.log("inside sendSMS after request------------>>>>>", body);
             if (err) {
 
                 console.log("errrrrrrrrrrrrr", err, null);

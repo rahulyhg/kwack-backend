@@ -16,6 +16,19 @@ var controller = {
             })
         }
     },
+        getUserforSocailLoginFacebook: function (req, res) {
+        if (req.body) {
+            console.log("is ide ctrl")
+            User.getUserforSocailLoginFacebook(req.body.email, res.callback);
+        } else {
+            res.json({
+                value: false,
+                data: {
+                    message: "Invalid Request"
+                }
+            })
+        }
+    },
         /**
      * for users to add interests 
      */
