@@ -5,6 +5,9 @@ var schema = new Schema({
     userName: {
         type: String,
     },
+    screenName: {
+        type: String,
+    },
     status: {
         type: String,
         default: "Active"
@@ -80,6 +83,23 @@ var schema = new Schema({
         }
     },
     photo: {
+        type: String,
+        default: "",
+        excel: [{
+            name: "Photo Val"
+        }, {
+            name: "Photo String",
+            modify: function (val, data) {
+                return "http://abc/" + val;
+            }
+        }, {
+            name: "Photo Kebab",
+            modify: function (val, data) {
+                return data.name + " " + moment(data.dob).format("MMM DD YYYY");
+            }
+        }]
+    },
+    socailLoginPhoto: {
         type: String,
         default: "",
         excel: [{
@@ -218,16 +238,16 @@ var model = {
                         "sender": "Kwackk"
                     }]
                 };
-                console.log("Data for sms send is---------------->>>>>>>>>",smsObj)
+                console.log("Data for sms send is---------------->>>>>>>>>", smsObj)
                 Config.sendSMS(smsObj, function (error, SMSResponse) {
-                    console.log(" SMS Response is----------------->>>>>>>>>>>",SMSResponse)
+                    console.log(" SMS Response is----------------->>>>>>>>>>>", SMSResponse)
                     if (error || SMSResponse == undefined) {
                         console.log("User >>> generateOtp >>> User.findOne >>> Config.sendSMS >>> error >>>", error);
                         callback(error, null);
-                    } else if(SMSResponse=="INV-NUMBER") {
-                       callback(null,"INV-NUMBER");
-                    }else if(SMSResponse=="sms-sent"){
-                        callback(null,"sms-sent");
+                    } else if (SMSResponse == "INV-NUMBER") {
+                        callback(null, "INV-NUMBER");
+                    } else if (SMSResponse == "sms-sent") {
+                        callback(null, "sms-sent");
                     }
                 })
 
@@ -242,18 +262,30 @@ var model = {
      * @param {otp} input otp
      * @param {callback} callback function with err and response
      */
-    verifyOTPForResetPass: function (otp,_id, callback) {
+    verifyOTPForResetPass: function (otp, _id, callback) {
         console.log("*********************", otp)
         User.findOne({
-            _id:_id,
             otp: otp
         }).exec(function (err, found) {
             if (err) {
                 callback(err, null);
             } else if (_.isEmpty(found)) {
-                callback("noDataound", null);
+                callback("noDatafound", null);
             } else {
-                callback(null, found);
+                
+                dataToSave={}
+                dataToSave.otp=''
+                 dataToSave._id=found._id
+                 console.log("************************",dataToSave)
+                User.saveData(dataToSave, function (err, created) {
+                    if (err) {
+                        callback(err, null);
+                    } else if (_.isEmpty(created)) {
+                        callback(null, "noDatafound");
+                    } else {
+                        callback(null, created);
+                    }
+                });
             }
         });
     },
@@ -267,7 +299,7 @@ var model = {
     getUserforSocailLogin: function (name, callback) {
         // console.log("***************",userEmail)
         User.findOne({
-            name: name,
+            screenName: screenName,
         }).exec(function (err, found) {
             if (err) {
                 callback(err, null);
@@ -278,7 +310,7 @@ var model = {
             }
         });
     },
-       getUserforSocailLoginFacebook: function (email, callback) {
+    getUserforSocailLoginFacebook: function (email, callback) {
         // console.log("***************",userEmail)
         User.findOne({
             email: email,

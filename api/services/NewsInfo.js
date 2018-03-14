@@ -51,6 +51,10 @@ var schema = new Schema({
         type: String,
 
     },
+        language: {
+        type: String,
+
+    },
     shareNewsCount: [{
         sharenews: {
             type: Schema.Types.ObjectId,
@@ -662,9 +666,8 @@ var model = {
      */
     getAllNews1: function (data, userId, callback) {
         console.log("inside get getAllNews1", data.page)
-        if (data.page == 1) {
-            data.page = 2
-        }
+        data.page=data.page+1
+       
         if (data.count) {
             var maxCount = data.count;
         } else {
@@ -1743,6 +1746,7 @@ var model = {
                                     dataToSave.url = value.url
                                     dataToSave.imageUrl = value.urlToImage
                                     dataToSave.source = value.source.id
+                                    dataToSave.language="English"
                                     NewsInfo.saveData(dataToSave, function (err, created) {
                                         if (err) {
                                             console.log("Error occurred while storing news: ", err);
@@ -1777,6 +1781,7 @@ var model = {
                                             dataToSave.description = value.description
                                         dataToSave.url = value.url
                                         dataToSave.imageUrl = value.urlToImage
+                                         dataToSave.language="English"
                                         NewsInfo.saveData(dataToSave, function (err, created) {
                                             if (err) {
                                                 console.log("Error occurred while storing news: ", err);
