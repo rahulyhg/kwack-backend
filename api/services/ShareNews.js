@@ -70,7 +70,7 @@ var model = {
                 });
             },
             function (datain, callback2) {
-                console.log("&&&&&&&&&&&&&&&&", dataToSave.newsId, datain._id)
+                console.log("&&&&&&&&&&&&&&&&", datain.newsId, datain._id)
                 NewsInfo.update({
                     _id: datain.newsId
                 }, {
