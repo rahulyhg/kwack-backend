@@ -6,7 +6,7 @@ var controller = {
     getUserforSocailLogin: function (req, res) {
         if (req.body) {
             console.log("is ide ctrl")
-            User.getUserforSocailLogin(req.body.name, res.callback);
+            User.getUserforSocailLogin(req.body.screenName, res.callback);
         } else {
             res.json({
                 value: false,

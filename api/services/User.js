@@ -296,7 +296,7 @@ var model = {
      * @param {userEmail} input userEmail
      * @param {callback} callback function with err and response
      */
-    getUserforSocailLogin: function (name, callback) {
+    getUserforSocailLogin: function (screenName, callback) {
         // console.log("***************",userEmail)
         User.findOne({
             screenName: screenName,
