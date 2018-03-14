@@ -84,7 +84,7 @@
         "placeholder": "Enter Otp",
         "id": "otp",
         "disabled": false,
-        "validation": ["required", "trim", "unique"],
+        "validation": ["", "trim", ""],
         "url": ""
     },{
         "name": "AccessLevel",
