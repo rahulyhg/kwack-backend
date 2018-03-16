@@ -8,12 +8,11 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
     })
 
     .controller('AccessController', function ($scope, TemplateService, NavigationService, $timeout, $state) {
-        // if ($.jStorage.get("accessToken")) {
+        if ($.jStorage.get("accessToken")) {
 
-        // } else {
-        //     $state.go("login");
-        //     console.log("in login page");
-        // }
+        } else {
+            $state.go("login");
+        }
     })
     .controller('pollanswerviewCtrl', function ($scope, $uibModal, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr) {
         //Used to name the .html file
