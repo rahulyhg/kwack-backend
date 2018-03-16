@@ -12,6 +12,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
         } else {
             $state.go("login");
+            console.log("login1");
         }
     })
     .controller('pollanswerviewCtrl', function ($scope, $uibModal, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr) {
