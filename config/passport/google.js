@@ -10,13 +10,12 @@ global["GoogleclientSecret"] = "lkiA8qSBs5aYReT-B5gd7MBP";
 passport.use(new GoogleStrategy({
         clientId: GoogleclientId,
         clientSecret: GoogleclientSecret,
-        profileFields: ['id', 'emails', 'name','displayName'],
-        callbackURL: global["env"].realHost + "/api/user/loginGoogle",
+        callbackURL: global["env"].realHost + "/api/User/loginGoogle",
         accessType: "offline"
     },
     function (accessToken, refreshToken, profile, cb) {
-        profile.googleAccessToken = accessToken;
-        profile.googleRefreshToken = refreshToken;
+        profile.AccessToken = accessToken;
+        profile.RefreshToken = refreshToken;
         return cb(profile);
     }
 ));

@@ -968,8 +968,10 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 NavigationService.parseAccessToken($stateParams.id, function () {
                     NavigationService.profile(function () {
                         $state.go("dashboard");
+                        console.log("dashboard");
                     }, function () {
                         $state.go("login");
+                        console.log("login");
                     });
                 });
             }
