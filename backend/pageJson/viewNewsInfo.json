@@ -35,13 +35,7 @@
             "value": "_id"
         }
     }],
-    "button": [ {
-        "name": "Create",
-        "icon": "plus",
-        "class": "btn-success",
-        "type": "page",
-        "action": "createNewsInfo"
-    }],
+    "button": [],
     "apiCall": {
         "url": "NewsInfo/search1",
         "params": "_id"

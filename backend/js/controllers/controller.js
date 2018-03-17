@@ -21,7 +21,6 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
         } else {
             $state.go("login");
-            console.log("login1");
         }
     })
     .controller('pollanswerviewCtrl', function ($scope, $uibModal, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr) {
@@ -978,10 +977,8 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 NavigationService.parseAccessToken($stateParams.id, function () {
                     NavigationService.profile(function () {
                         $state.go("dashboard");
-                        console.log("dashboard");
                     }, function () {
                         $state.go("login");
-                        console.log("login");
                     });
                 });
             }
