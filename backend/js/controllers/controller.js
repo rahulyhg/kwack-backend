@@ -5,6 +5,15 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.menutitle = NavigationService.makeactive("Dashboard");
         TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
+        $state.go("user");
+    })
+
+    .controller('UserCtrl', function ($scope, TemplateService, NavigationService, $timeout, $state) {
+        //Used to name the .html file
+        $scope.template = TemplateService.changecontent("user");
+        $scope.menutitle = NavigationService.makeactive("User");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
     })
 
     .controller('AccessController', function ($scope, TemplateService, NavigationService, $timeout, $state) {

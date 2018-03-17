@@ -31,6 +31,12 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             controller: 'DashboardCtrl',
         })
 
+        .state('user', {
+            url: "/#!/page/viewUser//",
+            templateUrl: "views/template.html",
+            controller: 'UserCtrl',
+        })
+
         .state('login', {
             url: "/login",
             templateUrl: "views/login.html",
