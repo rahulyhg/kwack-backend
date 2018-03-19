@@ -809,7 +809,7 @@ var model = {
                         modelUser.socialAccessToken = user.AccessToken;
                         modelUser.socialRefreshToken = user.RefreshToken;
                         if (user.image && user.image.url) {
-                            modelUser.photo = user.image.url;
+                            modelUser.socailLoginPhoto = user.image.url;
                         }
                         console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
                         console.log("modelUsermodelUser", modelUser)
